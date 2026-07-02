@@ -443,7 +443,7 @@ function Index() {
       {/* WE DON'T FOLLOW CATALOGUES */}
       <section className="bg-cream-soft py-20 sm:py-28">
         <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 md:grid-cols-2 md:gap-16">
-          <Reveal>
+          <Reveal variant="left">
             <div className="relative">
               <div
                 className="absolute -inset-4 -z-10 opacity-30"
@@ -452,7 +452,7 @@ function Index() {
                     "radial-gradient(circle at 30% 30%, var(--gold) 0%, transparent 60%)",
                 }}
               />
-              <ArchFrame>
+              <ArchFrame className="img-zoom shadow-[0_30px_60px_-30px_color-mix(in_oklab,var(--wine)_55%,transparent)]">
                 <img
                   src={craftImg}
                   alt="Aari craftsmanship close-up"
@@ -464,7 +464,7 @@ function Index() {
               </ArchFrame>
             </div>
           </Reveal>
-          <Reveal>
+          <Reveal variant="right" delay={120}>
             <p className="text-xs uppercase tracking-[0.35em] text-gold">Personalized · Handcrafted</p>
             <h2 className="mt-4 font-serif text-4xl leading-tight text-wine sm:text-5xl">
               Your Wedding.
@@ -513,17 +513,18 @@ function Index() {
                 text: "Receive your perfectly crafted bridal outfit, ready for your biggest day.",
               },
             ].map((s, i) => (
-              <Reveal key={s.title} className="relative">
-                <div className="relative flex h-full flex-col items-center rounded-2xl border border-[color:var(--gold)]/30 bg-cream-soft px-6 py-10 text-center shadow-sm">
+              <Reveal key={s.title} className="relative" delay={i * 120}>
+                <div className="card-lift relative flex h-full flex-col items-center rounded-2xl border border-[color:var(--gold)]/30 bg-cream-soft px-6 py-10 text-center shadow-[0_8px_28px_-16px_color-mix(in_oklab,var(--wine)_25%,transparent)]">
                   <div className="mb-2 font-serif text-xs uppercase tracking-[0.3em] text-gold">
                     Step {i + 1}
                   </div>
                   <div
-                    className="flex h-16 w-16 items-center justify-center rounded-full text-3xl"
+                    className="flex h-16 w-16 items-center justify-center rounded-full text-3xl transition-transform duration-500 group-hover:rotate-6"
                     style={{
                       background:
                         "linear-gradient(135deg, var(--gold) 0%, var(--wine) 100%)",
                       color: "var(--cream-soft)",
+                      boxShadow: "0 12px 30px -12px color-mix(in oklab, var(--gold) 55%, transparent)",
                     }}
                   >
                     {s.icon}
