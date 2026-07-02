@@ -10,22 +10,144 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function Reveal({ children, className = "" }: { children: ReactNode; className?: string }) {
+type RevealVariant = "up" | "left" | "right" | "scale";
+function Reveal({
+  children,
+  className = "",
+  variant = "up",
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  variant?: RevealVariant;
+  delay?: number;
+}) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setVisible(true)),
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            setVisible(true);
+            io.unobserve(e.target);
+          }
+        }),
       { threshold: 0.12 },
     );
     io.observe(el);
     return () => io.disconnect();
   }, []);
+  const anim =
+    variant === "left"
+      ? "fade-in-left"
+      : variant === "right"
+        ? "fade-in-right"
+        : variant === "scale"
+          ? "scale-in"
+          : "fade-up";
   return (
-    <div ref={ref} className={`${className} ${visible ? "fade-up" : "opacity-0"}`}>
+    <div
+      ref={ref}
+      style={{ animationDelay: visible ? `${delay}ms` : undefined }}
+      className={`${className} ${visible ? anim : "opacity-0"}`}
+    >
       {children}
+    </div>
+  );
+}
+
+function useParallax() {
+  const [y, setY] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => setY(window.scrollY));
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+  return y;
+}
+
+function Carousel({
+  items,
+  renderItem,
+  className = "",
+  visible = 3,
+}: {
+  items: Array<{ key: string }>;
+  renderItem: (item: { key: string }, i: number) => ReactNode;
+  className?: string;
+  visible?: number;
+}) {
+  const [index, setIndex] = useState(0);
+  const [perView, setPerView] = useState(1);
+  useEffect(() => {
+    const compute = () =>
+      setPerView(window.innerWidth >= 1024 ? visible : window.innerWidth >= 640 ? 2 : 1);
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, [visible]);
+  const maxIndex = Math.max(0, items.length - perView);
+  const clamped = Math.min(index, maxIndex);
+  const prev = () => setIndex((i) => Math.max(0, i - 1));
+  const next = () => setIndex((i) => Math.min(maxIndex, i + 1));
+  return (
+    <div className={`relative ${className}`}>
+      <div className="overflow-hidden">
+        <div
+          className="flex transition-transform duration-700 ease-[cubic-bezier(.22,.61,.36,1)]"
+          style={{ transform: `translateX(-${(clamped * 100) / perView}%)` }}
+        >
+          {items.map((item, i) => (
+            <div
+              key={item.key}
+              className="shrink-0 px-3"
+              style={{ width: `${100 / perView}%` }}
+            >
+              {renderItem(item, i)}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="mt-6 flex items-center justify-center gap-4">
+        <button
+          onClick={prev}
+          disabled={clamped === 0}
+          aria-label="Previous"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--gold)]/60 text-wine transition-all hover:bg-gold hover:text-cream-soft disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          ‹
+        </button>
+        <div className="flex items-center gap-2">
+          {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === clamped ? "w-8 bg-gold" : "w-2 bg-wine/25 hover:bg-wine/50"
+              }`}
+            />
+          ))}
+        </div>
+        <button
+          onClick={next}
+          disabled={clamped >= maxIndex}
+          aria-label="Next"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--gold)]/60 text-wine transition-all hover:bg-gold hover:text-cream-soft disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          ›
+        </button>
+      </div>
     </div>
   );
 }
