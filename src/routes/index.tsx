@@ -712,41 +712,43 @@ function Index() {
             <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl">Video Testimonials</h2>
             <div className="gold-divider mx-auto mt-6 w-24" />
           </Reveal>
-          <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {[
-              { title: "Bride Experiences", img: bride1 },
-              { title: "Bridal Transformations", img: bride2 },
-              { title: "Customer Stories", img: bride3 },
-            ].map((v) => (
-              <Reveal key={v.title}>
-                <button className="group relative block w-full overflow-hidden rounded-2xl">
-                  <img
-                    src={v.img}
-                    alt={v.title}
-                    loading="lazy"
-                    width={800}
-                    height={1000}
-                    className="h-72 w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--wine-deep)]/90 via-[color:var(--wine)]/30 to-transparent" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span
-                      className="flex h-16 w-16 items-center justify-center rounded-full text-2xl text-cream-soft ring-2 ring-[color:var(--gold)]"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, var(--gold) 0%, var(--wine) 100%)",
-                      }}
-                    >
-                      ▶
-                    </span>
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 p-5 text-left">
-                    <h4 className="font-serif text-xl text-cream-soft">{v.title}</h4>
-                  </div>
-                </button>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal className="mt-12">
+            <Carousel
+              items={VIDEOS}
+              renderItem={(item) => {
+                const v = item as (typeof VIDEOS)[number];
+                return (
+                  <button className="group relative block w-full overflow-hidden rounded-2xl shadow-[0_18px_40px_-24px_color-mix(in_oklab,var(--wine)_50%,transparent)] transition-all duration-500 hover:shadow-[0_28px_60px_-24px_color-mix(in_oklab,var(--wine)_55%,transparent)]">
+                    <img
+                      src={v.img}
+                      alt={v.title}
+                      loading="lazy"
+                      width={800}
+                      height={1000}
+                      className="h-80 w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--wine-deep)]/90 via-[color:var(--wine)]/30 to-transparent" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span
+                        className="flex h-16 w-16 items-center justify-center rounded-full text-2xl text-cream-soft ring-2 ring-[color:var(--gold)] transition-all duration-500 group-hover:scale-110 group-hover:ring-4"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, var(--gold) 0%, var(--wine) 100%)",
+                          boxShadow:
+                            "0 10px 30px -8px color-mix(in oklab, var(--gold) 60%, transparent)",
+                        }}
+                      >
+                        ▶
+                      </span>
+                    </div>
+                    <div className="absolute inset-x-0 bottom-0 p-5 text-left">
+                      <h4 className="font-serif text-xl text-cream-soft">{v.title}</h4>
+                    </div>
+                  </button>
+                );
+              }}
+            />
+          </Reveal>
         </div>
       </section>
 
@@ -784,14 +786,23 @@ function Index() {
               },
             ].map((f) => (
               <Reveal key={f.q}>
-                <details className="group rounded-xl border border-[color:var(--gold)]/30 bg-cream px-5 py-4 open:shadow-sm">
+                <details
+                  data-faq
+                  className="group rounded-xl border border-[color:var(--gold)]/30 bg-cream px-5 py-4 transition-all duration-300 open:border-[color:var(--gold)]/70 open:shadow-[0_18px_40px_-24px_color-mix(in_oklab,var(--wine)_35%,transparent)] hover:border-[color:var(--gold)]/60"
+                >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
                     <span className="font-serif text-lg text-wine">{f.q}</span>
-                    <span className="text-2xl text-gold transition-transform group-open:rotate-45">
+                    <span
+                      className="flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--gold)]/50 text-xl text-gold transition-transform duration-500 group-open:rotate-[135deg] group-open:border-[color:var(--gold)] group-open:bg-gold group-open:text-cream-soft"
+                    >
                       +
                     </span>
                   </summary>
-                  <p className="mt-3 text-sm leading-relaxed text-foreground/75">{f.a}</p>
+                  <div className="faq-body">
+                    <div>
+                      <p className="pt-4 text-sm leading-relaxed text-foreground/75">{f.a}</p>
+                    </div>
+                  </div>
                 </details>
               </Reveal>
             ))}
