@@ -169,15 +169,44 @@
   color: var(--cream-soft);
   box-shadow: 0 10px 30px -12px color-mix(in oklab, var(--wine) 55%, transparent);
   transition: transform 250ms ease, box-shadow 250ms ease, filter 250ms ease;
-  &:hover { transform: translateY(-1px); filter: brightness(1.05); }
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 20%, color-mix(in oklab, var(--gold-soft) 80%, white) 45%, color-mix(in oklab, white 90%, transparent) 50%, color-mix(in oklab, var(--gold-soft) 80%, white) 55%, transparent 80%);
+    transform: translateX(-120%);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    animation: shimmer 3.6s ease-in-out infinite;
+  }
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow: 0 18px 40px -14px color-mix(in oklab, var(--gold) 55%, transparent), 0 0 0 1px color-mix(in oklab, var(--gold) 45%, transparent);
+  }
+  &:active { transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-120%); }
+  55%  { transform: translateX(120%); }
+  100% { transform: translateX(120%); }
 }
 
 @utility btn-outline-gold {
   border: 1px solid var(--gold);
   color: var(--gold);
   background: transparent;
-  transition: background 250ms ease, color 250ms ease;
-  &:hover { background: color-mix(in oklab, var(--gold) 15%, transparent); color: var(--wine-deep); }
+  transition: background 300ms ease, color 300ms ease, transform 300ms ease, box-shadow 300ms ease;
+  &:hover {
+    background: color-mix(in oklab, var(--gold) 18%, transparent);
+    color: var(--wine-deep);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px -14px color-mix(in oklab, var(--gold) 60%, transparent);
+  }
 }
 
 @utility gold-divider {
@@ -200,3 +229,56 @@
 @utility fade-up {
   animation: fade-up 700ms ease-out both;
 }
+
+@keyframes fade-in-left {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@utility fade-in-left { animation: fade-in-left 800ms cubic-bezier(.22,.61,.36,1) both; }
+
+@keyframes fade-in-right {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@utility fade-in-right { animation: fade-in-right 800ms cubic-bezier(.22,.61,.36,1) both; }
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@utility scale-in { animation: scale-in 700ms cubic-bezier(.22,.61,.36,1) both; }
+
+@utility card-lift {
+  transition: transform 400ms cubic-bezier(.22,.61,.36,1), box-shadow 400ms ease, border-color 400ms ease;
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 50px -24px color-mix(in oklab, var(--wine) 45%, transparent);
+    border-color: color-mix(in oklab, var(--gold) 70%, transparent);
+  }
+}
+
+@utility img-zoom {
+  overflow: hidden;
+  & > img {
+    transition: transform 900ms cubic-bezier(.22,.61,.36,1), filter 600ms ease;
+  }
+  &:hover > img {
+    transform: scale(1.06);
+    filter: saturate(1.08) brightness(1.02);
+  }
+}
+
+/* Smooth accordion content */
+details[data-faq] > div.faq-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 380ms cubic-bezier(.22,.61,.36,1), opacity 300ms ease;
+  opacity: 0;
+}
+details[data-faq][open] > div.faq-body {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+details[data-faq] > div.faq-body > div { overflow: hidden; }
+
+html { scroll-behavior: smooth; }
