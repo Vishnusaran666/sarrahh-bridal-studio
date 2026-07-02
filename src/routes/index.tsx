@@ -292,6 +292,7 @@ function Index() {
   const [booking, setBooking] = useState<BookingType | null>(null);
   const [navOpen, setNavOpen] = useState(false);
   const open = (t: BookingType) => setBooking(t);
+  const scrollY = useParallax();
 
   return (
     <div className="min-h-screen bg-cream text-foreground" style={{ scrollBehavior: "smooth" }}>
@@ -369,17 +370,23 @@ function Index() {
 
       {/* HERO */}
       <section id="top" className="relative overflow-hidden">
-        <div className="absolute inset-0">
+        <div
+          className="absolute inset-0 will-change-transform"
+          style={{ transform: `translate3d(0, ${scrollY * 0.35}px, 0) scale(${1 + Math.min(scrollY, 400) * 0.0004})` }}
+        >
           <img
             src={heroImg}
             alt="Sarrahh bridal collection"
             width={1920}
             height={1280}
-            className="h-full w-full object-cover"
+            className="h-[120%] w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--wine-deep)]/70 via-[color:var(--wine)]/55 to-[color:var(--wine-deep)]/90" />
         </div>
-        <div className="relative mx-auto max-w-6xl px-6 py-24 text-center text-cream-soft sm:py-32 md:py-40">
+        <div
+          className="relative mx-auto max-w-6xl px-6 py-28 text-center text-cream-soft sm:py-36 md:py-44"
+          style={{ transform: `translate3d(0, ${scrollY * -0.12}px, 0)` }}
+        >
           <Reveal>
             <p className="text-xs uppercase tracking-[0.5em] text-gold-soft">Sarrahh · Est. Craft</p>
             <div className="gold-divider mx-auto mt-6 w-32" />
