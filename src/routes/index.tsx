@@ -559,7 +559,7 @@ function Index() {
               },
             ].map((s, i) => (
               <Reveal key={s.title} className="relative" delay={i * 120}>
-                <div className="card-lift relative flex h-full flex-col items-center rounded-2xl border border-[color:var(--gold)]/30 bg-cream-soft px-6 py-10 text-center shadow-[0_8px_28px_-16px_color-mix(in_oklab,var(--wine)_25%,transparent)]">
+                <div className="group card-lift relative flex h-full flex-col items-center rounded-2xl border border-[color:var(--gold)]/30 bg-cream-soft px-6 py-10 text-center shadow-[0_8px_28px_-16px_color-mix(in_oklab,var(--wine)_25%,transparent)]">
                   <div className="mb-2 font-serif text-xs uppercase tracking-[0.3em] text-gold">
                     Step {i + 1}
                   </div>
@@ -669,14 +669,15 @@ function Index() {
               "Perfect fitting process",
               "Timely delivery",
               "Bridal outfit customization",
-            ].map((item) => (
-              <Reveal key={item}>
-                <div className="flex items-center gap-4 rounded-xl border border-[color:var(--gold)]/25 bg-cream-soft px-5 py-4">
+            ].map((item, i) => (
+              <Reveal key={item} delay={i * 80}>
+                <div className="group card-lift flex items-center gap-4 rounded-xl border border-[color:var(--gold)]/25 bg-cream-soft px-5 py-4">
                   <span
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold text-cream-soft"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-cream-soft transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110"
                     style={{
                       background:
                         "linear-gradient(135deg, var(--gold) 0%, var(--wine) 100%)",
+                      boxShadow: "0 8px 20px -10px color-mix(in oklab, var(--gold) 55%, transparent)",
                     }}
                   >
                     ✓
