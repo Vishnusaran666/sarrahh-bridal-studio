@@ -288,6 +288,51 @@ const NAV_LINKS = [
   { href: "#book", label: "Book" },
 ];
 
+const TESTIMONIALS = [
+  {
+    key: "t1",
+    img: bride1,
+    quote:
+      "I was planning to travel to Coimbatore, but after visiting Sarrahh, I knew this was the right place.",
+    name: "Priya · Tiruppur",
+  },
+  {
+    key: "t2",
+    img: bride2,
+    quote:
+      "They designed my blouse around my grandmother's saree. It felt like the most personal thing I own.",
+    name: "Meera · Karur",
+  },
+  {
+    key: "t3",
+    img: bride3,
+    quote:
+      "From consultation to final fitting, every step felt considered. I felt like their only bride.",
+    name: "Anitha · Erode",
+  },
+  {
+    key: "t4",
+    img: bride1,
+    quote:
+      "The Aari work is impossibly fine. My blouse looked like an heirloom on day one.",
+    name: "Kavya · Pollachi",
+  },
+  {
+    key: "t5",
+    img: bride2,
+    quote:
+      "Booked an online consultation first and it saved us three trips. So thoughtful.",
+    name: "Divya · Chennai",
+  },
+];
+
+const VIDEOS = [
+  { key: "v1", title: "Bride Experiences", img: bride1 },
+  { key: "v2", title: "Bridal Transformations", img: bride2 },
+  { key: "v3", title: "Customer Stories", img: bride3 },
+  { key: "v4", title: "Studio Fittings", img: bride1 },
+];
+
 function Index() {
   const [booking, setBooking] = useState<BookingType | null>(null);
   const [navOpen, setNavOpen] = useState(false);
