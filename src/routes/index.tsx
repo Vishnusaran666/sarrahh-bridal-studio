@@ -269,10 +269,10 @@ function Field({
   );
 }
 
-function ArchFrame({ children }: { children: ReactNode }) {
+function ArchFrame({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <div
-      className="relative overflow-hidden bg-wine"
+      className={`relative overflow-hidden bg-wine ${className}`}
       style={{ borderTopLeftRadius: "50% 30%", borderTopRightRadius: "50% 30%" }}
     >
       {children}
