@@ -572,50 +572,35 @@ function Index() {
             </div>
           </Reveal>
 
-          <div className="mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-6 md:grid md:grid-cols-3 md:overflow-visible">
-            {[
-              {
-                img: bride1,
-                quote:
-                  "I was planning to travel to Coimbatore, but after visiting Sarrahh, I knew this was the right place.",
-                name: "Priya · Tiruppur",
-              },
-              {
-                img: bride2,
-                quote:
-                  "They designed my blouse around my grandmother's saree. It felt like the most personal thing I own.",
-                name: "Meera · Karur",
-              },
-              {
-                img: bride3,
-                quote:
-                  "From consultation to final fitting, every step felt considered. I felt like their only bride.",
-                name: "Anitha · Erode",
-              },
-            ].map((t) => (
-              <Reveal key={t.name} className="min-w-[85%] snap-center md:min-w-0">
-                <article className="flex h-full flex-col rounded-2xl border border-[color:var(--gold)]/30 bg-cream p-7 shadow-sm">
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={t.img}
-                      alt={t.name}
-                      loading="lazy"
-                      width={64}
-                      height={64}
-                      className="h-14 w-14 rounded-full object-cover ring-2 ring-[color:var(--gold)]/50"
-                    />
-                    <div>
-                      <div className="flex gap-0.5 text-sm text-gold">★★★★★</div>
-                      <p className="font-serif text-sm text-wine">{t.name}</p>
+          <Reveal className="mt-12">
+            <Carousel
+              items={TESTIMONIALS}
+              renderItem={(item) => {
+                const t = item as (typeof TESTIMONIALS)[number];
+                return (
+                  <article className="card-lift flex h-full flex-col rounded-2xl border border-[color:var(--gold)]/30 bg-cream p-7 shadow-[0_10px_30px_-18px_color-mix(in_oklab,var(--wine)_30%,transparent)]">
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={t.img}
+                        alt={t.name}
+                        loading="lazy"
+                        width={64}
+                        height={64}
+                        className="h-14 w-14 rounded-full object-cover ring-2 ring-[color:var(--gold)]/50 transition-transform duration-500 hover:scale-105"
+                      />
+                      <div>
+                        <div className="flex gap-0.5 text-sm text-gold">★★★★★</div>
+                        <p className="font-serif text-sm text-wine">{t.name}</p>
+                      </div>
                     </div>
-                  </div>
-                  <p className="mt-5 font-serif text-lg italic leading-relaxed text-foreground/85">
-                    "{t.quote}"
-                  </p>
-                </article>
-              </Reveal>
-            ))}
-          </div>
+                    <p className="mt-5 font-serif text-lg italic leading-relaxed text-foreground/85">
+                      "{t.quote}"
+                    </p>
+                  </article>
+                );
+              }}
+            />
+          </Reveal>
           <p className="mt-2 text-center text-xs text-foreground/50">
             (Real customer photos & reviews)
           </p>
