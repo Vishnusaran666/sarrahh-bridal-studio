@@ -174,8 +174,13 @@
 @utility btn-gold {
   background-image: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 40%, var(--wine) 100%);
   color: var(--wine-deep);
-  box-shadow: 0 12px 30px -10px color-mix(in oklab, var(--gold) 65%, transparent), inset 0 1px 0 hsla(0, 0%, 100%, 0.3);
-  transition: transform 300ms cubic-bezier(.22, .61, .36, 1), box-shadow 300ms ease, filter 300ms ease;
+  box-shadow:
+    0 12px 30px -10px color-mix(in oklab, var(--gold) 65%, transparent),
+    inset 0 1px 0 hsla(0, 0%, 100%, 0.3);
+  transition:
+    transform 300ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 300ms ease,
+    filter 300ms ease;
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -187,7 +192,14 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(120deg, transparent 20%, color-mix(in oklab, var(--cream-soft) 80%, white) 45%, color-mix(in oklab, white 90%, transparent) 50%, color-mix(in oklab, var(--cream-soft) 80%, white) 55%, transparent 80%);
+    background: linear-gradient(
+      120deg,
+      transparent 20%,
+      color-mix(in oklab, var(--cream-soft) 80%, white) 45%,
+      color-mix(in oklab, white 90%, transparent) 50%,
+      color-mix(in oklab, var(--cream-soft) 80%, white) 55%,
+      transparent 80%
+    );
     transform: translateX(-120%);
     mix-blend-mode: overlay;
     pointer-events: none;
@@ -197,7 +209,10 @@
   &:hover {
     transform: translateY(-2px) scale(1.02);
     filter: brightness(1.1);
-    box-shadow: 0 20px 40px -12px color-mix(in oklab, var(--gold) 75%, transparent), 0 0 0 1px color-mix(in oklab, var(--gold-soft) 60%, transparent), inset 0 1px 0 hsla(0, 0%, 100%, 0.5);
+    box-shadow:
+      0 20px 40px -12px color-mix(in oklab, var(--gold) 75%, transparent),
+      0 0 0 1px color-mix(in oklab, var(--gold-soft) 60%, transparent),
+      inset 0 1px 0 hsla(0, 0%, 100%, 0.5);
   }
 
   &:active {
@@ -223,25 +238,34 @@
   border: 1px solid color-mix(in oklab, var(--gold) 75%, transparent);
   color: var(--gold);
   background: transparent;
-  box-shadow: inset 0 0 10px transparent, 0 0 0 transparent;
-  transition: all 400ms cubic-bezier(.22, .61, .36, 1);
+  box-shadow:
+    inset 0 0 10px transparent,
+    0 0 0 transparent;
+  transition: all 400ms cubic-bezier(0.22, 0.61, 0.36, 1);
 
   &:hover {
     background: color-mix(in oklab, var(--gold) 10%, transparent);
     color: var(--gold-soft);
     border-color: var(--gold);
     transform: translateY(-2px);
-    box-shadow: inset 0 0 15px color-mix(in oklab, var(--gold) 20%, transparent), 0 12px 24px -8px color-mix(in oklab, var(--gold) 35%, transparent);
+    box-shadow:
+      inset 0 0 15px color-mix(in oklab, var(--gold) 20%, transparent),
+      0 12px 24px -8px color-mix(in oklab, var(--gold) 35%, transparent);
   }
 }
 
 @utility gold-divider {
   height: 1px;
-  background-image: linear-gradient(90deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold) 20%,
+    var(--gold) 80%,
+    transparent
+  );
 }
 
 @keyframes pulse-gold {
-
   0%,
   100% {
     box-shadow: 0 0 0 0 color-mix(in oklab, var(--gold) 55%, transparent);
@@ -285,7 +309,7 @@
 }
 
 @utility fade-in-left {
-  animation: fade-in-left 800ms cubic-bezier(.22, .61, .36, 1) both;
+  animation: fade-in-left 800ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
 @keyframes fade-in-right {
@@ -301,13 +325,13 @@
 }
 
 @utility fade-in-right {
-  animation: fade-in-right 800ms cubic-bezier(.22, .61, .36, 1) both;
+  animation: fade-in-right 800ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
 @keyframes scale-in {
   from {
     opacity: 0;
-    transform: scale(.96);
+    transform: scale(0.96);
   }
 
   to {
@@ -317,11 +341,14 @@
 }
 
 @utility scale-in {
-  animation: scale-in 700ms cubic-bezier(.22, .61, .36, 1) both;
+  animation: scale-in 700ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
 @utility card-lift {
-  transition: transform 500ms cubic-bezier(.22, .61, .36, 1), box-shadow 500ms ease, border-color 500ms ease;
+  transition:
+    transform 500ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 500ms ease,
+    border-color 500ms ease;
 
   &:hover {
     transform: translateY(-8px) scale(1.01);
@@ -335,7 +362,9 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid color-mix(in oklab, var(--gold) 20%, transparent);
-  box-shadow: 0 20px 50px -20px color-mix(in oklab, var(--wine) 10%, transparent), inset 0 1px 0 hsla(0, 0%, 100%, 0.3);
+  box-shadow:
+    0 20px 50px -20px color-mix(in oklab, var(--wine) 10%, transparent),
+    inset 0 1px 0 hsla(0, 0%, 100%, 0.3);
 }
 
 @utility invitation-card {
@@ -375,13 +404,15 @@
     transition: box-shadow 500ms ease;
   }
 
-  &>img {
-    transition: transform 900ms cubic-bezier(.22, .61, .36, 1), filter 600ms ease;
+  & > img {
+    transition:
+      transform 900ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      filter 600ms ease;
     will-change: transform;
     border-radius: 1.5rem;
   }
 
-  &:hover>img {
+  &:hover > img {
     transform: scale(1.08);
     filter: saturate(1.1) contrast(1.05);
   }
@@ -394,30 +425,34 @@
 @utility img-zoom {
   overflow: hidden;
 
-  &>img {
-    transition: transform 900ms cubic-bezier(.22, .61, .36, 1), filter 600ms ease;
+  & > img {
+    transition:
+      transform 900ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      filter 600ms ease;
   }
 
-  &:hover>img {
+  &:hover > img {
     transform: scale(1.06);
     filter: saturate(1.08) brightness(1.02);
   }
 }
 
 /* Smooth accordion content */
-details[data-faq]>div.faq-body {
+details[data-faq] > div.faq-body {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 380ms cubic-bezier(.22, .61, .36, 1), opacity 300ms ease;
+  transition:
+    grid-template-rows 380ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    opacity 300ms ease;
   opacity: 0;
 }
 
-details[data-faq][open]>div.faq-body {
+details[data-faq][open] > div.faq-body {
   grid-template-rows: 1fr;
   opacity: 1;
 }
 
-details[data-faq]>div.faq-body>div {
+details[data-faq] > div.faq-body > div {
   overflow: hidden;
 }
 
@@ -426,7 +461,11 @@ html {
 }
 
 @utility icon-elegant {
-  transition: transform 400ms cubic-bezier(.22, .61, .36, 1), color 400ms ease, fill 400ms ease, stroke-width 400ms ease;
+  transition:
+    transform 400ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    color 400ms ease,
+    fill 400ms ease,
+    stroke-width 400ms ease;
   stroke: currentColor;
 
   &:hover {
@@ -436,7 +475,9 @@ html {
 }
 
 @utility icon-fill-hover {
-  transition: fill 500ms ease, transform 400ms cubic-bezier(.22, .61, .36, 1);
+  transition:
+    fill 500ms ease,
+    transform 400ms cubic-bezier(0.22, 0.61, 0.36, 1);
   fill: transparent;
 
   &:hover {
