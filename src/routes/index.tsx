@@ -5,6 +5,7 @@ import craftImg from "@/assets/craft.jpg";
 import bride1 from "@/assets/bride1.jpg";
 import bride2 from "@/assets/bride2.jpg";
 import bride3 from "@/assets/bride3.jpg";
+import { CalendarHeart, Scissors, Wand2, Star, Play, Plus, Minus, CheckCircle2, Check } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -76,6 +77,31 @@ function useParallax() {
   return y;
 }
 
+function Counter({ end, duration = 2000, prefix = "", suffix = "" }: { end: number, duration?: number, prefix?: string, suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        let startTime: number;
+        const step = (timestamp: number) => {
+          if (!startTime) startTime = timestamp;
+          const progress = Math.min((timestamp - startTime) / duration, 1);
+          setCount(Math.floor(progress * end));
+          if (progress < 1) window.requestAnimationFrame(step);
+        };
+        window.requestAnimationFrame(step);
+        observer.unobserve(el);
+      }
+    }, { threshold: 0.1 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [end, duration]);
+  return <span ref={ref}>{prefix}{count}{suffix}</span>;
+}
+
 function Carousel({
   items,
   renderItem,
@@ -133,9 +159,8 @@ function Carousel({
               key={i}
               onClick={() => setIndex(i)}
               aria-label={`Go to slide ${i + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === clamped ? "w-8 bg-gold" : "w-2 bg-wine/25 hover:bg-wine/50"
-              }`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${i === clamped ? "w-8 bg-gold" : "w-2 bg-wine/25 hover:bg-wine/50"
+                }`}
             />
           ))}
         </div>
@@ -345,13 +370,13 @@ function Index() {
       <div className="bg-[color:var(--wine-deep)] text-cream-soft">
         <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-4 py-2 text-[11px] tracking-[0.18em] uppercase sm:text-xs">
           <span className="pulse-strip inline-block h-1.5 w-1.5 rounded-full bg-gold" />
-          <span>Only 10 appointments open this month — book now</span>
+          <span>Only <Counter end={10} /> appointments open this month — book now</span>
         </div>
       </div>
 
       {/* Navbar */}
-      <header className="sticky top-0 z-50 border-b border-[color:var(--gold)]/25 bg-cream/85 backdrop-blur">
-        <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-4 px-5 py-4 sm:px-8">
+      <header className={`sticky top-0 z-50 border-b border-[color:var(--gold)]/25 transition-all duration-500 flex items-center ${scrollY > 50 ? "bg-[color:var(--cream-soft)]/95 backdrop-blur-xl h-16 shadow-[0_10px_30px_-10px_rgba(40,10,15,0.08)]" : "bg-cream/40 backdrop-blur h-24"}`}>
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-4 px-5 sm:px-8">
           <a href="#top" className="flex items-center gap-2">
             <span className="font-serif text-2xl font-semibold tracking-[0.22em] text-wine">
               SARRAHH
@@ -426,10 +451,10 @@ function Index() {
             height={1280}
             className="h-[120%] w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--wine-deep)]/70 via-[color:var(--wine)]/55 to-[color:var(--wine-deep)]/90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--wine-deep)]/85 via-[color:var(--wine)]/65 to-[color:var(--wine-deep)]/95" />
         </div>
         <div
-          className="relative mx-auto max-w-6xl px-6 py-28 text-center text-cream-soft sm:py-36 md:py-44"
+          className="relative mx-auto max-w-6xl px-6 py-32 text-center text-cream-soft sm:py-44 md:py-52"
           style={{ transform: `translate3d(0, ${scrollY * -0.12}px, 0)` }}
         >
           <Reveal>
@@ -446,7 +471,7 @@ function Index() {
               designs.
             </p>
             <p className="mx-auto mt-4 max-w-xl font-serif text-sm italic text-gold-soft/95 sm:text-base">
-              With ₹1 Lakh+ bridal Aari work creations and a craftsmanship-first approach, we help
+              With ₹<Counter end={1} /> Lakh+ bridal Aari work creations and a craftsmanship-first approach, we help
               every bride feel confident on her biggest day.
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
@@ -468,45 +493,42 @@ function Index() {
       </section>
 
       {/* WHY SARRAHH */}
-      <section id="why" className="bg-cream py-20 sm:py-28">
-        <div className="mx-auto max-w-3xl px-6 text-center">
+      <section id="why" className="bg-gradient-to-b from-cream to-cream-soft py-32 sm:py-48">
+        <div className="mx-auto max-w-4xl px-6 text-center">
           <Reveal>
-            <div className="gold-divider mx-auto w-24" />
-            <h2 className="mt-6 font-serif text-3xl leading-tight text-wine sm:text-4xl md:text-5xl">
-              Why travel far when your Wedding Wardrobe Partner is near you?
-            </h2>
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-foreground/80">
-              Most brides travel to bigger cities believing they'll find better bridal outfits. At
-              Sarrahh, we bring the same premium bridal experience closer to home — with
-              personalized designs, expert craftsmanship, and fittings that make you feel confident.
+            <blockquote className="relative inline-block p-10 md:p-16">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+              <span className="text-6xl text-gold-soft/50 absolute top-4 left-4 font-serif leading-none opacity-50">“</span>
+              <h2 className="relative font-serif text-3xl italic tracking-wide leading-relaxed text-wine sm:text-4xl md:text-5xl">
+                Why travel far when your Wedding Wardrobe Partner is near you?
+              </h2>
+              <span className="text-6xl text-gold-soft/50 absolute bottom-0 right-4 font-serif leading-none opacity-50">”</span>
+            </blockquote>
+            <p className="mx-auto mt-8 max-w-2xl text-sm tracking-[0.2em] uppercase text-foreground/60 font-medium">
+              The Boutique Experience, Closer to Home
             </p>
-            <div className="gold-divider mx-auto mt-8 w-24" />
           </Reveal>
         </div>
       </section>
 
       {/* WE DON'T FOLLOW CATALOGUES */}
-      <section className="bg-cream-soft py-20 sm:py-28">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 md:grid-cols-2 md:gap-16">
+      <section className="relative bg-gradient-to-b from-cream-soft to-cream py-32 sm:py-40">
+        <div className="bg-luxury-pattern absolute inset-0 opacity-40 pointer-events-none" />
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 md:grid-cols-2 md:gap-16">
           <Reveal variant="left">
-            <div className="relative">
-              <div
-                className="absolute -inset-4 -z-10 opacity-30"
-                style={{
-                  background:
-                    "radial-gradient(circle at 30% 30%, var(--gold) 0%, transparent 60%)",
-                }}
-              />
-              <ArchFrame className="img-zoom shadow-[0_30px_60px_-30px_color-mix(in_oklab,var(--wine)_55%,transparent)]">
+            <div className="relative p-6 md:p-10 bg-cream">
+              <div className="absolute inset-0 border border-[color:var(--gold)]/30 m-2" />
+              <div className="img-luxury relative z-10 w-[105%] ml-[-2%] md:ml-[-5%] shadow-[0_30px_60px_-30px_color-mix(in_oklab,var(--wine)_55%,transparent)]">
                 <img
                   src={craftImg}
                   alt="Aari craftsmanship close-up"
                   loading="lazy"
                   width={1200}
                   height={1408}
-                  className="h-[520px] w-full object-cover"
+                  className="h-[560px] w-full object-cover"
                 />
-              </ArchFrame>
+              </div>
             </div>
           </Reveal>
           <Reveal variant="right" delay={120}>
@@ -533,7 +555,7 @@ function Index() {
       </section>
 
       {/* PROCESS */}
-      <section id="process" className="bg-cream py-20 sm:py-28">
+      <section id="process" className="bg-gradient-to-b from-cream to-cream-soft py-32 sm:py-40">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal className="text-center">
             <p className="text-xs uppercase tracking-[0.35em] text-gold">In Three Considered Steps</p>
@@ -543,28 +565,28 @@ function Index() {
           <div className="mt-16 grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-6">
             {[
               {
-                icon: "📅",
+                icon: <CalendarHeart className="icon-elegant w-8 h-8" />,
                 title: "Book Your Bridal Consultation",
                 text: "Meet us in the studio or connect online.",
               },
               {
-                icon: "🪡",
+                icon: <Scissors className="icon-elegant w-8 h-8" />,
                 title: "Design Your Dream Outfit",
                 text: "We understand your vision and customize it with expert craftsmanship.",
               },
               {
-                icon: "✨",
+                icon: <Wand2 className="icon-elegant w-8 h-8" />,
                 title: "Walk Into Your Wedding",
                 text: "Receive your perfectly crafted bridal outfit, ready for your biggest day.",
               },
             ].map((s, i) => (
               <Reveal key={s.title} className="relative" delay={i * 120}>
-                <div className="group card-lift relative flex h-full flex-col items-center rounded-2xl border border-[color:var(--gold)]/30 bg-cream-soft px-6 py-10 text-center shadow-[0_8px_28px_-16px_color-mix(in_oklab,var(--wine)_25%,transparent)]">
+                <div className="glass-card group card-lift relative flex h-full flex-col items-center rounded-3xl px-6 py-12 text-center">
                   <div className="mb-2 font-serif text-xs uppercase tracking-[0.3em] text-gold">
                     Step {i + 1}
                   </div>
                   <div
-                    className="flex h-16 w-16 items-center justify-center rounded-full text-3xl transition-transform duration-500 group-hover:rotate-6"
+                    className="flex h-16 w-16 items-center justify-center rounded-full transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-105"
                     style={{
                       background:
                         "linear-gradient(135deg, var(--gold) 0%, var(--wine) 100%)",
@@ -580,10 +602,10 @@ function Index() {
                 {i < 2 && (
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute left-1/2 top-full my-4 -translate-x-1/2 text-gold md:left-full md:top-1/2 md:my-0 md:-translate-x-1/2 md:-translate-y-1/2"
+                    className="pointer-events-none absolute left-1/2 top-full my-6 -translate-x-1/2 md:left-full md:top-1/2 md:my-0 md:-translate-x-1/2 md:-translate-y-1/2 z-0"
                   >
-                    <span className="hidden md:inline">— — —▸</span>
-                    <span className="md:hidden">▼</span>
+                    <div className="hidden md:block w-16 h-[1px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+                    <div className="md:hidden w-[1px] h-10 bg-gradient-to-b from-transparent via-gold to-transparent" />
                   </div>
                 )}
               </Reveal>
@@ -593,12 +615,12 @@ function Index() {
       </section>
 
       {/* BRIDES WHO TRUSTED */}
-      <section id="brides" className="bg-cream-soft py-20 sm:py-28">
+      <section id="brides" className="relative bg-gradient-to-b from-cream-soft to-cream py-32 sm:py-40">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal className="text-center">
-            <div className="flex justify-center gap-1 text-2xl text-gold">
-              {"★★★★★".split("").map((_, i) => (
-                <span key={i}>★</span>
+            <div className="flex justify-center gap-1.5 text-gold">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className="icon-elegant w-6 h-6 fill-current" />
               ))}
             </div>
             <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl">
@@ -623,24 +645,29 @@ function Index() {
               renderItem={(item) => {
                 const t = item as (typeof TESTIMONIALS)[number];
                 return (
-                  <article className="card-lift flex h-full flex-col rounded-2xl border border-[color:var(--gold)]/30 bg-cream p-7 shadow-[0_10px_30px_-18px_color-mix(in_oklab,var(--wine)_30%,transparent)]">
-                    <div className="flex items-center gap-4">
+                  <article className="glass-card card-lift flex h-full flex-col p-8 rounded-3xl relative">
+                    <span className="text-6xl text-gold/20 absolute right-8 top-8 font-serif leading-none pointer-events-none">”</span>
+                    <p className="mt-2 font-serif text-lg italic leading-relaxed text-foreground/85 relative z-10 grow">
+                      "{t.quote}"
+                    </p>
+                    <div className="flex items-center gap-4 mt-8">
                       <img
                         src={t.img}
                         alt={t.name}
                         loading="lazy"
                         width={64}
                         height={64}
-                        className="h-14 w-14 rounded-full object-cover ring-2 ring-[color:var(--gold)]/50 transition-transform duration-500 hover:scale-105"
+                        className="h-14 w-14 rounded-full object-cover ring-2 ring-[color:var(--gold)]/50 transition-transform duration-500 hover:scale-110 shadow-lg"
                       />
                       <div>
-                        <div className="flex gap-0.5 text-sm text-gold">★★★★★</div>
-                        <p className="font-serif text-sm text-wine">{t.name}</p>
+                        <div className="flex gap-0.5 text-gold">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                          ))}
+                        </div>
+                        <p className="mt-1 font-serif text-sm text-wine">{t.name}</p>
                       </div>
                     </div>
-                    <p className="mt-5 font-serif text-lg italic leading-relaxed text-foreground/85">
-                      "{t.quote}"
-                    </p>
                   </article>
                 );
               }}
@@ -653,37 +680,28 @@ function Index() {
       </section>
 
       {/* WHY BRIDES CHOOSE US */}
-      <section className="bg-cream py-20 sm:py-28">
+      <section className="bg-gradient-to-b from-cream to-cream-soft py-32 sm:py-40">
         <div className="mx-auto max-w-5xl px-6">
           <Reveal className="text-center">
             <p className="text-xs uppercase tracking-[0.35em] text-gold">Craft · Care · Confidence</p>
             <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl">Why Brides Choose Us</h2>
             <div className="gold-divider mx-auto mt-6 w-24" />
           </Reveal>
-          <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+          <div className="mt-20 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-y-16">
             {[
               "Designed around your own style",
               "No catalogue-based designs",
               "Personalized bridal consultation",
               "Premium Aari craftsmanship",
               "Perfect fitting process",
-              "Timely delivery",
               "Bridal outfit customization",
             ].map((item, i) => (
-              <Reveal key={item} delay={i * 80}>
-                <div className="group card-lift flex items-center gap-4 rounded-xl border border-[color:var(--gold)]/25 bg-cream-soft px-5 py-4">
-                  <span
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-cream-soft transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, var(--gold) 0%, var(--wine) 100%)",
-                      boxShadow: "0 8px 20px -10px color-mix(in oklab, var(--gold) 55%, transparent)",
-                    }}
-                  >
-                    ✓
-                  </span>
-                  <span className="font-serif text-lg text-wine">{item}</span>
+              <Reveal key={item} delay={i * 80} className="text-center">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full text-wine mb-5 bg-[color:var(--gold-soft)]/10 relative">
+                  <div className="absolute inset-0 rounded-full border border-gold/30 scale-[1.15]" />
+                  <CheckCircle2 strokeWidth={1} className="h-8 w-8 opacity-80 icon-elegant text-gold" />
                 </div>
+                <span className="font-serif text-xl tracking-wide text-wine block mb-2 px-4">{item}</span>
               </Reveal>
             ))}
           </div>
@@ -691,22 +709,25 @@ function Index() {
       </section>
 
       {/* GOOGLE REVIEWS */}
-      <section className="bg-cream-soft py-20 sm:py-24">
-        <Reveal className="mx-auto max-w-2xl px-6 text-center">
-          <div className="text-5xl text-gold">★★★★★</div>
-          <h3 className="mt-4 font-serif text-3xl text-wine sm:text-4xl">Google Rating</h3>
-          <p className="mt-2 text-sm uppercase tracking-[0.28em] text-foreground/60">
-            Real Reviews · Real Brides
-          </p>
-          <div className="gold-divider mx-auto mt-6 w-24" />
-          <div className="mt-8 rounded-2xl border border-dashed border-[color:var(--gold)]/50 bg-cream px-6 py-10 text-sm text-foreground/60">
+      <section className="relative bg-gradient-to-b from-cream-soft to-cream py-32 sm:py-40">
+        <div className="bg-luxury-pattern absolute inset-0 opacity-40 pointer-events-none" />
+        <Reveal className="relative mx-auto max-w-2xl px-6 flex justify-center">
+          <div className="flex flex-col items-center justify-center p-12 bg-cream rounded-full w-80 h-80 shadow-[0_30px_60px_-20px_color-mix(in_oklab,var(--wine)_25%,transparent)] border border-[color:var(--gold)]/20 relative">
+            <div className="absolute inset-4 rounded-full border border-dashed border-[color:var(--gold)]/50 pointer-events-none" />
+            <div className="text-4xl text-gold mb-2 tracking-widest">★★★★★</div>
+            <h3 className="font-serif text-3xl text-wine text-center">Google<br />Rating</h3>
+            <p className="mt-4 text-[10px] sm:text-xs uppercase tracking-[0.25em] text-foreground/50 text-center font-medium">Real Reviews<br />Real Brides</p>
+          </div>
+        </Reveal>
+        <Reveal className="mt-8 text-center relative z-10 w-full flex justify-center">
+          <div className="px-6 py-3 text-xs uppercase tracking-widest bg-wine text-cream-soft rounded-full shadow-xl opacity-90 inline-block border border-[color:var(--gold)]/30">
             [ Google Reviews widget embeds here ]
           </div>
         </Reveal>
       </section>
 
       {/* VIDEO TESTIMONIALS */}
-      <section className="bg-cream py-20 sm:py-28">
+      <section className="bg-gradient-to-b from-cream to-cream-soft py-32 sm:py-40">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal className="text-center">
             <p className="text-xs uppercase tracking-[0.35em] text-gold">Watch · Listen · Feel</p>
@@ -719,27 +740,19 @@ function Index() {
               renderItem={(item) => {
                 const v = item as (typeof VIDEOS)[number];
                 return (
-                  <button className="group relative block w-full overflow-hidden rounded-2xl shadow-[0_18px_40px_-24px_color-mix(in_oklab,var(--wine)_50%,transparent)] transition-all duration-500 hover:shadow-[0_28px_60px_-24px_color-mix(in_oklab,var(--wine)_55%,transparent)]">
+                  <button className="img-luxury group relative block w-full text-left">
                     <img
                       src={v.img}
                       alt={v.title}
                       loading="lazy"
                       width={800}
                       height={1000}
-                      className="h-80 w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
+                      className="h-80 w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--wine-deep)]/90 via-[color:var(--wine)]/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--wine-deep)]/95 via-[color:var(--wine)]/20 to-transparent" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span
-                        className="flex h-16 w-16 items-center justify-center rounded-full text-2xl text-cream-soft ring-2 ring-[color:var(--gold)] transition-all duration-500 group-hover:scale-110 group-hover:ring-4"
-                        style={{
-                          background:
-                            "linear-gradient(135deg, var(--gold) 0%, var(--wine) 100%)",
-                          boxShadow:
-                            "0 10px 30px -8px color-mix(in oklab, var(--gold) 60%, transparent)",
-                        }}
-                      >
-                        ▶
+                      <span className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full text-cream-soft ring-[1px] ring-[color:var(--gold)] backdrop-blur-md bg-wine/40 transition-all duration-700 ease-out group-hover:scale-110 group-hover:bg-wine/60 shadow-[0_0_40px_rgba(40,10,15,0.4)]">
+                        <Play className="ml-1 h-6 w-6 fill-current opacity-90" />
                       </span>
                     </div>
                     <div className="absolute inset-x-0 bottom-0 p-5 text-left">
@@ -754,7 +767,7 @@ function Index() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="bg-cream-soft py-20 sm:py-28">
+      <section id="faq" className="bg-gradient-to-b from-cream-soft to-cream py-32 sm:py-40">
         <div className="mx-auto max-w-3xl px-6">
           <Reveal className="text-center">
             <p className="text-xs uppercase tracking-[0.35em] text-gold">Answers For Every Bride</p>
@@ -789,14 +802,14 @@ function Index() {
               <Reveal key={f.q}>
                 <details
                   data-faq
-                  className="group rounded-xl border border-[color:var(--gold)]/30 bg-cream px-5 py-4 transition-all duration-300 open:border-[color:var(--gold)]/70 open:shadow-[0_18px_40px_-24px_color-mix(in_oklab,var(--wine)_35%,transparent)] hover:border-[color:var(--gold)]/60"
+                  className="glass-card group rounded-2xl px-6 py-5 transition-all duration-300 open:border-[color:var(--gold)]/70 hover:border-[color:var(--gold)]/60"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
                     <span className="font-serif text-lg text-wine">{f.q}</span>
                     <span
-                      className="flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--gold)]/50 text-xl text-gold transition-transform duration-500 group-open:rotate-[135deg] group-open:border-[color:var(--gold)] group-open:bg-gold group-open:text-cream-soft"
+                      className="flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--gold)]/50 text-gold transition-transform duration-500 group-open:rotate-[135deg] group-open:border-[color:var(--gold)] group-open:bg-gold group-open:text-cream-soft"
                     >
-                      +
+                      <Plus className="h-4 w-4" />
                     </span>
                   </summary>
                   <div className="faq-body">
@@ -812,41 +825,30 @@ function Index() {
       </section>
 
       {/* EXCLUSIVE BENEFITS */}
-      <section className="bg-wine py-20 sm:py-24">
+      <section className="bg-gradient-to-b from-wine to-wine-deep py-32 sm:py-48">
         <div className="mx-auto max-w-3xl px-6">
           <Reveal>
-            <div
-              className="rounded-3xl p-1"
-              style={{
-                background:
-                  "linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 50%, var(--gold) 100%)",
-                boxShadow: "0 30px 80px -30px color-mix(in oklab, var(--gold) 60%, transparent)",
-              }}
-            >
-              <div className="rounded-[calc(1.5rem-4px)] bg-wine-deep px-8 py-12 text-cream-soft">
-                <p className="text-center text-xs uppercase tracking-[0.35em] text-gold-soft">
-                  A Considered Welcome
-                </p>
-                <h2 className="mt-4 text-center font-serif text-3xl sm:text-4xl">
-                  Book your consultation and receive
-                </h2>
-                <div className="gold-divider mx-auto mt-6 w-24" />
-                <ul className="mx-auto mt-8 max-w-lg space-y-4">
-                  {[
-                    "Personalized Bridal Consultation",
-                    "Design Suggestions Based on Your Style",
-                    "Priority Appointment Slot",
-                    "Exclusive Bridal Benefit (Shared Only During Consultation)",
-                  ].map((b) => (
-                    <li key={b} className="flex items-start gap-3">
-                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gold text-xs font-bold text-wine-deep">
-                        ✓
-                      </span>
-                      <span className="font-serif text-lg">{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="invitation-card px-8 text-wine py-16 sm:px-16 sm:py-20 text-center mx-auto max-w-2xl bg-luxury-pattern">
+              <p className="text-center text-xs uppercase tracking-[0.3em] text-gold font-semibold">
+                A Considered Welcome
+              </p>
+              <h2 className="mt-6 text-center font-serif text-3xl sm:text-4xl italic font-light tracking-wide">
+                Book your consultation and receive
+              </h2>
+              <div className="gold-divider mx-auto mt-8 w-16" />
+              <ul className="mx-auto mt-10 max-w-lg space-y-6 text-left inline-block">
+                {[
+                  "Personalized Bridal Consultation",
+                  "Design Suggestions Based on Your Style",
+                  "Priority Appointment Slot",
+                  "Exclusive Bridal Benefit (Shared Only During Consultation)",
+                ].map((b) => (
+                  <li key={b} className="group flex items-center gap-4">
+                    <span className="flex h-1.5 w-1.5 shrink-0 rounded-full bg-gold transition-transform duration-500 group-hover:scale-150" />
+                    <span className="font-serif text-[1.15rem] text-wine/90 tracking-wide">{b}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </Reveal>
         </div>
@@ -868,39 +870,37 @@ function Index() {
       </div>
 
       {/* FINAL CTA */}
-      <section id="book" className="relative overflow-hidden bg-wine py-24 sm:py-32">
+      <section id="book" className="relative overflow-hidden py-32 sm:py-48 bg-gradient-to-b from-wine to-wine-deep">
         <div
-          className="absolute inset-0 opacity-30"
+          className="absolute inset-0 opacity-25"
           style={{
             background:
-              "radial-gradient(circle at 20% 30%, var(--gold) 0%, transparent 40%), radial-gradient(circle at 80% 70%, var(--gold) 0%, transparent 40%)",
+              "radial-gradient(circle at 20% 40%, var(--gold) 0%, transparent 50%), radial-gradient(circle at 80% 60%, var(--gold) 0%, transparent 50%)",
           }}
         />
-        <div className="relative mx-auto max-w-3xl px-6 text-center text-cream-soft">
+        <div className="absolute inset-0 bg-luxury-pattern opacity-10 mix-blend-overlay pointer-events-none" />
+        <div className="relative mx-auto max-w-4xl px-6 text-center text-cream-soft">
           <Reveal>
-            <p className="text-xs uppercase tracking-[0.4em] text-gold-soft">The Final Step</p>
-            <h2 className="mt-6 font-serif text-3xl leading-tight sm:text-5xl">
-              Your dream bridal outfit doesn't have to begin with a long drive to another city.
+            <div className="gold-divider mx-auto w-24 mb-6" />
+            <p className="text-sm uppercase tracking-[0.4em] text-gold-soft font-semibold">The Final Step</p>
+            <h2 className="mt-8 font-serif text-4xl leading-tight sm:text-6xl font-light">
+              Your dream bridal outfit doesn't have to begin with a long drive.
             </h2>
-            <p className="mt-6 font-serif text-xl italic text-gold-soft">
+            <p className="mt-8 font-serif text-3xl italic text-gold-soft opacity-90">
               It begins with one consultation.
             </p>
-            <div className="gold-divider mx-auto mt-8 w-32" />
-            <p className="mt-8 font-serif text-2xl sm:text-3xl">
-              Book Your Bridal Appointment Today
-            </p>
-            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+            <div className="mt-14 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
               <button
                 onClick={() => open("studio")}
-                className="btn-gold w-full rounded-full px-8 py-3.5 text-sm font-medium uppercase tracking-[0.2em] sm:w-auto"
+                className="btn-gold w-full flex items-center justify-center gap-2 rounded-full px-10 py-5 text-sm font-semibold uppercase tracking-[0.2em] sm:w-auto ring-4 ring-gold/10"
               >
-                Book Studio Visit
+                <span>Book Studio Visit</span>
               </button>
               <button
                 onClick={() => open("online")}
-                className="btn-outline-gold w-full rounded-full px-8 py-3.5 text-sm font-medium uppercase tracking-[0.2em] sm:w-auto"
+                className="btn-outline-gold w-full flex items-center justify-center gap-2 rounded-full px-10 py-5 text-sm font-semibold uppercase tracking-[0.2em] sm:w-auto"
               >
-                Book Online Consultation
+                <span>Online Consultation</span>
               </button>
             </div>
           </Reveal>
