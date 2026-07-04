@@ -485,3 +485,11 @@ html {
     transform: scale(1.12);
   }
 }
+
+@utility scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -4,7 +4,28 @@ import craftImg from "@/assets/craft.jpg";
 import bride1 from "@/assets/bride1.jpg";
 import bride2 from "@/assets/bride2.jpg";
 import bride3 from "@/assets/bride3.jpg";
-import { CalendarHeart, Scissors, Wand2, Star, Play, Plus, CheckCircle2 } from "lucide-react";
+import {
+  CalendarHeart,
+  Scissors,
+  Wand2,
+  Star,
+  Play,
+  Plus,
+  CheckCircle2,
+  Volume2,
+  VolumeX,
+  Maximize2,
+  X,
+  ChevronRight,
+  Sparkles,
+  MapPin,
+  Phone,
+  Mail,
+  MessageSquare,
+  Clock,
+  Heart,
+  Award
+} from "lucide-react";
 
 type RevealVariant = "up" | "left" | "right" | "scale";
 function Reveal({
@@ -110,81 +131,9 @@ function Counter({
   return (
     <span ref={ref}>
       {prefix}
-      {count}
+      {count.toLocaleString()}
       {suffix}
     </span>
-  );
-}
-
-function Carousel({
-  items,
-  renderItem,
-  className = "",
-  visible = 3,
-}: {
-  items: Array<{ key: string }>;
-  renderItem: (item: { key: string }, i: number) => ReactNode;
-  className?: string;
-  visible?: number;
-}) {
-  const [index, setIndex] = useState(0);
-  const [perView, setPerView] = useState(1);
-  useEffect(() => {
-    const compute = () =>
-      setPerView(window.innerWidth >= 1024 ? visible : window.innerWidth >= 640 ? 2 : 1);
-    compute();
-    window.addEventListener("resize", compute);
-    return () => window.removeEventListener("resize", compute);
-  }, [visible]);
-  const maxIndex = Math.max(0, items.length - perView);
-  const clamped = Math.min(index, maxIndex);
-  const prev = () => setIndex((i) => Math.max(0, i - 1));
-  const next = () => setIndex((i) => Math.min(maxIndex, i + 1));
-  return (
-    <div className={`relative ${className}`}>
-      <div className="overflow-hidden">
-        <div
-          className="flex transition-transform duration-700 ease-[cubic-bezier(.22,.61,.36,1)]"
-          style={{ transform: `translateX(-${(clamped * 100) / perView}%)` }}
-        >
-          {items.map((item, i) => (
-            <div key={item.key} className="shrink-0 px-3" style={{ width: `${100 / perView}%` }}>
-              {renderItem(item, i)}
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="mt-6 flex items-center justify-center gap-4">
-        <button
-          onClick={prev}
-          disabled={clamped === 0}
-          aria-label="Previous"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--gold)]/60 text-wine transition-all hover:bg-gold hover:text-cream-soft disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          ‹
-        </button>
-        <div className="flex items-center gap-2">
-          {Array.from({ length: maxIndex + 1 }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIndex(i)}
-              aria-label={`Go to slide ${i + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === clamped ? "w-8 bg-gold" : "w-2 bg-wine/25 hover:bg-wine/50"
-              }`}
-            />
-          ))}
-        </div>
-        <button
-          onClick={next}
-          disabled={clamped >= maxIndex}
-          aria-label="Next"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--gold)]/60 text-wine transition-all hover:bg-gold hover:text-cream-soft disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          ›
-        </button>
-      </div>
-    </div>
   );
 }
 
@@ -211,19 +160,19 @@ function BookingModal({
       aria-modal="true"
     >
       <div
-        className="absolute inset-0 bg-[color:var(--wine-deep)]/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-[color:var(--wine-deep)]/75 backdrop-blur-md"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-md rounded-2xl bg-cream-soft p-8 shadow-2xl ring-1 ring-[color:var(--gold)]/40">
+      <div className="relative w-full max-w-md rounded-2xl bg-cream-soft p-8 shadow-2xl ring-1 ring-[color:var(--gold)]/40 transition-all duration-300 transform scale-100">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-wine hover:text-gold text-xl leading-none"
+          className="absolute right-4 top-4 text-wine hover:text-gold text-2xl leading-none transition-colors"
           aria-label="Close"
         >
           ×
         </button>
         <div className="mb-6 text-center">
-          <p className="text-xs uppercase tracking-[0.28em] text-gold">Sarrahh</p>
+          <p className="text-xs uppercase tracking-[0.28em] text-gold font-semibold">Sarrahh Bridal</p>
           <h3 className="mt-2 font-serif text-3xl text-wine">
             {type === "studio" ? "Book Studio Visit" : "Book Online Consultation"}
           </h3>
@@ -231,15 +180,18 @@ function BookingModal({
         </div>
         {submitted ? (
           <div className="py-6 text-center">
-            <p className="font-serif text-2xl text-wine">Thank you.</p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Our bridal team will reach out within 24 hours to confirm your appointment.
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gold/20 text-wine">
+              <CheckCircle2 className="h-8 w-8" />
+            </div>
+            <p className="font-serif text-2xl text-wine">Thank you, Bride.</p>
+            <p className="mt-2 text-sm text-muted-foreground px-2">
+              Our bridal team will reach out via WhatsApp or Call within 24 hours to finalize your customized consultation slot.
             </p>
             <button
               onClick={onClose}
-              className="btn-gold mt-6 rounded-full px-6 py-2.5 text-sm font-medium"
+              className="btn-gold mt-6 rounded-full px-8 py-2.5 text-sm font-medium"
             >
-              Close
+              Close Window
             </button>
           </div>
         ) : (
@@ -247,32 +199,45 @@ function BookingModal({
             className="space-y-4"
             onSubmit={(e) => {
               e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              const name = formData.get("name") as string;
+              const phone = formData.get("phone") as string;
+              const preferred = formData.get("preferred") as string;
+              const wedding = formData.get("wedding") as string;
+              const consultType = formData.get("type") as string;
+              
+              const message = `Hello Sarrahh Boutique! 🌸\n\nI would like to book a bridal consultation. Here are my details:\n\n*Name:* ${name}\n*Phone/WhatsApp:* ${phone}\n*Preferred Date:* ${preferred}\n*Wedding Date:* ${wedding || "Not fixed yet"}\n*Consultation Type:* ${consultType === "studio" ? "Studio Visit (Kangayam Studio)" : "Online Consultation (Video Call)"}\n\nPlease confirm my slot. Thank you!`;
+              
+              const whatsappUrl = `https://api.whatsapp.com/send?phone=919786412345&text=${encodeURIComponent(message)}`;
+              
+              window.open(whatsappUrl, "_blank");
               setSubmitted(true);
             }}
           >
-            <Field label="Full Name" name="name" type="text" required />
-            <Field label="Phone Number" name="phone" type="tel" required />
+            <Field label="Full Name" name="name" type="text" placeholder="Enter your full name" required />
+            <Field label="Phone Number / WhatsApp" name="phone" type="tel" placeholder="Enter 10 digit number" required />
             <div className="grid grid-cols-2 gap-3">
               <Field label="Preferred Date" name="preferred" type="date" required />
               <Field label="Wedding Date" name="wedding" type="date" />
             </div>
             <div>
-              <label className="mb-1.5 block text-xs uppercase tracking-wider text-wine/80">
+              <label className="mb-1.5 block text-xs uppercase tracking-wider text-wine/80 font-medium">
                 Consultation Type
               </label>
               <select
+                name="type"
                 defaultValue={type}
-                className="w-full rounded-lg border border-[color:var(--gold)]/50 bg-white px-3 py-2.5 text-sm text-foreground focus:border-gold focus:outline-none"
+                className="w-full rounded-lg border border-[color:var(--gold)]/50 bg-white px-3 py-2.5 text-sm text-foreground focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
               >
-                <option value="studio">Studio Visit</option>
-                <option value="online">Online Consultation</option>
+                <option value="studio">Studio Visit (Kangayam Studio)</option>
+                <option value="online">Online Consultation (Video Call)</option>
               </select>
             </div>
             <button
               type="submit"
-              className="btn-gold mt-2 w-full rounded-full px-6 py-3 text-sm font-medium tracking-wide"
+              className="btn-gold mt-4 w-full rounded-full px-6 py-3.5 text-xs font-semibold uppercase tracking-widest"
             >
-              Confirm Appointment
+              Request Consultation
             </button>
           </form>
         )}
@@ -285,21 +250,24 @@ function Field({
   label,
   name,
   type,
+  placeholder,
   required,
 }: {
   label: string;
   name: string;
   type: string;
+  placeholder?: string;
   required?: boolean;
 }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs uppercase tracking-wider text-wine/80">{label}</label>
+      <label className="mb-1.5 block text-xs uppercase tracking-wider text-wine/80 font-medium">{label}</label>
       <input
         name={name}
         type={type}
+        placeholder={placeholder}
         required={required}
-        className="w-full rounded-lg border border-[color:var(--gold)]/50 bg-white px-3 py-2.5 text-sm text-foreground focus:border-gold focus:outline-none"
+        className="w-full rounded-lg border border-[color:var(--gold)]/50 bg-white px-3 py-2.5 text-sm text-foreground focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
       />
     </div>
   );
@@ -307,89 +275,425 @@ function Field({
 
 const NAV_LINKS = [
   { href: "#why", label: "Why Sarrahh" },
+  { href: "#transformations", label: "Transformations" },
   { href: "#process", label: "Process" },
-  { href: "#brides", label: "Brides" },
+  { href: "#reviews", label: "Reviews" },
   { href: "#faq", label: "FAQ" },
-  { href: "#book", label: "Book" },
 ];
 
-const TESTIMONIALS = [
-  {
-    key: "t1",
-    img: bride1,
-    quote:
-      "I was planning to travel to Coimbatore, but after visiting Sarrahh, I knew this was the right place.",
-    name: "Priya · Tiruppur",
-  },
-  {
-    key: "t2",
-    img: bride2,
-    quote:
-      "They designed my blouse around my grandmother's saree. It felt like the most personal thing I own.",
-    name: "Meera · Karur",
-  },
-  {
-    key: "t3",
-    img: bride3,
-    quote:
-      "From consultation to final fitting, every step felt considered. I felt like their only bride.",
-    name: "Anitha · Erode",
-  },
-  {
-    key: "t4",
-    img: bride1,
-    quote: "The Aari work is impossibly fine. My blouse looked like an heirloom on day one.",
-    name: "Kavya · Pollachi",
-  },
-  {
-    key: "t5",
-    img: bride2,
-    quote: "Booked an online consultation first and it saved us three trips. So thoughtful.",
-    name: "Divya · Chennai",
-  },
+const PHOTOS = [
+  { url: "/photos/Picsart_26-06-27_09-41-27-355.png", title: "Velvet Red Bridal Perfection" },
+  { url: "/photos/Picsart_26-06-27_09-50-20-474.png", title: "Handcrafted Golden Peacock Aari Motif" },
+  { url: "/photos/Picsart_26-06-27_09-54-43-854.png", title: "Intricate Sleeves Detail Work" },
+  { url: "/photos/Picsart_26-06-28_17-47-19-185.jpg.jpeg", title: "Symmetric Border Stitching Elegance" },
+  { url: "/photos/Picsart_26-06-28_17-48-08-437.png", title: "Custom Fit Silk Blouse Finish" }
 ];
 
 const VIDEOS = [
-  { key: "v1", title: "Bride Experiences", img: bride1 },
-  { key: "v2", title: "Bridal Transformations", img: bride2 },
-  { key: "v3", title: "Customer Stories", img: bride3 },
-  { key: "v4", title: "Studio Fittings", img: bride1 },
+  { url: "/transformation_videos/VID-20260704-WA0010.mp4", category: "Transformations", title: "Perfect Sleeve Fit & Aari Detail" },
+  { url: "/transformation_videos/VID-20260704-WA0011.mp4", category: "Transformations", title: "Heavy Bridal Back Neck Finishing" },
+  { url: "/transformation_videos/VID-20260704-WA0013.mp4", category: "Transformations", title: "Golden Zardosi Detailing Reel" },
+  { url: "/transformation_videos/VID-20260704-WA0014.mp4", category: "Transformations", title: "Exquisite Sleeve Handwork Showcase" },
+
+  { url: "/transformation_videos/VID-20260704-WA0015.mp4", category: "Experiences", title: "First Trial Fit & Embroidery Glow" },
+  { url: "/transformation_videos/VID-20260704-WA0016.mp4", category: "Experiences", title: "Happy Bride In Studio Fitting room" },
+  { url: "/transformation_videos/VID-20260704-WA0017.mp4", category: "Experiences", title: "Real-time Blouse Finishing Inspection" },
+  { url: "/transformation_videos/VID-20260704-WA0020.mp4", category: "Experiences", title: "Reception Look Final Trial Walk" },
+
+  { url: "/transformation_videos/VID-20260526-WA0032.mp4", category: "Stories", title: "Saree Pleating & Fitted Blouse Match" },
+  { url: "/transformation_videos/VID-20260704-WA0027.mp4", category: "Stories", title: "Details Of Master Tailoring Process" }
+];
+
+interface Review {
+  id: number;
+  name: string;
+  avatar: string;
+  meta: string; // "Local Guide · 44 reviews"
+  date: string;
+  rating: number;
+  text: string;
+  tags: string[];
+  photos?: string[];
+  ownerReply?: string;
+}
+
+const REVIEWS_DATA: Review[] = [
+  {
+    id: 1,
+    name: "Cool Breeze",
+    avatar: "C",
+    meta: "Local Guide · 44 reviews · 8 photos",
+    date: "a month ago",
+    rating: 5,
+    text: "Really happy with their work! The blouse fitting was perfect, and the aari work was done beautifully with great finishing and detailing. They also help with design ideas and suggestions, which was very useful. The team is very approachable, …More",
+    tags: ["fitting", "aari work"],
+    photos: ["/photos/Picsart_26-06-27_09-41-27-355.png", "/photos/Picsart_26-06-27_09-50-20-474.png"]
+  },
+  {
+    id: 2,
+    name: "Rosilla Robert",
+    avatar: "R",
+    meta: "2 reviews · 2 photos",
+    date: "2 weeks ago",
+    rating: 5,
+    text: "The work and fit of the blouses were awesome, no alterations needed. Whether it's normal blouse or bridal blouses best results with great precision. Worth for every penny. Akkas work is awesome, can come here and never be disappointed.",
+    tags: ["fitting", "blouse stitching"],
+    ownerReply: "Dear Rosilla, Reading your review felt like receiving a personal note from a friend. Knowing that you loved the fitting, finishing, and overall experience means a lot to us. Your trust inspires us to keep raising our standards every single day. Thank you for being part of the Sarrahh family. Warm regards, Sarrahh Boutique & Tailors"
+  },
+  {
+    id: 3,
+    name: "Jeevitha",
+    avatar: "J",
+    meta: "1 review",
+    date: "2 months ago",
+    rating: 5,
+    text: "Sarrahh truly understands customer needs and delivers exactly what is requested. The stitching and craftsmanship are outstanding. …More",
+    tags: ["blouse stitching"]
+  },
+  {
+    id: 4,
+    name: "Selva Krithika",
+    avatar: "S",
+    meta: "2 reviews",
+    date: "4 months ago",
+    rating: 5,
+    text: "I and my sis had a great experience with this boutique for blouse and chudi stitching. The tailoring was neat, precise, and perfectly matched our measurements. The fitting was excellent, especially around the shoulders and sleeves, which is …More",
+    tags: ["fitting", "blouse stitching"]
+  },
+  {
+    id: 5,
+    name: "Selvanayaki M",
+    avatar: "S",
+    meta: "1 review",
+    date: "a month ago",
+    rating: 5,
+    text: "Excellent stitching work with neat finishing and perfect fitting. The dress was completed on time and designed exactly as expected. Good fabric and u fulfill my expectations mam",
+    tags: ["fitting", "blouse stitching"]
+  },
+  {
+    id: 6,
+    name: "Harivarsha 3333",
+    avatar: "H",
+    meta: "2 reviews",
+    date: "5 months ago",
+    rating: 5,
+    text: "The dress stitching experience was truly delightful and fulfilling. From selecting the fabric and taking careful measurements to cutting the pieces and joining them with neat stitches, every step felt creative and exciting. As the design …More",
+    tags: ["blouse stitching"]
+  },
+  {
+    id: 7,
+    name: "karthika sadhasivam",
+    avatar: "K",
+    meta: "6 reviews · 2 photos",
+    date: "4 months ago",
+    rating: 5,
+    text: "Finding that \"perfect fit\" for an Aari work blouse is a blend of precision tailoring and strategic design and the team Sarrahh has done it on point.",
+    tags: ["fitting", "aari work"],
+    photos: ["/photos/Picsart_26-06-27_09-54-43-854.png"]
+  },
+  {
+    id: 8,
+    name: "Aaraadanas Nest",
+    avatar: "A",
+    meta: "1 review",
+    date: "a month ago",
+    rating: 1,
+    text: "I came here after reading these reviews about this boutique..but I didn't expect this worst stitching style.. not worth for money which i paid..charged too much fair this worst stitching ..I paid more for this and the neckline is uneven, …More",
+    tags: ["blouse stitching"]
+  },
+  {
+    id: 9,
+    name: "shanthi thangavel",
+    avatar: "S",
+    meta: "1 review · 5 photos",
+    date: "5 months ago",
+    rating: 5,
+    text: "Amazing service! She listens to you carefully and stitches exactly what you request for nd very good stitching and perfect fitting, I loved the finishing of the blouses. Thank you so much for timely delivery and for stitching the blouses perfectly sisy ….. I’m so happy with your service sisy …I highly recommend.",
+    tags: ["fitting", "blouse stitching"],
+    photos: ["/photos/Picsart_26-06-28_17-47-19-185.jpg.jpeg", "/photos/Picsart_26-06-28_17-48-08-437.png"]
+  },
+  {
+    id: 10,
+    name: "Nivetha Moorthi",
+    avatar: "N",
+    meta: "4 reviews · 3 photos",
+    date: "a year ago",
+    rating: 5,
+    text: "I had placed my wedding blouses orders here. The work and fitting were so satisfying. You can share your preferences and get the exact output. Any type of alterations can be done immediately. I am really happy with their work.",
+    tags: ["fitting", "blouse designs"],
+    photos: ["/photos/Picsart_26-06-27_09-41-27-355.png"]
+  },
+  {
+    id: 11,
+    name: "Yamu Senthil",
+    avatar: "Y",
+    meta: "1 review",
+    date: "2 weeks ago",
+    rating: 5,
+    text: "Perfect stitching and fittings. Specifically timing is perfect. My blouses are all beautiful. Thank you akka.",
+    tags: ["fitting", "blouse stitching"],
+    ownerReply: "Dear yamuna, Behind every blouse we create is a team that works with passion and care. Your appreciation reminds us why we love what we do. Thank you for choosing us and for taking the time to share your experience. We are grateful to be a small part of your special moments. With love, Sarrahh Boutique"
+  },
+  {
+    id: 12,
+    name: "Teenu Pappu",
+    avatar: "T",
+    meta: "1 review",
+    date: "3 weeks ago",
+    rating: 5,
+    text: "Perfect fitting and excellent stitching. Very comfortable to wear—highly satisfied with Sarahh Boutique! 😊",
+    tags: ["fitting", "blouse stitching"],
+    ownerReply: "Dear Teena, Among hundreds of designs, fittings, and busy days, messages like yours make us pause and smile. Thank you for noticing the effort behind our work. We are grateful to have customers like you. Love, Team Sarrahh"
+  },
+  {
+    id: 13,
+    name: "Sahajan Sk",
+    avatar: "S",
+    meta: "1 review",
+    date: "6 months ago",
+    rating: 5,
+    text: "I stitched two of my bridal blouses at sarrahh. Two in another shop. I regret for not giving all my blouses here, because those two blouses were completely spoiled and took matching clothes and done all the reworks at sarrahh. They were my …More",
+    tags: ["fitting", "blouse designs"]
+  },
+  {
+    id: 14,
+    name: "Govarthini Shanmugam",
+    avatar: "G",
+    meta: "2 reviews",
+    date: "5 months ago",
+    rating: 5,
+    text: "Excellent stitching. After ages i found a nice place without any hype they are doing their work perfectly. No noise, no exaggeration. Simply perfect. I strongly recommend nd once you visit you will realise what I'm telling.",
+    tags: ["blouse stitching"]
+  },
+  {
+    id: 15,
+    name: "Kani Raj",
+    avatar: "K",
+    meta: "2 reviews · 2 photos",
+    date: "a year ago",
+    rating: 5,
+    text: "This is my first experience in Sarrah botique..Even I gave them at the last moment, within 3 days I got all my 3 blouses beautifully stitched and worked as in the reference given. The best thing is that the aari works are neat. We can trust them to the fullest.",
+    tags: ["aari work", "blouse stitching"],
+    photos: ["/photos/Picsart_26-06-27_09-50-20-474.png"],
+    ownerReply: "Thank you so much da. It's our pleasure to be a part of your happy moments."
+  },
+  {
+    id: 16,
+    name: "Santhiya V",
+    avatar: "S",
+    meta: "3 reviews",
+    date: "2 months ago",
+    rating: 5,
+    text: "I stitched 2 blouses here, first time I got my perfect fittings.they made my expectations fulfilled,Thank you soo much sister..Will continue with my future fittings🤝",
+    tags: ["fitting", "blouse stitching"]
+  },
+  {
+    id: 17,
+    name: "Hema Santhosh",
+    avatar: "H",
+    meta: "Local Guide · 39 reviews · 6 photos",
+    date: "2 years ago",
+    rating: 5,
+    text: "Regular follower of Sarrahh boutique in insta. Got my first designer blouse stitched. I am impressed by their aari work.. Stitching is good and work is quite decent and professional and they made exactly what I asked for. Inspite of her …More",
+    tags: ["aari work", "blouse stitching"],
+    photos: ["/photos/Picsart_26-06-27_09-41-27-355.png"],
+    ownerReply: "Thank you dear 🙏 you really made my day 🥰"
+  },
+  {
+    id: 18,
+    name: "Mohana Priya T",
+    avatar: "M",
+    meta: "2 reviews",
+    date: "a month ago",
+    rating: 5,
+    text: "Stitching was so nice for my reception ..the outfit came out very well..All the guests appreciated about the outfit",
+    tags: ["blouse stitching"]
+  },
+  {
+    id: 19,
+    name: "Michael Michael",
+    avatar: "M",
+    meta: "1 review",
+    date: "a month ago",
+    rating: 5,
+    text: "Awesome fitting and finishing. Really after long I got what I want. Frock is really very cute. Just loved it.",
+    tags: ["fitting"]
+  },
+  {
+    id: 20,
+    name: "kavi kutty",
+    avatar: "K",
+    meta: "1 review · 1 photo",
+    date: "2 months ago",
+    rating: 5,
+    text: "Yenakku romba pudichurukku nice romba happy na tq akka nalla irukku yenakku romba romba pudichurukku",
+    tags: ["blouse stitching"]
+  },
+  {
+    id: 21,
+    name: "Subhashini Sathiyaseelan",
+    avatar: "S",
+    meta: "3 reviews",
+    date: "3 weeks ago",
+    rating: 5,
+    text: "Satisfied, stitching was good and whatever we are asking they are doing as expected.",
+    tags: ["blouse stitching"],
+    ownerReply: "Dear Suba, Some customers walk into our boutique and leave as customers. Some leave as a beautiful memory. Thank you for your kind words and for trusting us with your outfit. Your appreciation means more than you know. With heartfelt gratitude, Sarrahh Boutique"
+  }
 ];
 
 export default function App() {
   const [booking, setBooking] = useState<BookingType | null>(null);
   const [navOpen, setNavOpen] = useState(false);
-  const open = (t: BookingType) => setBooking(t);
+  const [transTab, setTransTab] = useState<"transformations" | "experiences" | "stories">("transformations");
+  const [lightboxImg, setLightboxImg] = useState<string | null>(null);
+  const [lightboxVideo, setLightboxVideo] = useState<string | null>(null);
+  const [reviewFilter, setReviewFilter] = useState<string>("All");
+  const [reviewSort, setReviewSort] = useState<string>("Most relevant");
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [mutedVideos, setMutedVideos] = useState<Record<string, boolean>>({});
+
+  const reviewScrollRef = useRef<HTMLDivElement>(null);
+  const [reviewsHovered, setReviewsHovered] = useState(false);
+
+  const scrollReviews = (direction: "left" | "right") => {
+    const container = reviewScrollRef.current;
+    if (container) {
+      const scrollAmount = 405;
+      container.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  useEffect(() => {
+    const container = reviewScrollRef.current;
+    if (!container || reviewsHovered) return;
+
+    const interval = setInterval(() => {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      if (container.scrollLeft >= maxScroll - 10) {
+        container.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        container.scrollBy({ left: 405, behavior: "smooth" });
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [reviewsHovered]);
+
+  const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
+
   const scrollY = useParallax();
+  const open = (t: BookingType) => setBooking(t);
+
+  const toggleMute = (url: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const isMuted = !mutedVideos[url];
+    setMutedVideos({ ...mutedVideos, [url]: isMuted });
+    const video = videoRefs.current[url];
+    if (video) {
+      video.muted = isMuted;
+    }
+  };
+
+  const handleVideoHoverStart = (url: string) => {
+    const video = videoRefs.current[url];
+    if (video) {
+      video.play().catch(() => { });
+    }
+  };
+
+  const handleVideoHoverEnd = (url: string) => {
+    const video = videoRefs.current[url];
+    if (video) {
+      video.pause();
+    }
+  };
+
+  // Filter & Sort Reviews
+  const getFilteredReviews = () => {
+    let list = [...REVIEWS_DATA];
+
+    // Filter
+    if (reviewFilter !== "All") {
+      list = list.filter((r) => r.tags.includes(reviewFilter.toLowerCase()));
+    }
+
+    // Sort
+    if (reviewSort === "Newest") {
+      // Custom ordering mimicking dates
+      const dateWeight: Record<string, number> = {
+        "2 weeks ago": 1,
+        "3 weeks ago": 2,
+        "a month ago": 3,
+        "2 months ago": 4,
+        "4 months ago": 5,
+        "5 months ago": 6,
+        "6 months ago": 7,
+        "a year ago": 8,
+        "2 years ago": 9,
+      };
+      list.sort((a, b) => (dateWeight[a.date] || 99) - (dateWeight[b.date] || 99));
+    } else if (reviewSort === "Highest") {
+      list.sort((a, b) => b.rating - a.rating);
+    } else if (reviewSort === "Lowest") {
+      list.sort((a, b) => a.rating - b.rating);
+    } else {
+      // "Most relevant" - custom weight
+      const relevance: Record<number, number> = {
+        2: 1, // Rosilla Robert
+        1: 2, // Cool Breeze
+        13: 3, // Sahajan Sk
+        14: 4, // Govarthini
+        9: 5, // Shanthi Thangavel
+        11: 6, // Yamu
+        12: 7, // Teenu
+      };
+      list.sort((a, b) => (relevance[a.id] || 99) - (relevance[b.id] || 99));
+    }
+    return list;
+  };
+
+  const filteredReviews = getFilteredReviews();
 
   return (
-    <div className="min-h-screen bg-cream text-foreground" style={{ scrollBehavior: "smooth" }}>
-      {/* Top urgency strip */}
-      <div className="bg-[color:var(--wine-deep)] text-cream-soft">
-        <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-4 py-2 text-[11px] tracking-[0.18em] uppercase sm:text-xs">
+    <div className="min-h-screen bg-cream text-foreground antialiased" style={{ scrollBehavior: "smooth" }}>
+
+      {/* Top Urgency Strip */}
+      <div className="bg-[color:var(--wine-deep)] text-cream-soft border-b border-[color:var(--gold)]/20 sticky top-0 z-[60]">
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-4 py-2.5 text-center text-[10px] tracking-[0.16em] uppercase sm:text-[11px]">
           <span className="pulse-strip inline-block h-1.5 w-1.5 rounded-full bg-gold" />
-          <span>
-            Only <Counter end={10} /> appointments open this month — book now
+          <span className="font-semibold text-gold-soft">
+            Every outfit here is handmade.
           </span>
         </div>
       </div>
 
       {/* Navbar */}
       <header
-        className={`sticky top-0 z-50 border-b border-[color:var(--gold)]/25 transition-all duration-500 flex items-center ${scrollY > 50 ? "bg-[color:var(--cream-soft)]/95 backdrop-blur-xl h-16 shadow-[0_10px_30px_-10px_rgba(40,10,15,0.08)]" : "bg-cream/40 backdrop-blur h-24"}`}
+        className={`sticky top-[38px] z-50 border-b border-[color:var(--gold)]/20 transition-all duration-500 flex items-center ${scrollY > 50
+          ? "bg-[color:var(--cream-soft)]/90 backdrop-blur-xl h-16 shadow-[0_10px_30px_-10px_rgba(40,10,15,0.08)]"
+          : "bg-cream/40 backdrop-blur h-24"
+          }`}
       >
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-4 px-5 sm:px-8">
-          <a href="#top" className="flex items-center gap-2">
-            <span className="font-serif text-2xl font-semibold tracking-[0.22em] text-wine">
-              SARRAHH
-            </span>
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
+          <a href="#top" className="flex items-center">
+            <img
+              src="/logo.png"
+              alt="Sarrahh Logo"
+              className={`w-auto object-contain transition-all duration-500 ${
+                scrollY > 50 ? "h-11 sm:h-12" : "h-16 sm:h-20"
+              }`}
+            />
           </a>
           <nav className="hidden justify-center gap-8 md:flex">
             {NAV_LINKS.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
-                className="text-sm uppercase tracking-[0.15em] text-wine/80 transition-colors hover:text-gold"
+                className="text-xs uppercase tracking-[0.18em] font-medium text-wine/80 transition-colors hover:text-gold"
               >
                 {l.label}
               </a>
@@ -398,228 +702,618 @@ export default function App() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => open("studio")}
-              className="btn-gold hidden rounded-full px-5 py-2 text-xs font-medium uppercase tracking-widest md:inline-flex"
+              className="btn-gold hidden rounded-full px-6 py-2.5 text-xs font-semibold uppercase tracking-widest md:inline-flex"
             >
-              Book Now
+              Book Studio Visit
             </button>
             <button
-              className="md:hidden rounded-md border border-wine/30 p-2 text-wine"
+              className="md:hidden ml-auto rounded-md border border-wine/30 p-2 text-wine"
               onClick={() => setNavOpen((v) => !v)}
               aria-label="Menu"
             >
               <span className="block h-0.5 w-5 bg-wine" />
-              <span className="mt-1 block h-0.5 w-5 bg-wine" />
-              <span className="mt-1 block h-0.5 w-5 bg-wine" />
+              <span className="mt-1.5 block h-0.5 w-5 bg-wine" />
+              <span className="mt-1.5 block h-0.5 w-5 bg-wine" />
             </button>
           </div>
         </div>
         {navOpen && (
-          <div className="border-t border-[color:var(--gold)]/25 bg-cream md:hidden">
-            <nav className="flex flex-col px-6 py-4">
+          <div className="absolute top-full left-0 right-0 border-b border-[color:var(--gold)]/25 bg-cream md:hidden shadow-xl animate-fade-in">
+            <nav className="flex flex-col px-6 py-5 space-y-4">
               {NAV_LINKS.map((l) => (
                 <a
                   key={l.href}
                   href={l.href}
                   onClick={() => setNavOpen(false)}
-                  className="py-2 text-sm uppercase tracking-[0.15em] text-wine/80"
+                  className="text-xs uppercase tracking-[0.18em] font-medium text-wine/85 hover:text-gold py-1.5 border-b border-gold/10"
                 >
                   {l.label}
                 </a>
               ))}
-              <button
-                onClick={() => {
-                  setNavOpen(false);
-                  open("studio");
-                }}
-                className="btn-gold mt-3 rounded-full px-5 py-2.5 text-xs font-medium uppercase tracking-widest"
-              >
-                Book Appointment
-              </button>
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <button
+                  onClick={() => {
+                    setNavOpen(false);
+                    open("studio");
+                  }}
+                  className="btn-gold rounded-full py-3 text-[10px] font-bold uppercase tracking-widest text-center"
+                >
+                  Studio Visit
+                </button>
+                <button
+                  onClick={() => {
+                    setNavOpen(false);
+                    open("online");
+                  }}
+                  className="btn-outline-gold rounded-full py-3 text-[10px] font-bold uppercase tracking-widest text-center"
+                >
+                  Online Call
+                </button>
+              </div>
             </nav>
           </div>
         )}
       </header>
 
-      {/* HERO */}
-      <section id="top" className="relative overflow-hidden">
+      {/* HERO SECTION */}
+      <section id="top" className="relative overflow-hidden min-h-[85vh] flex items-center">
         <div
           className="absolute inset-0 will-change-transform"
           style={{
-            transform: `translate3d(0, ${scrollY * 0.35}px, 0) scale(${1 + Math.min(scrollY, 400) * 0.0004})`,
+            transform: `translate3d(0, ${scrollY * 0.28}px, 0) scale(${1 + Math.min(scrollY, 500) * 0.0003})`,
           }}
         >
           <img
-            src={heroImg}
-            alt="Sarrahh bridal collection"
+            src="/herobg.png"
+            alt="Sarrahh bridal couture collection"
             width={1920}
             height={1280}
-            className="h-[120%] w-full object-cover"
+            className="h-[115%] w-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--wine-deep)]/85 via-[color:var(--wine)]/65 to-[color:var(--wine-deep)]/95" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--wine-deep)]/90 via-[color:var(--wine)]/70 to-[color:var(--wine-deep)]/95" />
         </div>
         <div
-          className="relative mx-auto max-w-6xl px-6 py-32 text-center text-cream-soft sm:py-44 md:py-52"
-          style={{ transform: `translate3d(0, ${scrollY * -0.12}px, 0)` }}
+          className="relative mx-auto w-full max-w-6xl px-6 py-24 text-center text-cream-soft sm:py-32"
+          style={{ transform: `translate3d(0, ${scrollY * -0.08}px, 0)` }}
         >
           <Reveal>
-            <p className="text-xs uppercase tracking-[0.5em] text-gold-soft">
-              Sarrahh · Est. Craft
+            <p className="text-xs uppercase tracking-[0.4em] text-gold-soft font-semibold mb-2">
+              ESTABLISHED BRIDAL CRAFTSMANSHIP
             </p>
-            <div className="gold-divider mx-auto mt-6 w-32" />
-            <h1 className="mt-8 font-serif text-4xl leading-[1.05] sm:text-5xl md:text-6xl lg:text-7xl">
+            <div className="gold-divider mx-auto mt-4 w-28" />
+            <h1 className="mt-8 font-serif text-5xl leading-[1.08] sm:text-6xl md:text-7xl lg:text-8xl font-light">
               Your Wedding Wardrobe
               <br />
-              <span className="italic text-gold-soft">Partner Near You.</span>
+              <span className="italic text-gold-soft font-normal">Partner.</span>
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-sm text-cream-soft/85 sm:text-base">
-              Stop travelling to cities for your dream bridal outfit. At Sarrahh, we create bridal
-              blouses and customized wedding outfits designed around your style, not catalogue
-              designs.
+            <p className="mx-auto mt-8 max-w-2xl text-sm leading-relaxed text-cream-soft/90 font-light sm:text-base md:text-lg">
+              Made to be worn, Not managed, because every confidence comes from forgetting about the outfit and enjoying the moment.
             </p>
-            <p className="mx-auto mt-4 max-w-xl font-serif text-sm italic text-gold-soft/95 sm:text-base">
-              With ₹<Counter end={1} /> Lakh+ bridal Aari work creations and a craftsmanship-first
-              approach, we help every bride feel confident on her biggest day.
-            </p>
-            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+
+            <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5 max-w-md mx-auto sm:max-w-none">
               <button
                 onClick={() => open("studio")}
-                className="btn-gold w-full rounded-full px-8 py-3.5 text-sm font-medium uppercase tracking-[0.18em] sm:w-auto"
+                className="btn-gold w-full rounded-full px-8 py-4.5 text-xs font-bold uppercase tracking-[0.2em] sm:w-auto ring-4 ring-gold/10"
               >
                 Book Studio Visit
               </button>
               <button
                 onClick={() => open("online")}
-                className="btn-outline-gold w-full rounded-full px-8 py-3.5 text-sm font-medium uppercase tracking-[0.18em] sm:w-auto"
+                className="btn-outline-gold w-full rounded-full px-8 py-4.5 text-xs font-bold uppercase tracking-[0.2em] sm:w-auto"
               >
                 Book Online Consultation
               </button>
             </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* WHY SARRAHH */}
-      <section id="why" className="bg-gradient-to-b from-cream to-cream-soft py-32 sm:py-48">
-        <div className="mx-auto max-w-4xl px-6 text-center">
-          <Reveal>
-            <blockquote className="relative inline-block p-10 md:p-16">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-              <span className="text-6xl text-gold-soft/50 absolute top-4 left-4 font-serif leading-none opacity-50">
-                “
-              </span>
-              <h2 className="relative font-serif text-3xl italic tracking-wide leading-relaxed text-wine sm:text-4xl md:text-5xl">
-                Why travel far when your Wedding Wardrobe Partner is near you?
-              </h2>
-              <span className="text-6xl text-gold-soft/50 absolute bottom-0 right-4 font-serif leading-none opacity-50">
-                ”
-              </span>
-            </blockquote>
-            <p className="mx-auto mt-8 max-w-2xl text-sm tracking-[0.2em] uppercase text-foreground/60 font-medium">
-              The Boutique Experience, Closer to Home
+            <p className="mt-5 text-xs tracking-[0.15em] text-gold-soft/85 italic">
+              This is the right time to reach out.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* WE DON'T FOLLOW CATALOGUES */}
-      <section className="relative bg-gradient-to-b from-cream-soft to-cream py-32 sm:py-40">
-        <div className="bg-luxury-pattern absolute inset-0 opacity-40 pointer-events-none" />
-        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 md:grid-cols-2 md:gap-16">
-          <Reveal variant="left">
-            <div className="relative p-6 md:p-10 bg-cream">
-              <div className="absolute inset-0 border border-[color:var(--gold)]/30 m-2" />
-              <div className="img-luxury relative z-10 w-[105%] ml-[-2%] md:ml-[-5%] shadow-[0_30px_60px_-30px_color-mix(in_oklab,var(--wine)_55%,transparent)]">
-                <img
-                  src={craftImg}
-                  alt="Aari craftsmanship close-up"
-                  loading="lazy"
-                  width={1200}
-                  height={1408}
-                  className="h-[560px] w-full object-cover"
-                />
-              </div>
+      {/* SOCIAL PROOF SECTION */}
+      <section className="relative z-10 mt-12 max-w-6xl mx-auto px-6">
+        <Reveal variant="scale" delay={150}>
+          <div className="glass-card rounded-3xl p-8 sm:p-10 shadow-2xl border border-gold/30 bg-cream-soft/95 backdrop-blur-2xl">
+            <div className="grid grid-cols-2 gap-y-8 gap-x-4 md:grid-cols-4 md:gap-x-8 md:divide-x md:divide-gold/25">
+              {[
+                {
+                  question: "Can I trust them?",
+                  proof: "⭐ 4.8 rating by real customers.",
+                  icon: <Award className="w-5 h-5 text-gold" />
+                },
+                {
+                  question: "Have others chosen them?",
+                  proof: "👰 250+ Happy Brides",
+                  countEnd: 250,
+                  countSuffix: "+ Happy Brides",
+                  icon: <Heart className="w-5 h-5 text-gold" />
+                },
+                {
+                  question: "Do they have experience?",
+                  proof: "✂️ 8+ Years of Bridal Craftsmanship",
+                  countEnd: 8,
+                  countSuffix: "+ Years of Craft",
+                  icon: <Scissors className="w-5 h-5 text-gold" />
+                },
+                {
+                  question: "Are they specialists?",
+                  proof: "🧵 Delivered 1 Lakh+ Blouses.",
+                  countEnd: 100000,
+                  countPrefix: "Delivered ",
+                  countSuffix: "+ Blouses",
+                  icon: <Sparkles className="w-5 h-5 text-gold" />
+                }
+              ].map((p, idx) => (
+                <div key={p.question} className={`text-center flex flex-col items-center justify-between ${idx > 0 ? "md:pl-4" : ""}`}>
+                  <div className="flex items-center gap-1.5 text-gold-soft font-serif italic text-xs tracking-wider uppercase mb-2">
+                    {p.icon}
+                    <span>{p.question}</span>
+                  </div>
+                  <div className="font-serif text-xl font-medium text-wine tracking-wide sm:text-2xl mt-1 leading-snug">
+                    {p.countEnd ? (
+                      <Counter end={p.countEnd} prefix={p.countPrefix} suffix={p.countSuffix} />
+                    ) : (
+                      p.proof
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-          </Reveal>
-          <Reveal variant="right" delay={120}>
-            <p className="text-xs uppercase tracking-[0.35em] text-gold">
-              Personalized · Handcrafted
-            </p>
-            <h2 className="mt-4 font-serif text-4xl leading-tight text-wine sm:text-5xl">
-              Your Wedding.
-              <br />
-              <span className="italic">Your Style.</span>
-            </h2>
-            <div className="gold-divider mt-6 w-20" />
-            <p className="mt-6 text-base leading-relaxed text-foreground/80">
-              We don't ask you to choose from hundreds of catalogue designs. Instead, we create
-              outfits inspired by your personality, your saree, your vision, and your wedding style.
-              Because every bride deserves a look that feels uniquely hers.
-            </p>
-            <button
-              onClick={() => open("studio")}
-              className="btn-gold mt-8 inline-flex rounded-full px-7 py-3 text-xs font-medium uppercase tracking-[0.18em]"
-            >
-              Start Your Design
-            </button>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
       </section>
 
-      {/* PROCESS */}
-      <section id="process" className="bg-gradient-to-b from-cream to-cream-soft py-32 sm:py-40">
+      {/* WHY SARRAHH SECTION */}
+      <section id="why" className="py-24 sm:py-32 bg-gradient-to-b from-cream to-cream-soft overflow-hidden">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal className="text-center">
-            <p className="text-xs uppercase tracking-[0.35em] text-gold">
-              In Three Considered Steps
-            </p>
-            <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl">The Sarrahh Process</h2>
+            <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">THE SARRAHH DIFFERENCE</p>
+            <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl md:text-6xl font-light">Why Sarrahh?</h2>
             <div className="gold-divider mx-auto mt-6 w-24" />
           </Reveal>
-          <div className="mt-16 grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-6">
+
+          <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-3">
+
+            {/* THE FIT PHILOSOPHY */}
+            <Reveal variant="left" delay={50} className="flex">
+              <div className="glass-card card-lift rounded-3xl p-8 flex flex-col justify-between border border-gold/25 relative overflow-hidden bg-cream-soft/60">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gold/5 rounded-bl-full pointer-events-none" />
+                <div>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10 text-wine mb-6 border border-gold/20">
+                    <Scissors className="h-5 w-5" />
+                  </div>
+                  <h3 className="font-serif text-xs uppercase tracking-[0.2em] text-gold font-semibold">THE FIT PHILOSOPHY</h3>
+                  <h4 className="mt-3 font-serif text-2xl text-wine leading-tight">
+                    A bridal outfit should never ask you to adjust yourself.
+                  </h4>
+                  <div className="w-12 h-[1px] bg-gold/40 my-5" />
+                  <ul className="space-y-3.5 text-sm text-foreground/80 leading-relaxed font-light">
+                    <li className="flex items-start gap-2.5">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
+                      <span>Every bride worries about the design. Very few realise that the <strong>perfect fit</strong> is what gives them true confidence.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
+                      <span>An outfit shouldn't feel tight or restrictive during the ceremony.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
+                      <span>It shouldn't need constant fixing or adjusting on your stage.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
+                      <span>It shouldn't make you conscious every time someone takes a photo.</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="mt-8 pt-5 border-t border-gold/10">
+                  <p className="font-serif italic text-[15px] text-wine/90 leading-relaxed">
+                    "At Sarrahh, we believe your outfit should move with you—not against you. Because when the fit disappears, your confidence takes its place."
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
+            {/* THE CRAFTSMANSHIP */}
+            <Reveal variant="up" delay={100} className="flex">
+              <div className="glass-card card-lift rounded-3xl p-8 flex flex-col justify-between border border-gold/25 relative overflow-hidden bg-cream-soft/60">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gold/5 rounded-bl-full pointer-events-none" />
+                <div>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10 text-wine mb-6 border border-gold/20">
+                    <Sparkles className="h-5 w-5" />
+                  </div>
+                  <h3 className="font-serif text-xs uppercase tracking-[0.2em] text-gold font-semibold">THE CRAFTSMANSHIP</h3>
+                  <h4 className="mt-3 font-serif text-2xl text-wine leading-tight">
+                    Anyone can add more stones. Anyone can follow a trend. Real craftsmanship is quieter.
+                  </h4>
+                  <div className="w-12 h-[1px] bg-gold/40 my-5" />
+                  <ul className="space-y-3.5 text-sm text-foreground/80 leading-relaxed font-light">
+                    <li className="flex items-start gap-2.5">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
+                      <span>Symmetry of the hand embroidery, ensuring exact matching patterns on sleeves and shoulders.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
+                      <span>The meticulous balance of every single motif to align with your bridal style.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
+                      <span>Internal lining and edge finishing you'll never have to think about or feel discomfort from.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
+                      <span>Details that make the outfit feel complete without demanding loud attention.</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="mt-8 pt-5 border-t border-gold/10">
+                  <p className="font-serif italic text-[15px] text-wine/90 leading-relaxed">
+                    Quiet elegance. Handcrafted thread-by-thread under expert master supervision in our Kangayam studio.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
+            {/* PERSONAL DESIGN */}
+            <Reveal variant="right" delay={150} className="flex">
+              <div className="glass-card card-lift rounded-3xl p-8 flex flex-col justify-between border border-gold/25 relative overflow-hidden bg-cream-soft/60">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gold/5 rounded-bl-full pointer-events-none" />
+                <div>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10 text-wine mb-6 border border-gold/20">
+                    <Wand2 className="h-5 w-5" />
+                  </div>
+                  <h3 className="font-serif text-xs uppercase tracking-[0.2em] text-gold font-semibold">PERSONAL DESIGN</h3>
+                  <h4 className="mt-3 font-serif text-2xl text-wine leading-tight">
+                    Finding the right outfit shouldn't mean adjusting yourself to a catalogue. We don't follow catalogues.
+                  </h4>
+                  <div className="w-12 h-[1px] bg-gold/40 my-5" />
+                  <ul className="space-y-3.5 text-sm text-foreground/80 leading-relaxed font-light">
+                    <li className="flex items-start gap-2.5">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
+                      <span>Most boutiques present standard catalogs. We believe catalogs limit your unique bride story.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
+                      <span>Instead, we create outfits inspired by your personality, your wedding saree, your vision, and style.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
+                      <span>Because every bride deserves a look that feels uniquely, authentically hers.</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="mt-8 pt-5 border-t border-gold/10">
+                  <p className="font-serif text-base font-medium text-wine leading-relaxed tracking-wider uppercase">
+                    Your Wedding. Your Style.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
+          </div>
+
+          {/* Instagram Reel Showcase */}
+          <div className="mt-20 border-t border-gold/15 pt-16 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
+            <Reveal variant="left" className="space-y-6">
+              <span className="font-serif text-xs uppercase tracking-[0.25em] text-gold font-semibold">CRAFT IN FOCUS</span>
+              <h3 className="font-serif text-3xl sm:text-4xl text-wine leading-tight">
+                Watch Our Philosophy in Motion
+              </h3>
+              <p className="text-sm sm:text-base text-foreground/80 leading-relaxed font-light">
+                See how we bring customized, catalogue-free bridal designs to life. This video showcases the meticulous detail of our signature Aari handwork and precise tailoring process.
+              </p>
+              <div className="space-y-4 pt-2">
+                {[
+                  "Watch step-by-step thread mapping matching the saree's border",
+                  "See the custom neckline adjustments tailored to the bride's shoulders",
+                  "Witness the flawless, crease-free final fit inspection"
+                ].map((item) => (
+                  <div key={item} className="flex items-start gap-2.5 text-xs sm:text-sm text-foreground/75 font-light font-sans">
+                    <CheckCircle2 className="w-4 h-4 text-gold shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="pt-4">
+                <a
+                  href="https://www.instagram.com/reel/DR7YPHrjyVk/?igsh=MWtnOTIyM2RwZXdqdw=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline-gold inline-flex items-center gap-2 rounded-full px-6 py-3 text-xs font-semibold uppercase tracking-wider transition-all"
+                >
+                  <span>View on Instagram</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </Reveal>
+
+            <Reveal variant="right" className="flex justify-center">
+              <div className="w-full max-w-[340px] rounded-[2rem] overflow-hidden border border-gold/25 bg-cream-soft p-3.5 shadow-2xl relative group">
+                <div className="absolute inset-0 rounded-[2rem] border border-dashed border-gold/25 pointer-events-none m-1.5" />
+                <div className="relative rounded-2xl overflow-hidden aspect-[9/16] h-[520px] w-full bg-wine/5 shadow-inner">
+                  <video
+                    src="/transformation_videos/founder_intro.mp4"
+                    className="w-full h-full object-cover rounded-2xl"
+                    controls
+                    playsInline
+                    loop
+                    preload="metadata"
+                  />
+                </div>
+              </div>
+            </Reveal>
+          </div>
+
+          {/* Why CTA blocks */}
+          <Reveal className="mt-16 text-center">
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <button
+                onClick={() => open("studio")}
+                className="btn-gold w-full rounded-full px-8 py-4 text-xs font-semibold uppercase tracking-widest sm:w-auto"
+              >
+                Book Studio Visit
+              </button>
+              <button
+                onClick={() => open("online")}
+                className="btn-outline-gold w-full rounded-full px-8 py-4 text-xs font-semibold uppercase tracking-widest sm:w-auto"
+              >
+                Book Online Consultation
+              </button>
+            </div>
+            <p className="mt-4 text-xs font-medium text-wine/80 tracking-wide">
+              ⚡ If your wedding date is already fixed, don't wait too long
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* TRANSFORMATIONS SECTION */}
+      <section id="transformations" className="py-24 sm:py-32 bg-gradient-to-b from-cream-soft to-cream border-t border-gold/20 overflow-hidden">
+        <div className="mx-auto max-w-6xl px-6">
+          <Reveal className="text-center">
+            <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">GALLERY & STORIES</p>
+            <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl md:text-6xl font-light">Bridal Transformations</h2>
+            <div className="gold-divider mx-auto mt-6 w-24" />
+          </Reveal>
+
+          {/* Interactive Navigation Tabs */}
+          <div className="mt-12 flex justify-center border-b border-gold/20 max-w-lg mx-auto">
+            <div className="flex space-x-6 sm:space-x-8 pb-3">
+              {[
+                { id: "transformations", label: "Bridal Transformations" },
+                { id: "experiences", label: "Bride Experiences" },
+                { id: "stories", label: "Customer Stories" }
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setTransTab(t.id as any)}
+                  className={`text-xs sm:text-sm uppercase tracking-wider font-semibold pb-1.5 transition-all relative ${transTab === t.id
+                    ? "text-wine scale-105"
+                    : "text-foreground/50 hover:text-wine/80"
+                    }`}
+                >
+                  {t.label}
+                  {transTab === t.id && (
+                    <span className="absolute bottom-[-13px] left-0 right-0 h-[2px] bg-gold" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Transformations Grid Content */}
+          <div className="mt-14">
+            {transTab === "transformations" && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {VIDEOS.filter((v) => v.category === "Transformations").map((vid) => (
+                  <div
+                    key={vid.url}
+                    className="relative group rounded-3xl overflow-hidden shadow-lg border border-gold/25 bg-wine-deep aspect-[9/16] cursor-pointer"
+                    onMouseEnter={() => handleVideoHoverStart(vid.url)}
+                    onMouseLeave={() => handleVideoHoverEnd(vid.url)}
+                    onClick={() => setLightboxVideo(vid.url)}
+                  >
+                    <video
+                      ref={(el) => {
+                        videoRefs.current[vid.url] = el;
+                      }}
+                      src={vid.url}
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/95 via-wine-deep/30 to-transparent flex flex-col justify-between p-5">
+                      <div className="flex justify-end">
+                        <button
+                          onClick={(e) => toggleMute(vid.url, e)}
+                          className="bg-cream-soft/20 backdrop-blur-md text-cream-soft p-2 rounded-full hover:bg-cream-soft/40 transition-colors border border-cream-soft/20"
+                        >
+                          {mutedVideos[vid.url] ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                        </button>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-gold-soft mb-1 font-semibold">
+                          <Play className="w-3 h-3 fill-current" />
+                          <span>Hover to preview</span>
+                        </div>
+                        <h4 className="font-serif text-lg text-cream-soft leading-tight">{vid.title}</h4>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {transTab === "experiences" && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {VIDEOS.filter((v) => v.category === "Experiences").map((vid) => (
+                  <div
+                    key={vid.url}
+                    className="relative group rounded-3xl overflow-hidden shadow-lg border border-gold/25 bg-wine-deep aspect-[9/16] cursor-pointer"
+                    onMouseEnter={() => handleVideoHoverStart(vid.url)}
+                    onMouseLeave={() => handleVideoHoverEnd(vid.url)}
+                    onClick={() => setLightboxVideo(vid.url)}
+                  >
+                    <video
+                      ref={(el) => {
+                        videoRefs.current[vid.url] = el;
+                      }}
+                      src={vid.url}
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/95 via-wine-deep/30 to-transparent flex flex-col justify-between p-5">
+                      <div className="flex justify-end">
+                        <button
+                          onClick={(e) => toggleMute(vid.url, e)}
+                          className="bg-cream-soft/20 backdrop-blur-md text-cream-soft p-2 rounded-full hover:bg-cream-soft/40 transition-colors border border-cream-soft/20"
+                        >
+                          {mutedVideos[vid.url] ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                        </button>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-gold-soft mb-1 font-semibold">
+                          <Play className="w-3 h-3 fill-current" />
+                          <span>Hover to preview</span>
+                        </div>
+                        <h4 className="font-serif text-lg text-cream-soft leading-tight">{vid.title}</h4>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {transTab === "stories" && (
+              <div className="space-y-10">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                  {PHOTOS.map((pic) => (
+                    <div
+                      key={pic.url}
+                      className="relative group rounded-2xl overflow-hidden border border-gold/20 aspect-square cursor-pointer shadow-md bg-cream-soft"
+                      onClick={() => setLightboxImg(pic.url)}
+                    >
+                      <img
+                        src={pic.url}
+                        alt={pic.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                        <p className="text-[11px] text-cream-soft leading-tight font-serif">{pic.title}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="border-t border-gold/10 pt-8">
+                  <h4 className="font-serif text-xl text-wine mb-4">Behind-The-Scenes Video Stories</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {VIDEOS.filter((v) => v.category === "Stories").map((vid) => (
+                      <div
+                        key={vid.url}
+                        className="relative group rounded-3xl overflow-hidden shadow-lg border border-gold/25 bg-wine-deep aspect-[9/16] cursor-pointer"
+                        onMouseEnter={() => handleVideoHoverStart(vid.url)}
+                        onMouseLeave={() => handleVideoHoverEnd(vid.url)}
+                        onClick={() => setLightboxVideo(vid.url)}
+                      >
+                        <video
+                          ref={(el) => {
+                            videoRefs.current[vid.url] = el;
+                          }}
+                          src={vid.url}
+                          loop
+                          muted
+                          playsInline
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/95 via-wine-deep/30 to-transparent flex flex-col justify-between p-5">
+                          <div className="flex justify-end">
+                            <button
+                              onClick={(e) => toggleMute(vid.url, e)}
+                              className="bg-cream-soft/20 backdrop-blur-md text-cream-soft p-2 rounded-full hover:bg-cream-soft/40 transition-colors border border-cream-soft/20"
+                            >
+                              {mutedVideos[vid.url] ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                            </button>
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-gold-soft mb-1 font-semibold">
+                              <Play className="w-3 h-3 fill-current" />
+                              <span>Hover to preview</span>
+                            </div>
+                            <h4 className="font-serif text-lg text-cream-soft leading-tight">{vid.title}</h4>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* THE SARRAHH PROCESS */}
+      <section id="process" className="py-24 sm:py-32 bg-gradient-to-b from-cream to-cream-soft overflow-hidden">
+        <div className="mx-auto max-w-6xl px-6">
+          <Reveal className="text-center">
+            <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">THREE STEPS TO CONFIDENCE</p>
+            <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl md:text-6xl font-light">The Sarrahh Process</h2>
+            <div className="gold-divider mx-auto mt-6 w-24" />
+          </Reveal>
+
+          <div className="mt-20 grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-6 relative">
             {[
               {
-                icon: <CalendarHeart className="icon-elegant w-8 h-8" />,
+                step: "Step 1",
                 title: "Book Your Bridal Consultation",
-                text: "Meet us in the studio or connect online.",
+                desc: "Meet us in the studio or connect online.",
+                icon: <CalendarHeart className="w-6 h-6 text-cream-soft" />,
+                details: "We start by understanding your wedding details, saree color, and theme."
               },
               {
-                icon: <Scissors className="icon-elegant w-8 h-8" />,
+                step: "Step 2",
                 title: "Design Your Dream Outfit",
-                text: "We understand your vision and customize it with expert craftsmanship.",
+                desc: "We understand your vision and customize it with expert craftsmanship.",
+                icon: <Scissors className="w-6 h-6 text-cream-soft" />,
+                details: "No catalogue copies. We draft bespoke necklines and pattern work matching your shoulders."
               },
               {
-                icon: <Wand2 className="icon-elegant w-8 h-8" />,
-                title: "Walk Into Your Wedding",
-                text: "Receive your perfectly crafted bridal outfit, ready for your biggest day.",
-              },
-            ].map((s, i) => (
-              <Reveal key={s.title} className="relative" delay={i * 120}>
-                <div className="glass-card group card-lift relative flex h-full flex-col items-center rounded-3xl px-6 py-12 text-center">
-                  <div className="mb-2 font-serif text-xs uppercase tracking-[0.3em] text-gold">
-                    Step {i + 1}
-                  </div>
+                step: "Step 3",
+                title: "Walk Into Your Wedding With Confidence",
+                desc: "Receive your perfectly crafted bridal outfit, ready for your biggest day.",
+                icon: <Wand2 className="w-6 h-6 text-cream-soft" />,
+                details: "A trial run in the studio ensures flawless fit, comfort, and ultimate confidence."
+              }
+            ].map((p, idx) => (
+              <Reveal key={p.step} className="relative flex flex-col items-center" delay={idx * 150}>
+                <div className="glass-card w-full rounded-3xl p-8 text-center flex flex-col items-center h-full relative z-10 border border-gold/20 hover:border-gold/50 transition-all">
+                  <span className="font-serif text-xs uppercase tracking-[0.25em] text-gold font-semibold">{p.step}</span>
                   <div
-                    className="flex h-16 w-16 items-center justify-center rounded-full transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-105"
+                    className="flex h-14 w-14 items-center justify-center rounded-full mt-5 mb-6 shadow-md"
                     style={{
                       background: "linear-gradient(135deg, var(--gold) 0%, var(--wine) 100%)",
-                      color: "var(--cream-soft)",
-                      boxShadow:
-                        "0 12px 30px -12px color-mix(in oklab, var(--gold) 55%, transparent)",
                     }}
                   >
-                    {s.icon}
+                    {p.icon}
                   </div>
-                  <h3 className="mt-6 font-serif text-2xl text-wine">{s.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-foreground/75">{s.text}</p>
+                  <h3 className="font-serif text-2xl text-wine leading-tight mb-3">{p.title}</h3>
+                  <p className="text-sm font-semibold text-foreground/80 mb-4">{p.desc}</p>
+                  <p className="text-xs text-foreground/60 leading-relaxed font-light">{p.details}</p>
                 </div>
-                {i < 2 && (
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute left-1/2 top-full my-6 -translate-x-1/2 md:left-full md:top-1/2 md:my-0 md:-translate-x-1/2 md:-translate-y-1/2 z-0"
-                  >
-                    <div className="hidden md:block w-16 h-[1px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                    <div className="md:hidden w-[1px] h-10 bg-gradient-to-b from-transparent via-gold to-transparent" />
+                {idx < 2 && (
+                  <div className="hidden lg:block absolute left-[90%] top-[40%] w-[25%] h-[1px] bg-gradient-to-r from-gold/70 via-gold/10 to-transparent z-0">
+                    <span className="absolute right-0 top-[-3.5px] border-t-4 border-b-4 border-l-6 border-transparent border-l-gold" />
+                  </div>
+                )}
+                {idx < 2 && (
+                  <div className="lg:hidden my-4 text-gold flex flex-col items-center">
+                    <span className="text-2xl font-light">↓</span>
                   </div>
                 )}
               </Reveal>
@@ -628,225 +1322,161 @@ export default function App() {
         </div>
       </section>
 
-      {/* BRIDES WHO TRUSTED */}
-      <section
-        id="brides"
-        className="relative bg-gradient-to-b from-cream-soft to-cream py-32 sm:py-40"
-      >
-        <div className="mx-auto max-w-6xl px-6">
-          <Reveal className="text-center">
-            <div className="flex justify-center gap-1.5 text-gold">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="icon-elegant w-6 h-6 fill-current" />
-              ))}
+      {/* REVIEWS SECTION */}
+      <section id="reviews" className="py-24 bg-gradient-to-b from-cream-soft to-cream border-t border-gold/25 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-6">
+          
+          {/* Header Row */}
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+            <div className="text-left font-sans">
+              <p className="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-gold font-bold">OUR REVIEWS</p>
+              <h2 className="mt-3 font-serif text-4xl text-wine sm:text-5xl md:text-6xl font-light tracking-tight leading-none">
+                What Our <span className="text-gold font-normal italic font-serif">Brides</span> Say
+              </h2>
             </div>
-            <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl">
-              Brides Who Trusted Sarrahh
-            </h2>
-            <div className="gold-divider mx-auto mt-6 w-24" />
-            <div className="mt-8 flex flex-wrap justify-center gap-2">
-              {["Chennai", "Tiruppur", "Karur", "Erode", "Pollachi", "Dharapuram"].map((c) => (
-                <span
-                  key={c}
-                  className="rounded-full border border-[color:var(--gold)]/60 bg-cream px-4 py-1.5 text-xs uppercase tracking-[0.18em] text-wine"
-                >
-                  {c}
-                </span>
-              ))}
+            
+            {/* Nav Arrows */}
+            <div className="flex gap-3 self-start sm:self-auto">
+              <button
+                onClick={() => scrollReviews("left")}
+                aria-label="Previous review"
+                className="h-12 w-12 rounded-full bg-wine text-cream-soft hover:bg-wine-deep flex items-center justify-center shadow-md transition-all active:scale-95 cursor-pointer border border-gold/20"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gold-soft">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+              </button>
+              
+              <button
+                onClick={() => scrollReviews("right")}
+                aria-label="Next review"
+                className="h-12 w-12 rounded-full bg-wine text-cream-soft hover:bg-wine-deep flex items-center justify-center shadow-md transition-all active:scale-95 cursor-pointer border border-gold/20"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gold-soft">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+              </button>
             </div>
-          </Reveal>
+          </div>
 
-          <Reveal className="mt-12">
-            <Carousel
-              items={TESTIMONIALS}
-              renderItem={(item) => {
-                const t = item as (typeof TESTIMONIALS)[number];
-                return (
-                  <article className="glass-card card-lift flex h-full flex-col p-8 rounded-3xl relative">
-                    <span className="text-6xl text-gold/20 absolute right-8 top-8 font-serif leading-none pointer-events-none">
-                      ”
-                    </span>
-                    <p className="mt-2 font-serif text-lg italic leading-relaxed text-foreground/85 relative z-10 grow">
-                      "{t.quote}"
-                    </p>
-                    <div className="flex items-center gap-4 mt-8">
-                      <img
-                        src={t.img}
-                        alt={t.name}
-                        loading="lazy"
-                        width={64}
-                        height={64}
-                        className="h-14 w-14 rounded-full object-cover ring-2 ring-[color:var(--gold)]/50 transition-transform duration-500 hover:scale-110 shadow-lg"
-                      />
-                      <div>
-                        <div className="flex gap-0.5 text-gold">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                          ))}
-                        </div>
-                        <p className="mt-1 font-serif text-sm text-wine">{t.name}</p>
+          {/* Carousel Slider Row */}
+          <div
+            ref={reviewScrollRef}
+            onMouseEnter={() => setReviewsHovered(true)}
+            onMouseLeave={() => setReviewsHovered(false)}
+            className="mt-12 flex gap-6 overflow-x-auto scrollbar-none pb-6 scroll-smooth snap-x snap-mandatory"
+          >
+            {REVIEWS_DATA.map((r) => {
+              // Get custom punchy quote matching the image's layout balance
+              const getReviewQuote = (id: number, text: string) => {
+                const quotes: Record<number, string> = {
+                  1: "They tailor their solutions to our specific blouse design and fit needs.",
+                  2: "Awesome precision stitching, no alterations needed, worth every single penny.",
+                  3: "Outstanding craftsmanship that truly understands every custom detail requested.",
+                  4: "Tailoring was neat, precise, and perfectly matched our specific bridal measurements.",
+                  5: "Excellent stitching work with neat finishing and perfect fitting.",
+                  6: "Neat stitches and creative designs that make the wedding outfit delightful.",
+                  7: "Outstanding customer service and perfect fit on my custom reception lehenga."
+                };
+                return quotes[id] || (text.length > 80 ? text.slice(0, 80) + "..." : text);
+              };
+
+              return (
+                <div
+                  key={r.id}
+                  className="w-[290px] sm:w-[380px] shrink-0 snap-start glass-card bg-cream-soft/85 border border-gold/25 rounded-[2.5rem] p-8 shadow-sm hover:shadow-lg hover:border-gold/45 transition-all duration-500 flex flex-col justify-between h-[370px] relative text-left"
+                >
+                  <div>
+                    {/* Top card row */}
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="h-12 w-12 rounded-full bg-gradient-to-br from-gold to-wine text-cream-soft flex items-center justify-center font-serif text-lg font-bold shadow-inner shrink-0 select-none overflow-hidden uppercase">
+                        {r.avatar}
+                      </div>
+                      
+                      <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-wine/5 border border-gold/25 text-[10px] font-bold uppercase tracking-wider text-wine shadow-sm">
+                        <span className="text-gold font-bold text-xs">✓</span>
+                        <span>Verified</span>
                       </div>
                     </div>
-                  </article>
-                );
-              }}
-            />
-          </Reveal>
-          <p className="mt-2 text-center text-xs text-foreground/50">
-            (Real customer photos & reviews)
-          </p>
-        </div>
-      </section>
 
-      {/* WHY BRIDES CHOOSE US */}
-      <section className="bg-gradient-to-b from-cream to-cream-soft py-32 sm:py-40">
-        <div className="mx-auto max-w-5xl px-6">
-          <Reveal className="text-center">
-            <p className="text-xs uppercase tracking-[0.35em] text-gold">
-              Craft · Care · Confidence
-            </p>
-            <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl">Why Brides Choose Us</h2>
-            <div className="gold-divider mx-auto mt-6 w-24" />
-          </Reveal>
-          <div className="mt-20 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-y-16">
-            {[
-              "Designed around your own style",
-              "No catalogue-based designs",
-              "Personalized bridal consultation",
-              "Premium Aari craftsmanship",
-              "Perfect fitting process",
-              "Bridal outfit customization",
-            ].map((item, i) => (
-              <Reveal key={item} delay={i * 80} className="text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full text-wine mb-5 bg-[color:var(--gold-soft)]/10 relative">
-                  <div className="absolute inset-0 rounded-full border border-gold/30 scale-[1.15]" />
-                  <CheckCircle2
-                    strokeWidth={1}
-                    className="h-8 w-8 opacity-80 icon-elegant text-gold"
-                  />
+                    {/* Double Quote icon SVG in Brand Gold */}
+                    <svg className="w-8 h-8 text-gold mt-5 opacity-90" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.987z" />
+                    </svg>
+                    
+                    {/* Review Quote text in brand wine serif italic */}
+                    <p className="text-[17px] sm:text-lg font-serif italic text-wine leading-snug tracking-wide mt-3 line-clamp-4">
+                      "{getReviewQuote(r.id, r.text)}"
+                    </p>
+                  </div>
+
+                  {/* Footer details in Brand styling */}
+                  <div className="border-t border-gold/15 pt-4 text-left">
+                    <span className="font-sans text-xs font-bold text-wine uppercase tracking-widest block">{r.name}</span>
+                    <span className="text-[10px] text-wine/60 block mt-0.5 tracking-wide">
+                      {r.meta.split("·")[0].trim()} · {r.date}
+                    </span>
+                    <div className="flex gap-0.5 text-gold mt-2">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star key={i} className="w-3 h-3 fill-current" />
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <span className="font-serif text-xl tracking-wide text-wine block mb-2 px-4">
-                  {item}
-                </span>
-              </Reveal>
-            ))}
+              );
+            })}
           </div>
+
         </div>
       </section>
 
-      {/* GOOGLE REVIEWS */}
-      <section className="relative bg-gradient-to-b from-cream-soft to-cream py-32 sm:py-40">
-        <div className="bg-luxury-pattern absolute inset-0 opacity-40 pointer-events-none" />
-        <Reveal className="relative mx-auto max-w-2xl px-6 flex justify-center">
-          <div className="flex flex-col items-center justify-center p-12 bg-cream rounded-full w-80 h-80 shadow-[0_30px_60px_-20px_color-mix(in_oklab,var(--wine)_25%,transparent)] border border-[color:var(--gold)]/20 relative">
-            <div className="absolute inset-4 rounded-full border border-dashed border-[color:var(--gold)]/50 pointer-events-none" />
-            <div className="text-4xl text-gold mb-2 tracking-widest">★★★★★</div>
-            <h3 className="font-serif text-3xl text-wine text-center">
-              Google
-              <br />
-              Rating
-            </h3>
-            <p className="mt-4 text-[10px] sm:text-xs uppercase tracking-[0.25em] text-foreground/50 text-center font-medium">
-              Real Reviews
-              <br />
-              Real Brides
-            </p>
-          </div>
-        </Reveal>
-        <Reveal className="mt-8 text-center relative z-10 w-full flex justify-center">
-          <div className="px-6 py-3 text-xs uppercase tracking-widest bg-wine text-cream-soft rounded-full shadow-xl opacity-90 inline-block border border-[color:var(--gold)]/30">
-            [ Google Reviews widget embeds here ]
-          </div>
-        </Reveal>
-      </section>
 
-      {/* VIDEO TESTIMONIALS */}
-      <section className="bg-gradient-to-b from-cream to-cream-soft py-32 sm:py-40">
-        <div className="mx-auto max-w-6xl px-6">
-          <Reveal className="text-center">
-            <p className="text-xs uppercase tracking-[0.35em] text-gold">Watch · Listen · Feel</p>
-            <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl">Video Testimonials</h2>
-            <div className="gold-divider mx-auto mt-6 w-24" />
-          </Reveal>
-          <Reveal className="mt-12">
-            <Carousel
-              items={VIDEOS}
-              renderItem={(item) => {
-                const v = item as (typeof VIDEOS)[number];
-                return (
-                  <button className="img-luxury group relative block w-full text-left">
-                    <img
-                      src={v.img}
-                      alt={v.title}
-                      loading="lazy"
-                      width={800}
-                      height={1000}
-                      className="h-80 w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--wine-deep)]/95 via-[color:var(--wine)]/20 to-transparent" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full text-cream-soft ring-[1px] ring-[color:var(--gold)] backdrop-blur-md bg-wine/40 transition-all duration-700 ease-out group-hover:scale-110 group-hover:bg-wine/60 shadow-[0_0_40px_rgba(40,10,15,0.4)]">
-                        <Play className="ml-1 h-6 w-6 fill-current opacity-90" />
-                      </span>
-                    </div>
-                    <div className="absolute inset-x-0 bottom-0 p-5 text-left">
-                      <h4 className="font-serif text-xl text-cream-soft">{v.title}</h4>
-                    </div>
-                  </button>
-                );
-              }}
-            />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section id="faq" className="bg-gradient-to-b from-cream-soft to-cream py-32 sm:py-40">
+      {/* FREQUENTLY ASKED QUESTIONS */}
+      <section id="faq" className="py-24 sm:py-32 bg-gradient-to-b from-cream to-cream-soft border-t border-gold/20 overflow-hidden">
         <div className="mx-auto max-w-3xl px-6">
           <Reveal className="text-center">
-            <p className="text-xs uppercase tracking-[0.35em] text-gold">Answers For Every Bride</p>
-            <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl">
-              Frequently Asked Questions
-            </h2>
+            <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">ANSWERS FOR EVERY BRIDE</p>
+            <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl md:text-6xl font-light">Frequently Asked Questions</h2>
             <div className="gold-divider mx-auto mt-6 w-24" />
           </Reveal>
-          <div className="mt-12 space-y-3">
+
+          <div className="mt-16 space-y-4">
             {[
               {
                 q: "Do I need to travel to Coimbatore for a premium bridal outfit?",
-                a: "Not anymore. Sarrahh offers personalized bridal craftsmanship and premium customization right here, closer to you.",
+                a: "Not anymore. Sarrahh offers personalized bridal craftsmanship and premium customization right here, closer to you. Save multiple trips to big cities."
               },
               {
                 q: "Can you create my own design?",
-                a: "Yes. Every bridal outfit is customized based on your ideas and preferences — not from a catalogue.",
+                a: "Yes. Every bridal outfit is customized based on your own ideas, Pinterest reference pins, saree colors, and design preferences—not from a pre-made catalogue."
               },
               {
                 q: "When should I book my bridal appointment?",
-                a: "We recommend booking as early as possible after your wedding date is finalized to secure your preferred consultation slot.",
+                a: "We recommend booking as early as possible (ideally 2 to 3 months) after your wedding date is finalized. This secures your preferred consultation slot and gives our craftsmen ample time to perform design iterations."
               },
               {
                 q: "Can I book an online consultation first?",
-                a: "Yes. Brides from other cities can start with an online consultation before visiting our studio.",
+                a: "Yes. Brides living in other cities or overseas can start with an online video consultation, where we finalize design sketches before scheduling fitting dates."
               },
               {
                 q: "Do you customize bridal blouses and lehengas?",
-                a: "Yes. We specialize in customized bridal blouses and bridal outfits designed exclusively for each bride.",
-              },
-            ].map((f) => (
-              <Reveal key={f.q}>
+                a: "Yes. We specialize in fully customized bridal blouses, design-heavy Aari embroidery, reception lehengas, and bridal outfits designed exclusively for each bride."
+              }
+            ].map((f, fIdx) => (
+              <Reveal key={f.q} delay={fIdx * 80}>
                 <details
                   data-faq
-                  className="glass-card group rounded-2xl px-6 py-5 transition-all duration-300 open:border-[color:var(--gold)]/70 hover:border-[color:var(--gold)]/60"
+                  className="glass-card group rounded-2xl px-6 py-5 transition-all duration-300 border border-gold/20 open:border-[color:var(--gold)]/70 hover:border-gold/45 bg-cream-soft/60"
                 >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
-                    <span className="font-serif text-lg text-wine">{f.q}</span>
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--gold)]/50 text-gold transition-transform duration-500 group-open:rotate-[135deg] group-open:border-[color:var(--gold)] group-open:bg-gold group-open:text-cream-soft">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 select-none outline-none">
+                    <span className="font-serif text-lg text-wine font-medium">{f.q}</span>
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[color:var(--gold)]/50 text-gold transition-transform duration-500 group-open:rotate-[135deg] group-open:border-[color:var(--gold)] group-open:bg-gold group-open:text-cream-soft">
                       <Plus className="h-4 w-4" />
                     </span>
                   </summary>
                   <div className="faq-body">
                     <div>
-                      <p className="pt-4 text-sm leading-relaxed text-foreground/75">{f.a}</p>
+                      <p className="pt-4 text-sm leading-relaxed text-foreground/75 font-light">{f.a}</p>
                     </div>
                   </div>
                 </details>
@@ -856,171 +1486,227 @@ export default function App() {
         </div>
       </section>
 
-      {/* EXCLUSIVE BENEFITS */}
-      <section className="bg-gradient-to-b from-wine to-wine-deep py-32 sm:py-48">
-        <div className="mx-auto max-w-3xl px-6">
-          <Reveal>
-            <div className="invitation-card px-8 text-wine py-16 sm:px-16 sm:py-20 text-center mx-auto max-w-2xl bg-luxury-pattern">
-              <p className="text-center text-xs uppercase tracking-[0.3em] text-gold font-semibold">
-                A Considered Welcome
-              </p>
-              <h2 className="mt-6 text-center font-serif text-3xl sm:text-4xl italic font-light tracking-wide">
-                Book your consultation and receive
-              </h2>
-              <div className="gold-divider mx-auto mt-8 w-16" />
-              <ul className="mx-auto mt-10 max-w-lg space-y-6 text-left inline-block">
-                {[
-                  "Personalized Bridal Consultation",
-                  "Design Suggestions Based on Your Style",
-                  "Priority Appointment Slot",
-                  "Exclusive Bridal Benefit (Shared Only During Consultation)",
-                ].map((b) => (
-                  <li key={b} className="group flex items-center gap-4">
-                    <span className="flex h-1.5 w-1.5 shrink-0 rounded-full bg-gold transition-transform duration-500 group-hover:scale-150" />
-                    <span className="font-serif text-[1.15rem] text-wine/90 tracking-wide">
-                      {b}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* URGENCY STRIP REPEAT */}
-      <div
-        className="border-y border-[color:var(--gold)]/50"
-        style={{
-          background:
-            "linear-gradient(90deg, var(--wine) 0%, var(--wine-deep) 50%, var(--wine) 100%)",
-        }}
-      >
-        <div className="mx-auto flex max-w-7xl items-center justify-center gap-3 px-4 py-4 text-center text-cream-soft">
-          <span className="pulse-strip inline-block h-2 w-2 rounded-full bg-gold" />
-          <p className="text-xs font-medium uppercase tracking-[0.2em] sm:text-sm">
-            ⚡ Only 10 appointments open this month — Book now
-          </p>
-        </div>
-      </div>
-
-      {/* FINAL CTA */}
+      {/* FINAL CTA SECTION */}
       <section
         id="book"
-        className="relative overflow-hidden py-32 sm:py-48 bg-gradient-to-b from-wine to-wine-deep"
+        className="py-16 sm:py-24 bg-gradient-to-b from-cream to-cream-soft border-t border-gold/25 overflow-hidden"
       >
-        <div
-          className="absolute inset-0 opacity-25"
-          style={{
-            background:
-              "radial-gradient(circle at 20% 40%, var(--gold) 0%, transparent 50%), radial-gradient(circle at 80% 60%, var(--gold) 0%, transparent 50%)",
-          }}
-        />
-        <div className="absolute inset-0 bg-luxury-pattern opacity-10 mix-blend-overlay pointer-events-none" />
-        <div className="relative mx-auto max-w-4xl px-6 text-center text-cream-soft">
-          <Reveal>
-            <div className="gold-divider mx-auto w-24 mb-6" />
-            <p className="text-sm uppercase tracking-[0.4em] text-gold-soft font-semibold">
-              The Final Step
-            </p>
-            <h2 className="mt-8 font-serif text-4xl leading-tight sm:text-6xl font-light">
-              Your dream bridal outfit doesn't have to begin with a long drive.
-            </h2>
-            <p className="mt-8 font-serif text-3xl italic text-gold-soft opacity-90">
-              It begins with one consultation.
-            </p>
-            <div className="mt-14 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
-              <button
-                onClick={() => open("studio")}
-                className="btn-gold w-full flex items-center justify-center gap-2 rounded-full px-10 py-5 text-sm font-semibold uppercase tracking-[0.2em] sm:w-auto ring-4 ring-gold/10"
-              >
-                <span>Book Studio Visit</span>
-              </button>
-              <button
-                onClick={() => open("online")}
-                className="btn-outline-gold w-full flex items-center justify-center gap-2 rounded-full px-10 py-5 text-sm font-semibold uppercase tracking-[0.2em] sm:w-auto"
-              >
-                <span>Online Consultation</span>
-              </button>
+        <div className="relative mx-auto max-w-6xl px-6">
+          <Reveal variant="scale">
+            <div className="relative overflow-hidden rounded-3xl p-8 sm:p-12 md:p-14 bg-gradient-to-r from-wine to-wine-deep text-cream-soft shadow-2xl border border-gold/30">
+              
+              {/* Floating ambient circle elements */}
+              <div className="absolute top-[-80px] left-[-80px] w-64 h-64 rounded-full bg-gold/10 blur-2xl pointer-events-none" />
+              <div className="absolute bottom-[-120px] right-[-60px] w-80 h-80 rounded-full bg-gold-soft/10 blur-3xl pointer-events-none" />
+              <div className="absolute bottom-[-20px] left-[35%] w-40 h-40 rounded-full bg-white/5 blur-xl pointer-events-none" />
+              
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-10 items-center justify-between">
+                
+                {/* Left Side Info */}
+                <div className="flex flex-col items-start text-left gap-5">
+                  <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cream-soft text-[10px] font-bold tracking-widest text-wine uppercase shadow-md border border-gold/20">
+                    <span className="text-gold font-bold">✓</span>
+                    <span>New Collection</span>
+                  </div>
+                  
+                  <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light tracking-tight leading-tight">
+                    Ready to <span className="text-gold-soft font-normal italic">Elevate Your Style?</span>
+                  </h2>
+                  
+                  <p className="text-sm sm:text-base text-cream-soft/85 max-w-xl leading-relaxed font-light">
+                    Don't miss out on the latest trends and exclusive collections. Your perfect wardrobe awaits.
+                  </p>
+                </div>
+
+                {/* Right Side CTAs & Social Proof */}
+                <div className="flex flex-col items-start lg:items-end gap-6">
+                  
+                  {/* Button row */}
+                  <div className="flex flex-col sm:flex-row gap-3.5 w-full sm:w-auto">
+                    <button
+                      onClick={() => open("studio")}
+                      className="btn-gold px-8 py-3.5 rounded-xl text-xs font-semibold uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 group shrink-0"
+                    >
+                      <span>Shop the Collection</span>
+                      <span className="text-sm transition-transform group-hover:translate-x-1">→</span>
+                    </button>
+                    
+                    <button
+                      onClick={() => open("online")}
+                      className="border-2 border-gold-soft/60 text-cream-soft hover:bg-gold/15 px-8 py-3.5 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all text-center shrink-0"
+                    >
+                      <span>Explore Deals</span>
+                    </button>
+                  </div>
+
+                  {/* Overlapping Avatars & Rating details */}
+                  <div className="flex items-center gap-3.5">
+                    <div className="flex -space-x-2">
+                      {[
+                        "bg-gradient-to-tr from-purple-500 to-indigo-500",
+                        "bg-gradient-to-tr from-pink-500 to-rose-500",
+                        "bg-gradient-to-tr from-teal-500 to-emerald-500",
+                        "bg-gradient-to-tr from-blue-500 to-cyan-500",
+                        "bg-gradient-to-tr from-amber-500 to-orange-500"
+                      ].map((gradient, idx) => (
+                        <div
+                          key={idx}
+                          className={`w-8 h-8 rounded-full border-2 border-wine-deep ${gradient} shadow-sm flex items-center justify-center text-[8px] font-bold text-white uppercase`}
+                        >
+                          {String.fromCharCode(65 + idx)}
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <span className="text-xs text-gold-soft font-semibold tracking-wide">
+                      5/5 (1200 customers)
+                    </span>
+                  </div>
+
+                </div>
+
+              </div>
             </div>
           </Reveal>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-wine-deep py-14 text-cream-soft/80">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-6 md:grid-cols-4">
+      <footer className="bg-wine-deep py-16 text-cream-soft/75 border-t border-gold/15">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-6 md:grid-cols-4 sm:gap-8">
           <div>
-            <h3 className="font-serif text-2xl tracking-[0.22em] text-cream-soft">SARRAHH</h3>
-            <div className="gold-divider mt-4 w-16" />
-            <p className="mt-4 text-sm leading-relaxed">
-              Handcrafted bridal outfits, designed around you. Your wedding wardrobe partner near
-              you.
+            <img
+              src="/logo.png"
+              alt="Sarrahh Logo"
+              className="h-16 sm:h-20 w-auto object-contain brightness-0 invert opacity-95 mb-4"
+            />
+            <div className="gold-divider w-16" />
+            <p className="mt-5 text-xs leading-relaxed font-light text-cream-soft/70">
+              Personalized bridal blouses, design-heavy Aari embroidery, and bespoke wedding couture created exclusively near you.
             </p>
           </div>
           <div>
-            <h4 className="mb-4 text-xs uppercase tracking-[0.3em] text-gold">Quick Links</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="mb-4 text-xs uppercase tracking-[0.2em] text-gold font-semibold">Explore</h4>
+            <ul className="space-y-3 text-xs font-medium">
               <li>
-                <a href="#top" className="hover:text-gold">
-                  Home
+                <a href="#why" className="hover:text-gold transition-colors">
+                  Why Sarrahh
                 </a>
               </li>
               <li>
-                <a href="#why" className="hover:text-gold">
-                  Collections
+                <a href="#transformations" className="hover:text-gold transition-colors">
+                  Transformations
                 </a>
               </li>
               <li>
-                <a href="#brides" className="hover:text-gold">
-                  About Us
+                <a href="#process" className="hover:text-gold transition-colors">
+                  Our Process
                 </a>
               </li>
               <li>
-                <a href="#book" className="hover:text-gold">
-                  Contact
+                <a href="#reviews" className="hover:text-gold transition-colors">
+                  Brides Reviews
+                </a>
+              </li>
+              <li>
+                <a href="#faq" className="hover:text-gold transition-colors">
+                  FAQs
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <h4 className="mb-4 text-xs uppercase tracking-[0.3em] text-gold">Contact</h4>
-            <p className="text-sm leading-relaxed">
-              Sarrahh Bridal Studio
-              <br />
-              Tiruppur, Tamil Nadu
-              <br />
-              +91 00000 00000
-              <br />
-              hello@sarrahh.in
+            <h4 className="mb-4 text-xs uppercase tracking-[0.2em] text-gold font-semibold">Kangayam Studio</h4>
+            <p className="text-xs leading-relaxed font-light text-cream-soft/70 space-y-1.5 flex flex-col">
+              <span className="flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-gold/80" />
+                <span>Kangayam, Tiruppur District, Tamil Nadu</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-gold/80" />
+                <span>10:00 AM - 8:30 PM (Sunday Closed)</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Phone className="w-3.5 h-3.5 text-gold/80" />
+                <span>+91 97864 12345</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5 text-gold/80" />
+                <span>consultation@sarrahh.in</span>
+              </span>
             </p>
           </div>
           <div>
-            <h4 className="mb-4 text-xs uppercase tracking-[0.3em] text-gold">Follow</h4>
+            <h4 className="mb-4 text-xs uppercase tracking-[0.2em] text-gold font-semibold">Follow Our Work</h4>
+            <p className="text-xs font-light text-cream-soft/60 mb-4">View daily fit reels and real bride stories on social channels.</p>
             <div className="flex gap-3">
-              {["Instagram", "Facebook", "WhatsApp"].map((s) => (
+              {[
+                { name: "Instagram", href: "https://instagram.com/sarrahh" },
+                { name: "WhatsApp", href: "https://wa.me/919786412345" },
+                { name: "Facebook", href: "https://facebook.com/sarrahh" }
+              ].map((s) => (
                 <a
-                  key={s}
-                  href="#"
-                  aria-label={s}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--gold)]/40 text-xs uppercase tracking-widest text-gold-soft transition-colors hover:bg-gold hover:text-wine-deep"
+                  key={s.name}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.name}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--gold)]/30 text-[10px] uppercase font-semibold text-gold-soft transition-all hover:bg-gold hover:text-wine-deep"
                 >
-                  {s[0]}
+                  {s.name[0]}
                 </a>
               ))}
             </div>
           </div>
         </div>
-        <div className="mx-auto mt-10 max-w-6xl border-t border-cream-soft/10 px-6 pt-6 text-center text-xs text-cream-soft/50">
-          © {new Date().getFullYear()} Sarrahh Bridal Studio. Crafted with care.
+        <div className="mx-auto mt-14 max-w-6xl border-t border-cream-soft/10 px-6 pt-8 text-center text-[10px] tracking-wider uppercase text-cream-soft/40">
+          © {new Date().getFullYear()} Sarrahh Bridal Studio Kangayam. All rights reserved. Designed to inspire confidence.
         </div>
       </footer>
 
+      {/* Booking Form Dialog Modal */}
       <BookingModal
         open={booking !== null}
         type={booking ?? "studio"}
         onClose={() => setBooking(null)}
       />
+
+      {/* PHOTO LIGHTBOX MODAL */}
+      {lightboxImg && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md" onClick={() => setLightboxImg(null)}>
+          <button
+            onClick={() => setLightboxImg(null)}
+            className="absolute top-6 right-6 text-cream-soft hover:text-gold transition-colors p-2"
+          >
+            <X className="w-8 h-8" />
+          </button>
+          <div className="relative max-w-4xl max-h-[85vh] overflow-hidden rounded-2xl border border-gold/25" onClick={(e) => e.stopPropagation()}>
+            <img src={lightboxImg} alt="Enlarged detailed work" className="max-w-full max-h-[85vh] object-contain rounded-2xl" />
+          </div>
+        </div>
+      )}
+
+      {/* VIDEO LIGHTBOX MODAL */}
+      {lightboxVideo && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md" onClick={() => setLightboxVideo(null)}>
+          <button
+            onClick={() => setLightboxVideo(null)}
+            className="absolute top-6 right-6 text-cream-soft hover:text-gold transition-colors p-2"
+          >
+            <X className="w-8 h-8" />
+          </button>
+          <div className="relative max-w-md w-full aspect-[9/16] rounded-3xl overflow-hidden border border-gold/25 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <video
+              src={lightboxVideo}
+              autoPlay
+              controls
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
