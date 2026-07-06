@@ -12,10 +12,9 @@ import {
   Play,
   Plus,
   CheckCircle2,
-  Volume2,
-  VolumeX,
   Maximize2,
   X,
+  ChevronLeft,
   ChevronRight,
   Sparkles,
   MapPin,
@@ -24,7 +23,8 @@ import {
   MessageSquare,
   Clock,
   Heart,
-  Award
+  Award,
+  Globe
 } from "lucide-react";
 
 type RevealVariant = "up" | "left" | "right" | "scale";
@@ -551,8 +551,6 @@ export default function App() {
   const [reviewFilter, setReviewFilter] = useState<string>("All");
   const [reviewSort, setReviewSort] = useState<string>("Most relevant");
   const [showAllReviews, setShowAllReviews] = useState(false);
-  const [mutedVideos, setMutedVideos] = useState<Record<string, boolean>>({});
-
   const reviewScrollRef = useRef<HTMLDivElement>(null);
   const [reviewsHovered, setReviewsHovered] = useState(false);
 
@@ -584,19 +582,23 @@ export default function App() {
   }, [reviewsHovered]);
 
   const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
+  const transScrollRef = useRef<HTMLDivElement>(null);
+  const expScrollRef = useRef<HTMLDivElement>(null);
+  const storiesScrollRef = useRef<HTMLDivElement>(null);
+  const photoStoriesScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollCarousel = (ref: React.RefObject<HTMLDivElement | null>, direction: "left" | "right") => {
+    if (ref.current) {
+      const scrollAmount = ref.current.clientWidth * 0.75;
+      ref.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth"
+      });
+    }
+  };
 
   const scrollY = useParallax();
   const open = (t: BookingType) => setBooking(t);
-
-  const toggleMute = (url: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    const isMuted = !mutedVideos[url];
-    setMutedVideos({ ...mutedVideos, [url]: isMuted });
-    const video = videoRefs.current[url];
-    if (video) {
-      video.muted = isMuted;
-    }
-  };
 
   const handleVideoHoverStart = (url: string) => {
     const video = videoRefs.current[url];
@@ -756,12 +758,15 @@ export default function App() {
       </header>
 
       {/* HERO SECTION */}
-      <section id="top" className="relative overflow-hidden min-h-[85vh] flex items-center">
+      <section id="top" className="relative overflow-hidden min-h-[92vh] flex items-center">
+
+        {/* ── Gold shimmer top border ── */}
+        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent z-20" />
+
+        {/* ── Parallax Background ── */}
         <div
           className="absolute inset-0 will-change-transform"
-          style={{
-            transform: `translate3d(0, ${scrollY * 0.28}px, 0) scale(${1 + Math.min(scrollY, 500) * 0.0003})`,
-          }}
+          style={{ transform: `translate3d(0, ${scrollY * 0.28}px, 0) scale(${1 + Math.min(scrollY, 500) * 0.0003})` }}
         >
           <img
             src="/herobg.png"
@@ -770,45 +775,201 @@ export default function App() {
             height={1280}
             className="h-[115%] w-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--wine-deep)]/90 via-[color:var(--wine)]/70 to-[color:var(--wine-deep)]/95" />
+          {/* Deep cinematic overlay stack */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--wine-deep)]/80 via-[color:var(--wine)]/55 to-[color:var(--wine-deep)]/90" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/25" />
+          {/* Warm golden center spotlight */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_50%_at_50%_55%,rgba(197,160,90,0.10)_0%,rgba(0,0,0,0)_65%,rgba(0,0,0,0.5)_100%)]" />
         </div>
+
+        {/* ── Floating ambient gold orbs ── */}
+        <div className="absolute top-[12%] left-[8%] w-48 h-48 rounded-full bg-gold/15 blur-3xl pointer-events-none orb-pulse" />
+        <div className="absolute bottom-[18%] right-[6%] w-64 h-64 rounded-full bg-gold/10 blur-3xl pointer-events-none" style={{ animation: "orb-pulse 8s ease-in-out 2s infinite" }} />
+        <div className="absolute top-[40%] right-[15%] w-32 h-32 rounded-full bg-gold-soft/10 blur-2xl pointer-events-none" style={{ animation: "orb-pulse 5s ease-in-out 1s infinite" }} />
+
+        {/* ── Floating gold dust particles ── */}
+        <div className="absolute top-[22%] left-[18%] w-2.5 h-2.5 rounded-full bg-gold/70 pointer-events-none hero-float-1" />
+        <div className="absolute top-[35%] left-[72%] w-1.5 h-1.5 rounded-full bg-gold-soft/80 pointer-events-none hero-float-2" />
+        <div className="absolute top-[65%] left-[28%] w-2 h-2 rounded-full bg-gold/60 pointer-events-none hero-float-3" />
+        <div className="absolute top-[55%] right-[22%] w-1.5 h-1.5 rounded-full bg-gold-soft/70 pointer-events-none hero-float-1" style={{ animationDelay: "2s" }} />
+        <div className="absolute top-[78%] left-[55%] w-2 h-2 rounded-full bg-gold/50 pointer-events-none hero-float-2" style={{ animationDelay: "3s" }} />
+        <div className="absolute top-[18%] right-[32%] w-1 h-1 rounded-full bg-gold/90 pointer-events-none hero-float-3" style={{ animationDelay: "1.5s" }} />
+
+        {/* ── Sparkle stars ── */}
+        <div className="absolute top-[28%] left-[38%] text-gold/70 text-lg pointer-events-none sparkle-1">✦</div>
+        <div className="absolute top-[72%] right-[38%] text-gold-soft/60 text-sm pointer-events-none sparkle-2">✦</div>
+        <div className="absolute top-[48%] left-[12%] text-gold/50 text-base pointer-events-none sparkle-3">✦</div>
+
+        {/* ── Main content ── */}
         <div
-          className="relative mx-auto w-full max-w-6xl px-6 py-24 text-center text-cream-soft sm:py-32"
+          className="relative mx-auto w-full max-w-5xl px-6 py-24 text-center text-cream-soft sm:py-36 z-10"
           style={{ transform: `translate3d(0, ${scrollY * -0.08}px, 0)` }}
         >
           <Reveal>
-            <p className="text-xs uppercase tracking-[0.4em] text-gold-soft font-semibold mb-2">
-              ESTABLISHED BRIDAL CRAFTSMANSHIP
-            </p>
-            <div className="gold-divider mx-auto mt-4 w-28" />
-            <h1 className="mt-8 font-serif text-5xl leading-[1.08] sm:text-6xl md:text-7xl lg:text-8xl font-light">
+            {/* Badge */}
+            <div
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-gold/40 bg-gold/10 backdrop-blur-sm mb-6"
+              style={{ animation: "hero-badge-pop 0.9s cubic-bezier(0.22,0.61,0.36,1) both" }}
+            >
+              <span className="text-gold ornament-glow">✦</span>
+              <span className="text-[10px] uppercase tracking-[0.35em] text-gold font-bold">Established Bridal Craftsmanship</span>
+              <span className="text-gold ornament-glow">✦</span>
+            </div>
+
+            {/* Ornamental divider */}
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <div className="h-px w-16 bg-gradient-to-r from-transparent to-gold/70" />
+              <span className="text-gold/80 text-lg ornament-glow">❧</span>
+              <div className="h-px w-16 bg-gradient-to-l from-transparent to-gold/70" />
+            </div>
+
+            {/* Glowing headline */}
+            <h1
+              className="font-serif text-5xl leading-[1.02] sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight"
+              style={{ textShadow: "0 0 80px rgba(197,160,90,0.3), 0 4px 12px rgba(0,0,0,0.6)" }}
+            >
               Your Wedding Wardrobe
               <br />
-              <span className="italic text-gold-soft font-normal">Partner.</span>
+              <span
+                className="italic font-normal"
+                style={{
+                  fontFamily: '"Cormorant Garamond", Georgia, serif',
+                  background: "linear-gradient(120deg, #c5a05a 0%, #e8d5a3 40%, #c5a05a 60%, #f0e6c8 80%, #c5a05a 100%)",
+                  backgroundSize: "200% auto",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  animation: "text-shimmer 4s linear infinite",
+                  textShadow: "none",
+                  fontSize: "1.15em",
+                  letterSpacing: "0.02em",
+                  filter: "drop-shadow(0 0 18px rgba(197,160,90,0.55))",
+                }}
+              >
+                Partner.
+              </span>
             </h1>
-            <p className="mx-auto mt-8 max-w-2xl text-sm leading-relaxed text-cream-soft/90 font-light sm:text-base md:text-lg">
-              Made to be worn, Not managed, because every confidence comes from forgetting about the outfit and enjoying the moment.
+
+            {/* Tagline */}
+            <p
+              className="mx-auto mt-8 max-w-2xl text-sm leading-loose text-cream-soft/95 font-normal sm:text-base md:text-[1.05rem] tracking-wide"
+              style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)", fontFamily: '"Jost", sans-serif', letterSpacing: "0.04em" }}
+            >
+              Made to be worn, Not managed — because every confidence comes from
+              <br className="hidden sm:block" />
+              forgetting about the outfit and enjoying the moment.
             </p>
 
-            <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5 max-w-md mx-auto sm:max-w-none">
-              <button
-                onClick={() => open("studio")}
-                className="btn-gold w-full rounded-full px-8 py-4.5 text-xs font-bold uppercase tracking-[0.2em] sm:w-auto ring-4 ring-gold/10"
-              >
-                Book Studio Visit
-              </button>
-              <button
-                onClick={() => open("online")}
-                className="btn-outline-gold w-full rounded-full px-8 py-4.5 text-xs font-bold uppercase tracking-[0.2em] sm:w-auto"
-              >
-                Book Online Consultation
-              </button>
+            {/* Divider with diamond */}
+            <div className="flex items-center justify-center gap-3 mt-10">
+              <div className="h-px w-20 bg-gradient-to-r from-transparent to-gold/50" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-gold/70" />
+              <div className="h-px w-20 bg-gradient-to-l from-transparent to-gold/50" />
             </div>
-            <p className="mt-5 text-xs tracking-[0.15em] text-gold-soft/85 italic">
-              This is the right time to reach out.
-            </p>
+
+            {/* CTA Buttons — premium card style */}
+            <div className="relative mt-8 flex flex-col items-center gap-6 w-full">
+              {/* Ambient glow */}
+              <div className="absolute inset-x-[5%] -inset-y-6 bg-gold/10 blur-3xl rounded-full pointer-events-none" />
+
+              {/* Tagline */}
+              <p
+                className="text-sm tracking-[0.18em] font-medium italic"
+                style={{
+                  background: "linear-gradient(90deg, #c5a05a, #f0e6c8, #c5a05a)",
+                  backgroundSize: "200% auto",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  animation: "text-shimmer 5s linear infinite",
+                }}
+              >
+                ✦ &nbsp; This is the right time to reach out. &nbsp; ✦
+              </p>
+
+              {/* Two large CTA cards */}
+              <div className="flex flex-col sm:flex-row gap-4 w-full max-w-2xl relative">
+
+                {/* Book Studio Visit */}
+                <button
+                  onClick={() => open("studio")}
+                  className="group flex-1 flex items-center gap-4 rounded-2xl px-6 py-5 text-left transition-all duration-300 hover:scale-[1.02] hover:brightness-110"
+                  style={{
+                    background: "linear-gradient(135deg, #c5a05a 0%, #e8d5a3 50%, #b8934a 100%)",
+                    boxShadow: "0 0 32px rgba(197,160,90,0.45), inset 0 1px 0 rgba(255,255,255,0.25)",
+                  }}
+                >
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ background: "rgba(120,50,30,0.18)" }}
+                  >
+                    <CalendarHeart className="w-6 h-6" style={{ color: "#7a2e1a" }} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: "#3d1508" }}>Book Studio Visit</p>
+                    <p className="text-[11px] mt-0.5 font-light" style={{ color: "rgba(61,21,8,0.75)" }}>Experience in person</p>
+                  </div>
+                </button>
+
+                {/* Book Online Consultation */}
+                <button
+                  onClick={() => open("online")}
+                  className="group flex-1 flex items-center gap-4 rounded-2xl px-6 py-5 text-left transition-all duration-300 hover:scale-[1.02] hover:brightness-110"
+                  style={{
+                    background: "linear-gradient(135deg, #5a1220 0%, #7a1f2e 50%, #4a0e1a 100%)",
+                    border: "1px solid rgba(197,160,90,0.35)",
+                    boxShadow: "0 0 24px rgba(90,18,32,0.5), inset 0 1px 0 rgba(197,160,90,0.15)",
+                  }}
+                >
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ background: "rgba(197,160,90,0.12)" }}
+                  >
+                    <Globe className="w-6 h-6" style={{ color: "#c5a05a" }} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: "#c5a05a" }}>Book Online Consultation</p>
+                    <p className="text-[11px] mt-0.5 font-light" style={{ color: "rgba(197,160,90,0.65)" }}>Connect from anywhere</p>
+                  </div>
+                </button>
+
+              </div>
+
+              {/* Three trust badges */}
+              <div
+                className="flex flex-col sm:flex-row items-center gap-0 w-full max-w-2xl rounded-2xl overflow-hidden relative"
+                style={{
+                  background: "rgba(0,0,0,0.35)",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(197,160,90,0.15)",
+                }}
+              >
+                {[
+                  { icon: <Wand2 className="w-5 h-5" />, label: "PERSONALISED STYLING", sub: "Just for you" },
+                  { icon: <Star className="w-5 h-5" />, label: "PREMIUM QUALITY", sub: "Crafted to perfection" },
+                  { icon: <Heart className="w-5 h-5" />, label: "TIMELESS ELEGANCE", sub: "Made to be cherished" },
+                ].map((badge, i) => (
+                  <div
+                    key={badge.label}
+                    className={`flex items-center gap-3 flex-1 px-5 py-4 ${
+                      i < 2 ? "border-b sm:border-b-0 sm:border-r border-gold/10" : ""
+                    }`}
+                  >
+                    <span style={{ color: "rgba(197,160,90,0.75)" }}>{badge.icon}</span>
+                    <div className="text-left">
+                      <p className="text-[9px] uppercase tracking-[0.22em] font-bold" style={{ color: "rgba(197,160,90,0.85)" }}>{badge.label}</p>
+                      <p className="text-[10px] font-light mt-0.5" style={{ color: "rgba(255,255,255,0.55)" }}>{badge.sub}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+            </div>
           </Reveal>
         </div>
+
+        {/* ── Gold shimmer bottom border ── */}
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/70 to-transparent z-20" />
       </section>
 
       {/* SOCIAL PROOF SECTION */}
@@ -846,7 +1007,7 @@ export default function App() {
                 }
               ].map((p, idx) => (
                 <div key={p.question} className={`text-center flex flex-col items-center justify-between ${idx > 0 ? "md:pl-4" : ""}`}>
-                  <div className="flex items-center gap-1.5 text-gold-soft font-serif italic text-xs tracking-wider uppercase mb-2">
+                  <div className="flex flex-col sm:flex-row items-center gap-1.5 label-premium text-gold mb-2">
                     {p.icon}
                     <span>{p.question}</span>
                   </div>
@@ -994,41 +1155,8 @@ export default function App() {
           </div>
 
           {/* Instagram Reel Showcase */}
-          <div className="mt-20 border-t border-gold/15 pt-16 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
-            <Reveal variant="left" className="space-y-6">
-              <span className="font-serif text-xs uppercase tracking-[0.25em] text-gold font-semibold">CRAFT IN FOCUS</span>
-              <h3 className="font-serif text-3xl sm:text-4xl text-wine leading-tight">
-                Watch Our Philosophy in Motion
-              </h3>
-              <p className="text-sm sm:text-base text-foreground/80 leading-relaxed font-light">
-                See how we bring customized, catalogue-free bridal designs to life. This video showcases the meticulous detail of our signature Aari handwork and precise tailoring process.
-              </p>
-              <div className="space-y-4 pt-2">
-                {[
-                  "Watch step-by-step thread mapping matching the saree's border",
-                  "See the custom neckline adjustments tailored to the bride's shoulders",
-                  "Witness the flawless, crease-free final fit inspection"
-                ].map((item) => (
-                  <div key={item} className="flex items-start gap-2.5 text-xs sm:text-sm text-foreground/75 font-light font-sans">
-                    <CheckCircle2 className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="pt-4">
-                <a
-                  href="https://www.instagram.com/reel/DR7YPHrjyVk/?igsh=MWtnOTIyM2RwZXdqdw=="
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-outline-gold inline-flex items-center gap-2 rounded-full px-6 py-3 text-xs font-semibold uppercase tracking-wider transition-all"
-                >
-                  <span>View on Instagram</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </Reveal>
-
-            <Reveal variant="right" className="flex justify-center">
+          <div className="mt-20 border-t border-gold/15 pt-16 flex justify-center">
+            <Reveal variant="scale" className="flex justify-center">
               <div className="w-full max-w-[340px] rounded-[2rem] overflow-hidden border border-gold/25 bg-cream-soft p-3.5 shadow-2xl relative group">
                 <div className="absolute inset-0 rounded-[2rem] border border-dashed border-gold/25 pointer-events-none m-1.5" />
                 <div className="relative rounded-2xl overflow-hidden aspect-[9/16] h-[520px] w-full bg-wine/5 shadow-inner">
@@ -1038,7 +1166,9 @@ export default function App() {
                     controls
                     playsInline
                     loop
+                    muted
                     preload="metadata"
+                    ref={(el) => { if (el) el.muted = true; }}
                   />
                 </div>
               </div>
@@ -1105,151 +1235,214 @@ export default function App() {
           {/* Transformations Grid Content */}
           <div className="mt-14">
             {transTab === "transformations" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {VIDEOS.filter((v) => v.category === "Transformations").map((vid) => (
-                  <div
-                    key={vid.url}
-                    className="relative group rounded-3xl overflow-hidden shadow-lg border border-gold/25 bg-wine-deep aspect-[9/16] cursor-pointer"
-                    onMouseEnter={() => handleVideoHoverStart(vid.url)}
-                    onMouseLeave={() => handleVideoHoverEnd(vid.url)}
-                    onClick={() => setLightboxVideo(vid.url)}
-                  >
-                    <video
-                      ref={(el) => {
-                        videoRefs.current[vid.url] = el;
-                      }}
-                      src={vid.url}
-                      loop
-                      muted
-                      playsInline
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/95 via-wine-deep/30 to-transparent flex flex-col justify-between p-5">
-                      <div className="flex justify-end">
-                        <button
-                          onClick={(e) => toggleMute(vid.url, e)}
-                          className="bg-cream-soft/20 backdrop-blur-md text-cream-soft p-2 rounded-full hover:bg-cream-soft/40 transition-colors border border-cream-soft/20"
-                        >
-                          {mutedVideos[vid.url] ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-                        </button>
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-gold-soft mb-1 font-semibold">
-                          <Play className="w-3 h-3 fill-current" />
-                          <span>Hover to preview</span>
+              <div className="relative group/carousel">
+                {/* Left Arrow */}
+                <button
+                  onClick={() => scrollCarousel(transScrollRef, "left")}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gold" />
+                </button>
+                
+                {/* Right Arrow */}
+                <button
+                  onClick={() => scrollCarousel(transScrollRef, "right")}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
+                >
+                  <ChevronRight className="w-5 h-5 text-gold" />
+                </button>
+
+                <div 
+                  ref={transScrollRef}
+                  className="flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-8 hide-scrollbar -mx-6 px-6"
+                >
+                  {VIDEOS.filter((v) => v.category === "Transformations").map((vid) => (
+                    <div
+                      key={vid.url}
+                      className="relative group rounded-3xl overflow-hidden shadow-lg border border-gold/25 bg-wine-deep aspect-[9/16] cursor-pointer shrink-0 snap-center w-[75vw] sm:w-[45vw] lg:w-[320px]"
+                      onMouseEnter={() => handleVideoHoverStart(vid.url)}
+                      onMouseLeave={() => handleVideoHoverEnd(vid.url)}
+                      onClick={() => setLightboxVideo(vid.url)}
+                    >
+                      <video
+                        ref={(el) => {
+                          videoRefs.current[vid.url] = el;
+                          if (el) el.muted = true;
+                        }}
+                        src={vid.url}
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/95 via-wine-deep/30 to-transparent flex flex-col justify-end p-5">
+                        <div>
+                          <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-gold-soft mb-1 font-semibold">
+                            <Play className="w-3 h-3 fill-current" />
+                            <span>Hover to preview</span>
+                          </div>
+                          <h4 className="font-serif text-lg text-cream-soft leading-tight">{vid.title}</h4>
                         </div>
-                        <h4 className="font-serif text-lg text-cream-soft leading-tight">{vid.title}</h4>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
 
             {transTab === "experiences" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {VIDEOS.filter((v) => v.category === "Experiences").map((vid) => (
-                  <div
-                    key={vid.url}
-                    className="relative group rounded-3xl overflow-hidden shadow-lg border border-gold/25 bg-wine-deep aspect-[9/16] cursor-pointer"
-                    onMouseEnter={() => handleVideoHoverStart(vid.url)}
-                    onMouseLeave={() => handleVideoHoverEnd(vid.url)}
-                    onClick={() => setLightboxVideo(vid.url)}
-                  >
-                    <video
-                      ref={(el) => {
-                        videoRefs.current[vid.url] = el;
-                      }}
-                      src={vid.url}
-                      loop
-                      muted
-                      playsInline
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/95 via-wine-deep/30 to-transparent flex flex-col justify-between p-5">
-                      <div className="flex justify-end">
-                        <button
-                          onClick={(e) => toggleMute(vid.url, e)}
-                          className="bg-cream-soft/20 backdrop-blur-md text-cream-soft p-2 rounded-full hover:bg-cream-soft/40 transition-colors border border-cream-soft/20"
-                        >
-                          {mutedVideos[vid.url] ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-                        </button>
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-gold-soft mb-1 font-semibold">
-                          <Play className="w-3 h-3 fill-current" />
-                          <span>Hover to preview</span>
+              <div className="relative group/carousel">
+                {/* Left Arrow */}
+                <button
+                  onClick={() => scrollCarousel(expScrollRef, "left")}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gold" />
+                </button>
+                
+                {/* Right Arrow */}
+                <button
+                  onClick={() => scrollCarousel(expScrollRef, "right")}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
+                >
+                  <ChevronRight className="w-5 h-5 text-gold" />
+                </button>
+
+                <div 
+                  ref={expScrollRef}
+                  className="flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-8 hide-scrollbar -mx-6 px-6"
+                >
+                  {VIDEOS.filter((v) => v.category === "Experiences").map((vid) => (
+                    <div
+                      key={vid.url}
+                      className="relative group rounded-3xl overflow-hidden shadow-lg border border-gold/25 bg-wine-deep aspect-[9/16] cursor-pointer shrink-0 snap-center w-[75vw] sm:w-[45vw] lg:w-[320px]"
+                      onMouseEnter={() => handleVideoHoverStart(vid.url)}
+                      onMouseLeave={() => handleVideoHoverEnd(vid.url)}
+                      onClick={() => setLightboxVideo(vid.url)}
+                    >
+                      <video
+                        ref={(el) => {
+                          videoRefs.current[vid.url] = el;
+                          if (el) el.muted = true;
+                        }}
+                        src={vid.url}
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/95 via-wine-deep/30 to-transparent flex flex-col justify-end p-5">
+                        <div>
+                          <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-gold-soft mb-1 font-semibold">
+                            <Play className="w-3 h-3 fill-current" />
+                            <span>Hover to preview</span>
+                          </div>
+                          <h4 className="font-serif text-lg text-cream-soft leading-tight">{vid.title}</h4>
                         </div>
-                        <h4 className="font-serif text-lg text-cream-soft leading-tight">{vid.title}</h4>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
 
             {transTab === "stories" && (
               <div className="space-y-10">
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                  {PHOTOS.map((pic) => (
-                    <div
-                      key={pic.url}
-                      className="relative group rounded-2xl overflow-hidden border border-gold/20 aspect-square cursor-pointer shadow-md bg-cream-soft"
-                      onClick={() => setLightboxImg(pic.url)}
-                    >
-                      <img
-                        src={pic.url}
-                        alt={pic.title}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                        <p className="text-[11px] text-cream-soft leading-tight font-serif">{pic.title}</p>
+                <div className="relative group/carousel">
+                  {/* Left Arrow */}
+                  <button
+                    onClick={() => scrollCarousel(storiesScrollRef, "left")}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-gold" />
+                  </button>
+                  
+                  {/* Right Arrow */}
+                  <button
+                    onClick={() => scrollCarousel(storiesScrollRef, "right")}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
+                  >
+                    <ChevronRight className="w-5 h-5 text-gold" />
+                  </button>
+
+                  <div 
+                    ref={storiesScrollRef}
+                    className="flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-6 hide-scrollbar -mx-6 px-6"
+                  >
+                    {PHOTOS.map((pic) => (
+                      <div
+                        key={pic.url}
+                        className="relative group rounded-2xl overflow-hidden border border-gold/20 aspect-square cursor-pointer shadow-md bg-cream-soft shrink-0 snap-center w-[55vw] sm:w-[35vw] md:w-[250px]"
+                        onClick={() => setLightboxImg(pic.url)}
+                      >
+                        <img
+                          src={pic.url}
+                          alt={pic.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                          <p className="text-[11px] text-cream-soft leading-tight font-serif">{pic.title}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
 
                 <div className="border-t border-gold/10 pt-8">
                   <h4 className="font-serif text-xl text-wine mb-4">Behind-The-Scenes Video Stories</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {VIDEOS.filter((v) => v.category === "Stories").map((vid) => (
-                      <div
-                        key={vid.url}
-                        className="relative group rounded-3xl overflow-hidden shadow-lg border border-gold/25 bg-wine-deep aspect-[9/16] cursor-pointer"
-                        onMouseEnter={() => handleVideoHoverStart(vid.url)}
-                        onMouseLeave={() => handleVideoHoverEnd(vid.url)}
-                        onClick={() => setLightboxVideo(vid.url)}
-                      >
-                        <video
-                          ref={(el) => {
-                            videoRefs.current[vid.url] = el;
-                          }}
-                          src={vid.url}
-                          loop
-                          muted
-                          playsInline
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/95 via-wine-deep/30 to-transparent flex flex-col justify-between p-5">
-                          <div className="flex justify-end">
-                            <button
-                              onClick={(e) => toggleMute(vid.url, e)}
-                              className="bg-cream-soft/20 backdrop-blur-md text-cream-soft p-2 rounded-full hover:bg-cream-soft/40 transition-colors border border-cream-soft/20"
-                            >
-                              {mutedVideos[vid.url] ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-                            </button>
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-gold-soft mb-1 font-semibold">
-                              <Play className="w-3 h-3 fill-current" />
-                              <span>Hover to preview</span>
+                  <div className="relative group/carousel">
+                    {/* Left Arrow */}
+                    <button
+                      onClick={() => scrollCarousel(photoStoriesScrollRef, "left")}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
+                    >
+                      <ChevronLeft className="w-5 h-5 text-gold" />
+                    </button>
+                    
+                    {/* Right Arrow */}
+                    <button
+                      onClick={() => scrollCarousel(photoStoriesScrollRef, "right")}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
+                    >
+                      <ChevronRight className="w-5 h-5 text-gold" />
+                    </button>
+
+                    <div 
+                      ref={photoStoriesScrollRef}
+                      className="flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-8 hide-scrollbar -mx-6 px-6"
+                    >
+                      {VIDEOS.filter((v) => v.category === "Stories").map((vid) => (
+                        <div
+                          key={vid.url}
+                          className="relative group rounded-3xl overflow-hidden shadow-lg border border-gold/25 bg-wine-deep aspect-[9/16] cursor-pointer shrink-0 snap-center w-[75vw] sm:w-[45vw] lg:w-[320px]"
+                          onMouseEnter={() => handleVideoHoverStart(vid.url)}
+                          onMouseLeave={() => handleVideoHoverEnd(vid.url)}
+                          onClick={() => setLightboxVideo(vid.url)}
+                        >
+                          <video
+                            ref={(el) => {
+                              videoRefs.current[vid.url] = el;
+                              if (el) el.muted = true;
+                            }}
+                            src={vid.url}
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/95 via-wine-deep/30 to-transparent flex flex-col justify-end p-5">
+                            <div>
+                              <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-gold-soft mb-1 font-semibold">
+                                <Play className="w-3 h-3 fill-current" />
+                                <span>Hover to preview</span>
+                              </div>
+                              <h4 className="font-serif text-lg text-cream-soft leading-tight">{vid.title}</h4>
                             </div>
-                            <h4 className="font-serif text-lg text-cream-soft leading-tight">{vid.title}</h4>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1505,29 +1698,45 @@ export default function App() {
                 {/* Left Side Info */}
                 <div className="flex flex-col items-start text-left gap-5">
                   <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cream-soft text-[10px] font-bold tracking-widest text-wine uppercase shadow-md border border-gold/20">
-                    <span className="text-gold font-bold">✓</span>
-                    <span>New Collection</span>
+                    <span className="text-gold font-bold">✦</span>
+                    <span>Bespoke Bridal Couture</span>
                   </div>
                   
-                  <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light tracking-tight leading-tight">
-                    Ready to <span className="text-gold-soft font-normal italic">Elevate Your Style?</span>
+                  <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight">
+                    Let's Create Something{" "}
+                    <span
+                      className="text-gold-soft font-normal italic"
+                      style={{ fontFamily: '"Cormorant Garamond", Georgia, serif', fontSize: "1.08em", letterSpacing: "0.02em" }}
+                    >Unique</span>{" "}
+                    That Feels Yours.
                   </h2>
                   
-                  <p className="text-sm sm:text-base text-cream-soft/85 max-w-xl leading-relaxed font-light">
-                    Don't miss out on the latest trends and exclusive collections. Your perfect wardrobe awaits.
+                  <p className="text-sm sm:text-base text-cream-soft/85 max-w-xl leading-relaxed font-normal tracking-wide">
+                    Because, every bride has a different story.
+                    <br />
+                    Your bridal outfit should reflect that.
                   </p>
+
+                  {/* Urgency Line */}
+                  <div className="inline-flex items-start gap-2 px-4 py-3 rounded-xl bg-gold/15 border border-gold/30 text-cream-soft/90 text-xs sm:text-sm font-medium leading-snug max-w-md">
+                    <span className="text-gold mt-0.5 shrink-0">⏳</span>
+                    <span>
+                      Handcrafted, not mass-made — so we only take a{" "}
+                      <span className="text-gold font-semibold">few bridal bookings each month.</span>
+                    </span>
+                  </div>
                 </div>
 
                 {/* Right Side CTAs & Social Proof */}
                 <div className="flex flex-col items-start lg:items-end gap-6">
                   
                   {/* Button row */}
-                  <div className="flex flex-col sm:flex-row gap-3.5 w-full sm:w-auto">
+                  <div className="flex flex-col sm:flex-row lg:flex-col gap-3.5 w-full sm:w-auto">
                     <button
                       onClick={() => open("studio")}
                       className="btn-gold px-8 py-3.5 rounded-xl text-xs font-semibold uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 group shrink-0"
                     >
-                      <span>Shop the Collection</span>
+                      <span>Book Studio Visit</span>
                       <span className="text-sm transition-transform group-hover:translate-x-1">→</span>
                     </button>
                     
@@ -1535,32 +1744,17 @@ export default function App() {
                       onClick={() => open("online")}
                       className="border-2 border-gold-soft/60 text-cream-soft hover:bg-gold/15 px-8 py-3.5 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all text-center shrink-0"
                     >
-                      <span>Explore Deals</span>
+                      <span>Book Online Consultation</span>
                     </button>
                   </div>
 
-                  {/* Overlapping Avatars & Rating details */}
-                  <div className="flex items-center gap-3.5">
-                    <div className="flex -space-x-2">
-                      {[
-                        "bg-gradient-to-tr from-purple-500 to-indigo-500",
-                        "bg-gradient-to-tr from-pink-500 to-rose-500",
-                        "bg-gradient-to-tr from-teal-500 to-emerald-500",
-                        "bg-gradient-to-tr from-blue-500 to-cyan-500",
-                        "bg-gradient-to-tr from-amber-500 to-orange-500"
-                      ].map((gradient, idx) => (
-                        <div
-                          key={idx}
-                          className={`w-8 h-8 rounded-full border-2 border-wine-deep ${gradient} shadow-sm flex items-center justify-center text-[8px] font-bold text-white uppercase`}
-                        >
-                          {String.fromCharCode(65 + idx)}
-                        </div>
-                      ))}
-                    </div>
-                    
-                    <span className="text-xs text-gold-soft font-semibold tracking-wide">
-                      5/5 (1200 customers)
-                    </span>
+                  {/* Social Proof Line */}
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-cream-soft/75 font-light">
+                    <span className="text-gold-soft font-semibold">Trusted by 250+ brides</span>
+                    <span className="text-gold/50">•</span>
+                    <span>⭐ 4.8 Google Rating</span>
+                    <span className="text-gold/50">•</span>
+                    <span>8+ Years of Bridal Craftsmanship</span>
                   </div>
 
                 </div>
@@ -1699,8 +1893,10 @@ export default function App() {
             <video
               src={lightboxVideo}
               autoPlay
-              controls
+              loop
               playsInline
+              muted
+              ref={(el) => { if (el) el.muted = true; }}
               className="w-full h-full object-cover"
             />
           </div>
