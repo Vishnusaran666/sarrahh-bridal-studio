@@ -67,7 +67,7 @@
   --color-gold-soft: var(--gold-soft);
   --font-serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
   --font-serif-accent: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Canva Sans", "Jost", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {

@@ -974,60 +974,63 @@ export default function App() {
 
       {/* SOCIAL PROOF SECTION */}
       <section className="relative z-10 mt-12 max-w-6xl mx-auto px-6">
-        <Reveal variant="scale" delay={150}>
-          <div className="glass-card rounded-3xl p-8 sm:p-10 shadow-2xl border border-gold/30 bg-cream-soft/95 backdrop-blur-2xl">
-            <div className="grid grid-cols-2 gap-y-8 gap-x-4 md:grid-cols-4 md:gap-x-8 md:divide-x md:divide-gold/25">
-              {[
-                {
-                  question: "Can I trust them?",
-                  proof: "⭐ 4.8 rating by real customers.",
-                  icon: <Award className="w-5 h-5 text-gold" />
-                },
-                {
-                  question: "Have others chosen them?",
-                  proof: "👰 250+ Happy Brides",
-                  countEnd: 250,
-                  countSuffix: "+ Happy Brides",
-                  icon: <Heart className="w-5 h-5 text-gold" />
-                },
-                {
-                  question: "Do they have experience?",
-                  proof: "✂️ 8+ Years of Bridal Craftsmanship",
-                  countEnd: 8,
-                  countSuffix: "+ Years of Craft",
-                  icon: <Scissors className="w-5 h-5 text-gold" />
-                },
-                {
-                  question: "Are they specialists?",
-                  proof: "🧵 Delivered 1 Lakh+ Blouses.",
-                  countEnd: 100000,
-                  countPrefix: "Delivered ",
-                  countSuffix: "+ Blouses",
-                  icon: <Sparkles className="w-5 h-5 text-gold" />
-                }
-              ].map((p, idx) => (
-                <div key={p.question} className={`text-center flex flex-col items-center justify-between ${idx > 0 ? "md:pl-4" : ""}`}>
-                  <div className="flex flex-col sm:flex-row items-center gap-1.5 label-premium text-gold mb-2">
-                    {p.icon}
-                    <span>{p.question}</span>
-                  </div>
-                  <div className="font-serif text-xl font-medium text-wine tracking-wide sm:text-2xl mt-1 leading-snug">
-                    {p.countEnd ? (
-                      <Counter end={p.countEnd} prefix={p.countPrefix} suffix={p.countSuffix} />
-                    ) : (
-                      p.proof
-                    )}
-                  </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              question: "Can I trust them?",
+              proof: "⭐ 4.8 rating by real customers.",
+              icon: <Award className="w-7 h-7 text-[#B8892E]" />,
+            },
+            {
+              question: "Have others chosen them?",
+              proof: "👰 250+ Happy Brides",
+              countEnd: 250,
+              countSuffix: "+ Happy Brides",
+              icon: <Heart className="w-7 h-7 text-[#B8892E]" />,
+            },
+            {
+              question: "Do they have experience?",
+              proof: "✂️ 8+ Years of Bridal Craftsmanship",
+              countEnd: 8,
+              countSuffix: "+ Years of Craft",
+              icon: <Scissors className="w-7 h-7 text-[#B8892E]" />,
+            },
+            {
+              question: "Are they specialists?",
+              proof: "🧵 Delivered 1 Lakh+ Blouses.",
+              countEnd: 100000,
+              countPrefix: "Delivered ",
+              countSuffix: "+ Blouses",
+              icon: <Sparkles className="w-7 h-7 text-[#B8892E]" />,
+            },
+          ].map((p, idx) => (
+            <Reveal key={p.question} variant="up" delay={idx * 80}>
+              <div className="trust-card group h-[230px] rounded-[24px] bg-white border border-[rgba(201,151,43,0.18)] shadow-[0_18px_50px_-20px_rgba(91,31,42,0.20)] p-8 flex flex-col items-center justify-center text-center transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-[#C9972B] hover:shadow-[0_30px_60px_-18px_rgba(201,151,43,0.45)]">
+                <div className="trust-icon mb-4 flex h-[60px] w-[60px] items-center justify-center rounded-full bg-[rgba(201,151,43,0.12)] transition-transform duration-300 ease-out group-hover:rotate-6">
+                  {p.icon}
                 </div>
-              ))}
-            </div>
-          </div>
-        </Reveal>
+                <div
+                  className="trust-number font-bold leading-none text-[#5B1F2A] text-[28px] sm:text-[30px] transition-transform duration-300 ease-out group-hover:scale-105"
+                  style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+                >
+                  {p.countEnd ? (
+                    <Counter end={p.countEnd} prefix={p.countPrefix} suffix={p.countSuffix} />
+                  ) : (
+                    p.proof
+                  )}
+                </div>
+                <p className="label-premium mt-3 text-[11px] uppercase tracking-[0.22em] text-[#B8892E] font-semibold">
+                  {p.question}
+                </p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </section>
 
       {/* WHY SARRAHH SECTION */}
       <section id="why" className="py-24 sm:py-32 bg-gradient-to-b from-cream to-cream-soft overflow-hidden">
-        <div className="mx-auto max-w-6xl px-6">
+        <div className="mx-auto max-w-[90rem] px-6">
           <Reveal className="text-center">
             <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">THE SARRAHH DIFFERENCE</p>
             <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl md:text-6xl font-light">Why Sarrahh?</h2>
@@ -1036,48 +1039,8 @@ export default function App() {
 
           <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-3">
 
-            {/* THE FIT PHILOSOPHY */}
-            <Reveal variant="left" delay={50} className="flex">
-              <div className="glass-card card-lift rounded-3xl p-8 flex flex-col justify-between border border-gold/25 relative overflow-hidden bg-cream-soft/60">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gold/5 rounded-bl-full pointer-events-none" />
-                <div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10 text-wine mb-6 border border-gold/20">
-                    <Scissors className="h-5 w-5" />
-                  </div>
-                  <h3 className="font-serif text-xs uppercase tracking-[0.2em] text-gold font-semibold">THE FIT PHILOSOPHY</h3>
-                  <h4 className="mt-3 font-serif text-2xl text-wine leading-tight">
-                    A bridal outfit should never ask you to adjust yourself.
-                  </h4>
-                  <div className="w-12 h-[1px] bg-gold/40 my-5" />
-                  <ul className="space-y-3.5 text-sm text-foreground/80 leading-relaxed font-light">
-                    <li className="flex items-start gap-2.5">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
-                      <span>Every bride worries about the design. Very few realise that the <strong>perfect fit</strong> is what gives them true confidence.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
-                      <span>An outfit shouldn't feel tight or restrictive during the ceremony.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
-                      <span>It shouldn't need constant fixing or adjusting on your stage.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
-                      <span>It shouldn't make you conscious every time someone takes a photo.</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="mt-8 pt-5 border-t border-gold/10">
-                  <p className="font-serif italic text-[15px] text-wine/90 leading-relaxed">
-                    "At Sarrahh, we believe your outfit should move with you—not against you. Because when the fit disappears, your confidence takes its place."
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-
             {/* THE CRAFTSMANSHIP */}
-            <Reveal variant="up" delay={100} className="flex">
+            <Reveal variant="up" delay={50} className="flex">
               <div className="glass-card card-lift rounded-3xl p-8 flex flex-col justify-between border border-gold/25 relative overflow-hidden bg-cream-soft/60">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gold/5 rounded-bl-full pointer-events-none" />
                 <div>
@@ -1089,7 +1052,7 @@ export default function App() {
                     Anyone can add more stones. Anyone can follow a trend. Real craftsmanship is quieter.
                   </h4>
                   <div className="w-12 h-[1px] bg-gold/40 my-5" />
-                  <ul className="space-y-3.5 text-sm text-foreground/80 leading-relaxed font-light">
+                  <ul className="space-y-3.5 text-[15px] text-foreground leading-relaxed font-medium">
                     <li className="flex items-start gap-2.5">
                       <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
                       <span>Symmetry of the hand embroidery, ensuring exact matching patterns on sleeves and shoulders.</span>
@@ -1116,8 +1079,33 @@ export default function App() {
               </div>
             </Reveal>
 
+            {/* Featured Founder Video (Middle Column) */}
+            <div className="flex flex-col items-center justify-center my-8 lg:my-0">
+              <Reveal variant="up" className="text-center mb-6">
+                <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">A WORD FROM OUR FOUNDER</p>
+                <div className="gold-divider mx-auto mt-4 w-20" />
+              </Reveal>
+              <Reveal variant="scale" className="flex justify-center w-full">
+                <div className="w-full max-w-[360px] rounded-[2rem] overflow-hidden border border-gold/25 bg-cream-soft p-3.5 shadow-2xl relative group">
+                  <div className="absolute inset-0 rounded-[2rem] border border-dashed border-gold/25 pointer-events-none m-1.5" />
+                  <div className="relative rounded-2xl overflow-hidden aspect-[9/16] h-[540px] w-full bg-wine/5 shadow-inner">
+                    <video
+                      src="/transformation_videos/founder_intro.mp4"
+                      className="w-full h-full object-cover rounded-2xl"
+                      controls
+                      playsInline
+                      loop
+                      muted
+                      preload="metadata"
+                      ref={(el) => { if (el) el.muted = true; }}
+                    />
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+
             {/* PERSONAL DESIGN */}
-            <Reveal variant="right" delay={150} className="flex">
+            <Reveal variant="right" delay={100} className="flex">
               <div className="glass-card card-lift rounded-3xl p-8 flex flex-col justify-between border border-gold/25 relative overflow-hidden bg-cream-soft/60">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gold/5 rounded-bl-full pointer-events-none" />
                 <div>
@@ -1129,7 +1117,7 @@ export default function App() {
                     Finding the right outfit shouldn't mean adjusting yourself to a catalogue. We don't follow catalogues.
                   </h4>
                   <div className="w-12 h-[1px] bg-gold/40 my-5" />
-                  <ul className="space-y-3.5 text-sm text-foreground/80 leading-relaxed font-light">
+                  <ul className="space-y-3.5 text-[15px] text-foreground leading-relaxed font-medium">
                     <li className="flex items-start gap-2.5">
                       <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
                       <span>Most boutiques present standard catalogs. We believe catalogs limit your unique bride story.</span>
@@ -1152,27 +1140,6 @@ export default function App() {
               </div>
             </Reveal>
 
-          </div>
-
-          {/* Instagram Reel Showcase */}
-          <div className="mt-20 border-t border-gold/15 pt-16 flex justify-center">
-            <Reveal variant="scale" className="flex justify-center">
-              <div className="w-full max-w-[340px] rounded-[2rem] overflow-hidden border border-gold/25 bg-cream-soft p-3.5 shadow-2xl relative group">
-                <div className="absolute inset-0 rounded-[2rem] border border-dashed border-gold/25 pointer-events-none m-1.5" />
-                <div className="relative rounded-2xl overflow-hidden aspect-[9/16] h-[520px] w-full bg-wine/5 shadow-inner">
-                  <video
-                    src="/transformation_videos/founder_intro.mp4"
-                    className="w-full h-full object-cover rounded-2xl"
-                    controls
-                    playsInline
-                    loop
-                    muted
-                    preload="metadata"
-                    ref={(el) => { if (el) el.muted = true; }}
-                  />
-                </div>
-              </div>
-            </Reveal>
           </div>
 
           {/* Why CTA blocks */}
@@ -1673,6 +1640,92 @@ export default function App() {
                     </div>
                   </div>
                 </details>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST STATISTICS SECTION */}
+      <section
+        className="relative py-20 sm:py-24 lg:py-28 bg-[#FFF8F3] overflow-hidden border-y border-gold/15"
+      >
+        {/* Subtle decorative background */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-[radial-gradient(circle,rgba(201,151,43,0.10),transparent_70%)] blur-2xl" />
+          <div className="absolute -bottom-32 -right-24 w-[28rem] h-[28rem] rounded-full bg-[radial-gradient(circle,rgba(201,151,43,0.08),transparent_70%)] blur-3xl" />
+          <div className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full bg-[radial-gradient(circle,rgba(91,31,42,0.05),transparent_70%)] blur-2xl" />
+        </div>
+
+        <div className="relative mx-auto max-w-[1280px] px-6">
+          {/* Section eyebrow + heading */}
+          <Reveal variant="up" className="text-center mb-14 sm:mb-16">
+            <p
+              className="text-[#B8892E] uppercase tracking-[3px] text-[16px] font-medium"
+              style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+            >
+              The Sarrahh Promise
+            </p>
+            <h2
+              className="mt-3 font-serif text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight text-wine"
+            >
+              Trusted by Brides, Loved for a Lifetime
+            </h2>
+            <div className="gold-divider mx-auto mt-5" />
+          </Reveal>
+
+          {/* 4 floating cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {[
+              {
+                icon: <Star className="w-7 h-7 text-[#B8892E]" />,
+                number: "4.8",
+                title: "Customer Rating",
+                desc: "★★★★★ Rated by Real Customers",
+              },
+              {
+                icon: <Heart className="w-7 h-7 text-[#B8892E]" />,
+                number: "250+",
+                title: "Happy Brides",
+                desc: "Trusted Families Across Tamil Nadu",
+              },
+              {
+                icon: <Scissors className="w-7 h-7 text-[#B8892E]" />,
+                number: "8+",
+                title: "Years of Excellence",
+                desc: "Expert Bridal Blouse Designers",
+              },
+              {
+                icon: <Sparkles className="w-7 h-7 text-[#B8892E]" />,
+                number: "100K+",
+                title: "Designer Blouses Delivered",
+                desc: "Crafted with Precision & Love",
+              },
+            ].map((stat, i) => (
+              <Reveal key={i} variant="up" delay={i * 0.08}>
+                <div className="trust-card group h-[240px] rounded-[24px] bg-white border border-[rgba(201,151,43,0.18)] shadow-[0_18px_50px_-20px_rgba(91,31,42,0.20)] p-8 flex flex-col items-center justify-center text-center transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-[#C9972B] hover:shadow-[0_30px_60px_-18px_rgba(201,151,43,0.45)]">
+                  <div className="trust-icon flex items-center justify-center w-[60px] h-[60px] rounded-full bg-[rgba(201,151,43,0.12)] mb-5 transition-transform duration-300 ease-out group-hover:rotate-6">
+                    {stat.icon}
+                  </div>
+                  <div
+                    className="trust-number font-bold leading-none text-[#5B1F2A] text-[44px] sm:text-[48px] transition-transform duration-300 ease-out group-hover:scale-105"
+                    style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+                  >
+                    {stat.number}
+                  </div>
+                  <p
+                    className="mt-3 text-[#B8892E] uppercase tracking-[2px] text-[13px] font-semibold"
+                    style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+                  >
+                    {stat.title}
+                  </p>
+                  <p
+                    className="mt-2 text-[#7A6A60] text-[17px] font-medium leading-snug"
+                    style={{ fontFamily: '"Inter", system-ui, sans-serif' }}
+                  >
+                    {stat.desc}
+                  </p>
+                </div>
               </Reveal>
             ))}
           </div>
