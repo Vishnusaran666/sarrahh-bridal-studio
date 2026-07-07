@@ -286,7 +286,18 @@ const PHOTOS = [
   { url: "/photos/Picsart_26-06-27_09-50-20-474.png", title: "Handcrafted Golden Peacock Aari Motif" },
   { url: "/photos/Picsart_26-06-27_09-54-43-854.png", title: "Intricate Sleeves Detail Work" },
   { url: "/photos/Picsart_26-06-28_17-47-19-185.jpg.jpeg", title: "Symmetric Border Stitching Elegance" },
-  { url: "/photos/Picsart_26-06-28_17-48-08-437.png", title: "Custom Fit Silk Blouse Finish" }
+  { url: "/photos/Picsart_26-06-28_17-48-08-437.png", title: "Custom Fit Silk Blouse Finish" },
+  { url: "/photos/202394.png", title: "Exquisite Bridal Look" },
+  { url: "/photos/202411.jpg.jpeg", title: "Traditional Silk Beauty" },
+  { url: "/photos/202413.jpg.jpeg", title: "Classic Aari Embellishment" },
+  { url: "/photos/202415.png", title: "Elegant Back Neck Design" },
+  { url: "/photos/202417.png", title: "Golden Thread Intricacy" },
+  { url: "/photos/202427.png", title: "Perfect Shoulder Fit" },
+  { url: "/photos/202444.jpg.jpeg", title: "Custom Fitted Bridal Blouse" },
+  { url: "/photos/202449.png", title: "Regal Bridal Transformation" },
+  { url: "/photos/202461.png", title: "Bespoke Handcrafted Detail" },
+  { url: "/photos/202463.png", title: "Timeless Elegance Stitching" },
+  { url: "/photos/202469.png", title: "Master Tailored Finish" }
 ];
 
 const VIDEOS = [
@@ -294,6 +305,8 @@ const VIDEOS = [
   { url: "/transformation_videos/VID-20260704-WA0011.mp4", category: "Transformations", title: "Heavy Bridal Back Neck Finishing" },
   { url: "/transformation_videos/VID-20260704-WA0013.mp4", category: "Transformations", title: "Golden Zardosi Detailing Reel" },
   { url: "/transformation_videos/VID-20260704-WA0014.mp4", category: "Transformations", title: "Exquisite Sleeve Handwork Showcase" },
+  { url: "/transformation_videos/202290.mp4", category: "Transformations", title: "Bridal Fitting Transformation" },
+  { url: "/transformation_videos/202292.mp4", category: "Transformations", title: "Perfect Stitching Walkthrough" },
 
   { url: "/transformation_videos/VID-20260704-WA0015.mp4", category: "Experiences", title: "First Trial Fit & Embroidery Glow" },
   { url: "/transformation_videos/VID-20260704-WA0016.mp4", category: "Experiences", title: "Happy Bride In Studio Fitting room" },
@@ -1262,13 +1275,7 @@ export default function App() {
             {transTab === "gallery" && (
               <div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-                  {[
-                    { url: "/photos/Picsart_26-06-27_09-41-27-355.png", title: "Velvet Red Bridal Perfection" },
-                    { url: "/photos/Picsart_26-06-27_09-50-20-474.png", title: "Handcrafted Golden Peacock Aari Motif" },
-                    { url: "/photos/Picsart_26-06-27_09-54-43-854.png", title: "Intricate Sleeves Detail Work" },
-                    { url: "/photos/Picsart_26-06-28_17-47-19-185.jpg.jpeg", title: "Symmetric Border Stitching Elegance" },
-                    { url: "/photos/Picsart_26-06-28_17-48-08-437.png", title: "Custom Fit Silk Blouse Finish" },
-                  ].map((pic) => (
+                  {PHOTOS.map((pic) => (
                     <div
                       key={pic.url}
                       className="relative group rounded-2xl overflow-hidden border border-gold/20 aspect-[3/4] cursor-pointer shadow-md bg-cream-soft"
