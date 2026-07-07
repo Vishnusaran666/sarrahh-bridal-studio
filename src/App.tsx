@@ -26,6 +26,7 @@ import {
   Award,
   Globe
 } from "lucide-react";
+import { FaWhatsapp, FaInstagram, FaFacebook } from "react-icons/fa";
 
 type RevealVariant = "up" | "left" | "right" | "scale";
 function Reveal({
@@ -98,11 +99,13 @@ function Counter({
   duration = 2000,
   prefix = "",
   suffix = "",
+  decimals = 0,
 }: {
   end: number;
   duration?: number;
   prefix?: string;
   suffix?: string;
+  decimals?: number;
 }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
@@ -116,7 +119,7 @@ function Counter({
           const step = (timestamp: number) => {
             if (!startTime) startTime = timestamp;
             const progress = Math.min((timestamp - startTime) / duration, 1);
-            setCount(Math.floor(progress * end));
+            setCount(progress * end);
             if (progress < 1) window.requestAnimationFrame(step);
           };
           window.requestAnimationFrame(step);
@@ -128,10 +131,13 @@ function Counter({
     observer.observe(el);
     return () => observer.disconnect();
   }, [end, duration]);
+  
+  const displayCount = decimals > 0 ? count.toFixed(decimals) : Math.floor(count).toLocaleString();
+
   return (
     <span ref={ref}>
       {prefix}
-      {count.toLocaleString()}
+      {displayCount}
       {suffix}
     </span>
   );
@@ -738,7 +744,7 @@ export default function App() {
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
           <a href="#top" className="flex items-center">
             <img
-              src="/logo.png"
+              src="/new_logo.png"
               alt="Sarrahh Logo"
               className={`w-auto object-contain transition-all duration-500 ${scrollY > 50 ? "h-11 sm:h-12" : "h-16 sm:h-20"
                 }`}
@@ -1031,25 +1037,25 @@ export default function App() {
           {[
             {
               question: "Can I trust them?",
-              value: "4.8 Rating",
+              value: <Counter end={4.8} decimals={1} suffix=" Rating" />,
               desc: "By Real Customers",
               icon: <Star className="w-5 h-5 text-[#B8892E] fill-[#B8892E]" />,
             },
             {
               question: "Have others chosen them?",
-              value: "250+ Brides",
+              value: <Counter end={250} suffix="+ Brides" />,
               desc: "Happy & Trusted",
               icon: <Heart className="w-5 h-5 text-[#B8892E] fill-[#B8892E]" />,
             },
             {
               question: "Do they have experience?",
-              value: "8+ Years",
+              value: <Counter end={8} suffix="+ Years" />,
               desc: "Bridal Craftsmanship",
               icon: <Scissors className="w-5 h-5 text-[#B8892E]" />,
             },
             {
               question: "Are they specialists?",
-              value: "100K+ Blouses",
+              value: <Counter end={100} suffix="K+ Blouses" />,
               desc: "Delivered with Love",
               icon: <Sparkles className="w-5 h-5 text-[#B8892E]" />,
             },
@@ -1672,7 +1678,7 @@ export default function App() {
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-6 md:grid-cols-4 sm:gap-8">
           <div>
             <img
-              src="/logo.png"
+              src="/new_logo.png"
               alt="Sarrahh Logo"
               className="h-16 sm:h-20 w-auto object-contain brightness-0 invert opacity-95 mb-4"
             />
@@ -1737,9 +1743,9 @@ export default function App() {
             <p className="text-xs font-light text-cream-soft/60 mb-4">View daily fit reels and real bride stories on social channels.</p>
             <div className="flex gap-3">
               {[
-                { name: "Instagram", href: "https://instagram.com/sarrahh" },
-                { name: "WhatsApp", href: "https://wa.me/919786412345" },
-                { name: "Facebook", href: "https://facebook.com/sarrahh" }
+                { name: "Instagram", href: "https://www.instagram.com/sarrahh_boutique?igsh=MTQ1eHA5cnZkNGhuYw==", icon: <FaInstagram className="w-4 h-4" /> },
+                { name: "WhatsApp", href: "https://wa.me/919865297121", icon: <FaWhatsapp className="w-4 h-4" /> },
+                { name: "Facebook", href: "https://www.facebook.com/share/18erQZ79kK/", icon: <FaFacebook className="w-4 h-4" /> }
               ].map((s) => (
                 <a
                   key={s.name}
@@ -1749,7 +1755,7 @@ export default function App() {
                   aria-label={s.name}
                   className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--gold)]/30 text-[10px] uppercase font-semibold text-gold-soft transition-all hover:bg-gold hover:text-wine-deep"
                 >
-                  {s.name[0]}
+                  {s.icon}
                 </a>
               ))}
             </div>
