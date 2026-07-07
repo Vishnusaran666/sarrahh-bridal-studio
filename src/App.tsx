@@ -205,11 +205,11 @@ function BookingModal({
               const preferred = formData.get("preferred") as string;
               const wedding = formData.get("wedding") as string;
               const consultType = formData.get("type") as string;
-              
+
               const message = `Hello Sarrahh Boutique! 🌸\n\nI would like to book a bridal consultation. Here are my details:\n\n*Name:* ${name}\n*Phone/WhatsApp:* ${phone}\n*Preferred Date:* ${preferred}\n*Wedding Date:* ${wedding || "Not fixed yet"}\n*Consultation Type:* ${consultType === "studio" ? "Studio Visit (Kangayam Studio)" : "Online Consultation (Video Call)"}\n\nPlease confirm my slot. Thank you!`;
-              
+
               const whatsappUrl = `https://api.whatsapp.com/send?phone=919786412345&text=${encodeURIComponent(message)}`;
-              
+
               window.open(whatsappUrl, "_blank");
               setSubmitted(true);
             }}
@@ -545,7 +545,7 @@ const REVIEWS_DATA: Review[] = [
 export default function App() {
   const [booking, setBooking] = useState<BookingType | null>(null);
   const [navOpen, setNavOpen] = useState(false);
-  const [transTab, setTransTab] = useState<"transformations" | "experiences" | "stories">("transformations");
+  const [transTab, setTransTab] = useState<"gallery" | "experiences">("gallery");
   const [lightboxImg, setLightboxImg] = useState<string | null>(null);
   const [lightboxVideo, setLightboxVideo] = useState<string | null>(null);
   const [reviewFilter, setReviewFilter] = useState<string>("All");
@@ -580,6 +580,25 @@ export default function App() {
 
     return () => clearInterval(interval);
   }, [reviewsHovered]);
+
+  const [experiencesHovered, setExperiencesHovered] = useState(false);
+
+  useEffect(() => {
+    const container = expScrollRef.current;
+    if (!container || experiencesHovered || transTab !== "experiences") return;
+
+    const interval = setInterval(() => {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      const scrollAmount = container.clientWidth * 0.75;
+      if (container.scrollLeft >= maxScroll - 10) {
+        container.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      }
+    }, 4500);
+
+    return () => clearInterval(interval);
+  }, [experiencesHovered, transTab]);
 
   const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
   const transScrollRef = useRef<HTMLDivElement>(null);
@@ -663,19 +682,42 @@ export default function App() {
   return (
     <div className="min-h-screen bg-cream text-foreground antialiased" style={{ scrollBehavior: "smooth" }}>
 
-      {/* Top Urgency Strip */}
-      <div className="bg-[color:var(--wine-deep)] text-cream-soft border-b border-[color:var(--gold)]/20 sticky top-0 z-[60]">
-        <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-4 py-2.5 text-center text-[10px] tracking-[0.16em] uppercase sm:text-[11px]">
-          <span className="pulse-strip inline-block h-1.5 w-1.5 rounded-full bg-gold" />
-          <span className="font-semibold text-gold-soft">
-            Every outfit here is handmade.
+      {/* Top Urgency Strip — auto-running ticker */}
+      <div className="bg-[color:var(--wine-deep)] text-cream-soft border-b border-[color:var(--gold)]/20 sticky top-0 z-[60] overflow-hidden">
+        <div className="relative flex items-center h-9" aria-label="Announcement ticker">
+          {/* Scrolling track — duplicated for seamless loop */}
+          <div className="ticker-run flex items-center whitespace-nowrap will-change-transform">
+            {[0, 1].map((copy) => (
+              <span key={copy} className="flex items-center">
+                {/* Message 1 */}
+                <span className="flex items-center gap-2 px-10 text-[10px] sm:text-[11px] uppercase tracking-[0.18em]">
+                  <span className="pulse-strip inline-block h-1.5 w-1.5 rounded-full bg-gold shrink-0" />
+                  <span className="font-semibold text-gold-soft">Every outfit here is handmade.</span>
+                </span>
+                {/* Divider */}
+                <span className="text-gold/40 px-2 text-base leading-none select-none">✦</span>
+                {/* Message 2 */}
+                <span className="flex items-center gap-2 px-10 text-[10px] sm:text-[11px] uppercase tracking-[0.18em]">
+                  <span className="pulse-strip inline-block h-1.5 w-1.5 rounded-full bg-gold shrink-0" style={{ animationDelay: "0.9s" }} />
+                  <span className="font-semibold text-gold-soft">That means we take limited bookings each month.</span>
+                </span>
+                {/* Divider */}
+                <span className="text-gold/40 px-2 text-base leading-none select-none">✦</span>
+              </span>
+            ))}
+          </div>
+          {/* Live badge pinned to right edge */}
+          <span className="absolute right-4 flex items-center gap-1.5 text-[9px] uppercase tracking-widest text-gold/70 font-semibold pointer-events-none select-none">
+            <span className="pulse-strip inline-block h-1.5 w-1.5 rounded-full bg-gold" />
+            Live
           </span>
         </div>
       </div>
 
+
       {/* Navbar */}
       <header
-        className={`sticky top-[38px] z-50 border-b border-[color:var(--gold)]/20 transition-all duration-500 flex items-center ${scrollY > 50
+        className={`sticky top-[36px] z-50 border-b border-[color:var(--gold)]/20 transition-all duration-500 flex items-center ${scrollY > 50
           ? "bg-[color:var(--cream-soft)]/90 backdrop-blur-xl h-16 shadow-[0_10px_30px_-10px_rgba(40,10,15,0.08)]"
           : "bg-cream/40 backdrop-blur h-24"
           }`}
@@ -685,9 +727,8 @@ export default function App() {
             <img
               src="/logo.png"
               alt="Sarrahh Logo"
-              className={`w-auto object-contain transition-all duration-500 ${
-                scrollY > 50 ? "h-11 sm:h-12" : "h-16 sm:h-20"
-              }`}
+              className={`w-auto object-contain transition-all duration-500 ${scrollY > 50 ? "h-11 sm:h-12" : "h-16 sm:h-20"
+                }`}
             />
           </a>
           <nav className="hidden justify-center gap-8 md:flex">
@@ -758,7 +799,7 @@ export default function App() {
       </header>
 
       {/* HERO SECTION */}
-      <section id="top" className="relative overflow-hidden min-h-[92vh] flex items-center">
+      <section id="top" className="relative overflow-hidden min-h-[100dvh] sm:min-h-[92vh] flex items-center">
 
         {/* ── Gold shimmer top border ── */}
         <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent z-20" />
@@ -773,7 +814,7 @@ export default function App() {
             alt="Sarrahh bridal couture collection"
             width={1920}
             height={1280}
-            className="h-[115%] w-full object-cover object-center"
+            className="h-full w-full object-cover object-center sm:h-[115%]"
           />
           {/* Deep cinematic overlay stack */}
           <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--wine-deep)]/80 via-[color:var(--wine)]/55 to-[color:var(--wine-deep)]/90" />
@@ -831,9 +872,8 @@ export default function App() {
               Your Wedding Wardrobe
               <br />
               <span
-                className="italic font-normal"
+                className="italic font-light"
                 style={{
-                  fontFamily: '"Cormorant Garamond", Georgia, serif',
                   background: "linear-gradient(120deg, #c5a05a 0%, #e8d5a3 40%, #c5a05a 60%, #f0e6c8 80%, #c5a05a 100%)",
                   backgroundSize: "200% auto",
                   WebkitBackgroundClip: "text",
@@ -853,7 +893,7 @@ export default function App() {
             {/* Tagline */}
             <p
               className="mx-auto mt-8 max-w-2xl text-sm leading-loose text-cream-soft/95 font-normal sm:text-base md:text-[1.05rem] tracking-wide"
-              style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)", fontFamily: '"Jost", sans-serif', letterSpacing: "0.04em" }}
+              style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)", letterSpacing: "0.04em" }}
             >
               Made to be worn, Not managed — because every confidence comes from
               <br className="hidden sm:block" />
@@ -936,7 +976,7 @@ export default function App() {
               </div>
 
               {/* Three trust badges */}
-              <div
+              {/* <div
                 className="flex flex-col sm:flex-row items-center gap-0 w-full max-w-2xl rounded-2xl overflow-hidden relative"
                 style={{
                   background: "rgba(0,0,0,0.35)",
@@ -962,7 +1002,7 @@ export default function App() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </div> */}
 
             </div>
           </Reveal>
@@ -978,48 +1018,48 @@ export default function App() {
           {[
             {
               question: "Can I trust them?",
-              proof: "⭐ 4.8 rating by real customers.",
-              icon: <Award className="w-7 h-7 text-[#B8892E]" />,
+              value: "4.8 Rating",
+              desc: "By Real Customers",
+              icon: <Star className="w-5 h-5 text-[#B8892E] fill-[#B8892E]" />,
             },
             {
               question: "Have others chosen them?",
-              proof: "👰 250+ Happy Brides",
-              countEnd: 250,
-              countSuffix: "+ Happy Brides",
-              icon: <Heart className="w-7 h-7 text-[#B8892E]" />,
+              value: "250+ Brides",
+              desc: "Happy & Trusted",
+              icon: <Heart className="w-5 h-5 text-[#B8892E] fill-[#B8892E]" />,
             },
             {
               question: "Do they have experience?",
-              proof: "✂️ 8+ Years of Bridal Craftsmanship",
-              countEnd: 8,
-              countSuffix: "+ Years of Craft",
-              icon: <Scissors className="w-7 h-7 text-[#B8892E]" />,
+              value: "8+ Years",
+              desc: "Bridal Craftsmanship",
+              icon: <Scissors className="w-5 h-5 text-[#B8892E]" />,
             },
             {
               question: "Are they specialists?",
-              proof: "🧵 Delivered 1 Lakh+ Blouses.",
-              countEnd: 100000,
-              countPrefix: "Delivered ",
-              countSuffix: "+ Blouses",
-              icon: <Sparkles className="w-7 h-7 text-[#B8892E]" />,
+              value: "100K+ Blouses",
+              desc: "Delivered with Love",
+              icon: <Sparkles className="w-5 h-5 text-[#B8892E]" />,
             },
           ].map((p, idx) => (
             <Reveal key={p.question} variant="up" delay={idx * 80}>
-              <div className="trust-card group h-[230px] rounded-[24px] bg-white border border-[rgba(201,151,43,0.18)] shadow-[0_18px_50px_-20px_rgba(91,31,42,0.20)] p-8 flex flex-col items-center justify-center text-center transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-[#C9972B] hover:shadow-[0_30px_60px_-18px_rgba(201,151,43,0.45)]">
-                <div className="trust-icon mb-4 flex h-[60px] w-[60px] items-center justify-center rounded-full bg-[rgba(201,151,43,0.12)] transition-transform duration-300 ease-out group-hover:rotate-6">
+              <div className="trust-card group h-[200px] rounded-[24px] bg-white border border-[rgba(201,151,43,0.18)] shadow-[0_12px_40px_-20px_rgba(91,31,42,0.15)] p-6 flex flex-col items-center justify-between text-center transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.01] hover:border-[#C9972B] hover:shadow-[0_24px_50px_-15px_rgba(201,151,43,0.3)]">
+                {/* Icon wrapper */}
+                <div className="trust-icon flex h-[48px] w-[48px] items-center justify-center rounded-full bg-[rgba(201,151,43,0.1)] transition-transform duration-300 ease-out group-hover:rotate-6">
                   {p.icon}
                 </div>
-                <div
-                  className="trust-number font-bold leading-none text-[#5B1F2A] text-[28px] sm:text-[30px] transition-transform duration-300 ease-out group-hover:scale-105"
-                  style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-                >
-                  {p.countEnd ? (
-                    <Counter end={p.countEnd} prefix={p.countPrefix} suffix={p.countSuffix} />
-                  ) : (
-                    p.proof
-                  )}
+                
+                {/* Metrics */}
+                <div className="flex flex-col gap-0.5 mt-2 flex-grow justify-center">
+                  <span className="font-bold text-[#5B1F2A] text-xl sm:text-2xl tracking-tight transition-transform duration-300 ease-out group-hover:scale-105 block">
+                    {p.value}
+                  </span>
+                  <span className="text-xs text-foreground/70 font-medium">
+                    {p.desc}
+                  </span>
                 </div>
-                <p className="label-premium mt-3 text-[11px] uppercase tracking-[0.22em] text-[#B8892E] font-semibold">
+                
+                {/* Subtitle / Question */}
+                <p className="mt-3 text-[9px] uppercase tracking-[0.2em] text-[#B8892E] font-semibold border-t border-gold/10 pt-2 w-full">
                   {p.question}
                 </p>
               </div>
@@ -1035,6 +1075,27 @@ export default function App() {
             <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">THE SARRAHH DIFFERENCE</p>
             <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl md:text-6xl font-light">Why Sarrahh?</h2>
             <div className="gold-divider mx-auto mt-6 w-24" />
+          </Reveal>
+
+          {/* THE FIT PHILOSOPHY */}
+          <Reveal className="mt-16">
+            <div className="relative rounded-3xl overflow-hidden border border-gold/25 bg-gradient-to-br from-wine-deep to-wine p-8 sm:p-12 text-cream-soft">
+              {/* Decorative glow */}
+              <div className="absolute top-[-60px] left-[-60px] w-72 h-72 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
+              <div className="absolute bottom-[-40px] right-[-40px] w-56 h-56 rounded-full bg-gold/8 blur-2xl pointer-events-none" />
+              <div className="relative z-10">
+                <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold mb-4">THE FIT PHILOSOPHY</p>
+                <div className="gold-divider w-20 mb-8" />
+                <p className="font-serif text-xl sm:text-2xl md:text-3xl font-semibold text-cream-soft leading-snug mb-8">
+                  A bridal outfit should never ask you to adjust yourself.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm sm:text-base leading-relaxed text-cream-soft/85 font-light">
+                  <p>Every bride worries about the design. Very few realise that the perfect fit is what gives them confidence.</p>
+                  <p>An outfit shouldn't feel tight during the ceremony. It shouldn't need constant fixing. It shouldn't make you conscious every time someone takes a photo.</p>
+                  <p className="sm:col-span-2 lg:col-span-1 italic text-gold-soft font-medium">At Sarrahh, we believe your outfit should move with you — not against you. Because when the fit disappears, your confidence takes its place.</p>
+                </div>
+              </div>
+            </div>
           </Reveal>
 
           <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-3">
@@ -1079,12 +1140,8 @@ export default function App() {
               </div>
             </Reveal>
 
-            {/* Featured Founder Video (Middle Column) */}
+            {/* CENTER — Featured Founder Video */}
             <div className="flex flex-col items-center justify-center my-8 lg:my-0">
-              <Reveal variant="up" className="text-center mb-6">
-                <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">A WORD FROM OUR FOUNDER</p>
-                <div className="gold-divider mx-auto mt-4 w-20" />
-              </Reveal>
               <Reveal variant="scale" className="flex justify-center w-full">
                 <div className="w-full max-w-[360px] rounded-[2rem] overflow-hidden border border-gold/25 bg-cream-soft p-3.5 shadow-2xl relative group">
                   <div className="absolute inset-0 rounded-[2rem] border border-dashed border-gold/25 pointer-events-none m-1.5" />
@@ -1169,18 +1226,17 @@ export default function App() {
       <section id="transformations" className="py-24 sm:py-32 bg-gradient-to-b from-cream-soft to-cream border-t border-gold/20 overflow-hidden">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal className="text-center">
-            <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">GALLERY & STORIES</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">GALLERY & EXPERIENCES</p>
             <h2 className="mt-4 font-serif text-4xl text-wine sm:text-5xl md:text-6xl font-light">Bridal Transformations</h2>
             <div className="gold-divider mx-auto mt-6 w-24" />
           </Reveal>
 
-          {/* Interactive Navigation Tabs */}
+          {/* Interactive Navigation Tabs — 2 tabs only */}
           <div className="mt-12 flex justify-center border-b border-gold/20 max-w-lg mx-auto">
-            <div className="flex space-x-6 sm:space-x-8 pb-3">
+            <div className="flex space-x-8 sm:space-x-12 pb-3">
               {[
-                { id: "transformations", label: "Bridal Transformations" },
-                { id: "experiences", label: "Bride Experiences" },
-                { id: "stories", label: "Customer Stories" }
+                { id: "gallery", label: "Blouse Gallery" },
+                { id: "experiences", label: "Bride Experiences" }
               ].map((t) => (
                 <button
                   key={t.id}
@@ -1199,56 +1255,37 @@ export default function App() {
             </div>
           </div>
 
-          {/* Transformations Grid Content */}
+          {/* Tab Content */}
           <div className="mt-14">
-            {transTab === "transformations" && (
-              <div className="relative group/carousel">
-                {/* Left Arrow */}
-                <button
-                  onClick={() => scrollCarousel(transScrollRef, "left")}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
-                >
-                  <ChevronLeft className="w-5 h-5 text-gold" />
-                </button>
-                
-                {/* Right Arrow */}
-                <button
-                  onClick={() => scrollCarousel(transScrollRef, "right")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
-                >
-                  <ChevronRight className="w-5 h-5 text-gold" />
-                </button>
 
-                <div 
-                  ref={transScrollRef}
-                  className="flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-8 hide-scrollbar -mx-6 px-6"
-                >
-                  {VIDEOS.filter((v) => v.category === "Transformations").map((vid) => (
+            {/* GALLERY TAB — Blouse Photos from /photos/ */}
+            {transTab === "gallery" && (
+              <div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+                  {[
+                    { url: "/photos/Picsart_26-06-27_09-41-27-355.png", title: "Velvet Red Bridal Perfection" },
+                    { url: "/photos/Picsart_26-06-27_09-50-20-474.png", title: "Handcrafted Golden Peacock Aari Motif" },
+                    { url: "/photos/Picsart_26-06-27_09-54-43-854.png", title: "Intricate Sleeves Detail Work" },
+                    { url: "/photos/Picsart_26-06-28_17-47-19-185.jpg.jpeg", title: "Symmetric Border Stitching Elegance" },
+                    { url: "/photos/Picsart_26-06-28_17-48-08-437.png", title: "Custom Fit Silk Blouse Finish" },
+                  ].map((pic) => (
                     <div
-                      key={vid.url}
-                      className="relative group rounded-3xl overflow-hidden shadow-lg border border-gold/25 bg-wine-deep aspect-[9/16] cursor-pointer shrink-0 snap-center w-[75vw] sm:w-[45vw] lg:w-[320px]"
-                      onMouseEnter={() => handleVideoHoverStart(vid.url)}
-                      onMouseLeave={() => handleVideoHoverEnd(vid.url)}
-                      onClick={() => setLightboxVideo(vid.url)}
+                      key={pic.url}
+                      className="relative group rounded-2xl overflow-hidden border border-gold/20 aspect-[3/4] cursor-pointer shadow-md bg-cream-soft"
+                      onClick={() => setLightboxImg(pic.url)}
                     >
-                      <video
-                        ref={(el) => {
-                          videoRefs.current[vid.url] = el;
-                          if (el) el.muted = true;
-                        }}
-                        src={vid.url}
-                        loop
-                        muted
-                        playsInline
+                      <img
+                        src={pic.url}
+                        alt={pic.title}
+                        loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/95 via-wine-deep/30 to-transparent flex flex-col justify-end p-5">
-                        <div>
-                          <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-gold-soft mb-1 font-semibold">
-                            <Play className="w-3 h-3 fill-current" />
-                            <span>Hover to preview</span>
-                          </div>
-                          <h4 className="font-serif text-lg text-cream-soft leading-tight">{vid.title}</h4>
+                      <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                        <p className="text-[11px] text-cream-soft leading-tight font-serif italic">{pic.title}</p>
+                      </div>
+                      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="w-8 h-8 rounded-full bg-gold/90 flex items-center justify-center">
+                          <Maximize2 className="w-3.5 h-3.5 text-wine-deep" />
                         </div>
                       </div>
                     </div>
@@ -1257,6 +1294,7 @@ export default function App() {
               </div>
             )}
 
+            {/* BRIDE EXPERIENCES TAB — Videos */}
             {transTab === "experiences" && (
               <div className="relative group/carousel">
                 {/* Left Arrow */}
@@ -1266,7 +1304,7 @@ export default function App() {
                 >
                   <ChevronLeft className="w-5 h-5 text-gold" />
                 </button>
-                
+
                 {/* Right Arrow */}
                 <button
                   onClick={() => scrollCarousel(expScrollRef, "right")}
@@ -1275,11 +1313,13 @@ export default function App() {
                   <ChevronRight className="w-5 h-5 text-gold" />
                 </button>
 
-                <div 
+                <div
                   ref={expScrollRef}
+                  onMouseEnter={() => setExperiencesHovered(true)}
+                  onMouseLeave={() => setExperiencesHovered(false)}
                   className="flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-8 hide-scrollbar -mx-6 px-6"
                 >
-                  {VIDEOS.filter((v) => v.category === "Experiences").map((vid) => (
+                  {VIDEOS.filter((v) => v.category === "Experiences" || v.category === "Transformations").map((vid) => (
                     <div
                       key={vid.url}
                       className="relative group rounded-3xl overflow-hidden shadow-lg border border-gold/25 bg-wine-deep aspect-[9/16] cursor-pointer shrink-0 snap-center w-[75vw] sm:w-[45vw] lg:w-[320px]"
@@ -1302,7 +1342,7 @@ export default function App() {
                         <div>
                           <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-gold-soft mb-1 font-semibold">
                             <Play className="w-3 h-3 fill-current" />
-                            <span>Hover to preview</span>
+                            <span>Tap to watch</span>
                           </div>
                           <h4 className="font-serif text-lg text-cream-soft leading-tight">{vid.title}</h4>
                         </div>
@@ -1313,108 +1353,9 @@ export default function App() {
               </div>
             )}
 
-            {transTab === "stories" && (
-              <div className="space-y-10">
-                <div className="relative group/carousel">
-                  {/* Left Arrow */}
-                  <button
-                    onClick={() => scrollCarousel(storiesScrollRef, "left")}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
-                  >
-                    <ChevronLeft className="w-5 h-5 text-gold" />
-                  </button>
-                  
-                  {/* Right Arrow */}
-                  <button
-                    onClick={() => scrollCarousel(storiesScrollRef, "right")}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
-                  >
-                    <ChevronRight className="w-5 h-5 text-gold" />
-                  </button>
-
-                  <div 
-                    ref={storiesScrollRef}
-                    className="flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-6 hide-scrollbar -mx-6 px-6"
-                  >
-                    {PHOTOS.map((pic) => (
-                      <div
-                        key={pic.url}
-                        className="relative group rounded-2xl overflow-hidden border border-gold/20 aspect-square cursor-pointer shadow-md bg-cream-soft shrink-0 snap-center w-[55vw] sm:w-[35vw] md:w-[250px]"
-                        onClick={() => setLightboxImg(pic.url)}
-                      >
-                        <img
-                          src={pic.url}
-                          alt={pic.title}
-                          loading="lazy"
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                          <p className="text-[11px] text-cream-soft leading-tight font-serif">{pic.title}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="border-t border-gold/10 pt-8">
-                  <h4 className="font-serif text-xl text-wine mb-4">Behind-The-Scenes Video Stories</h4>
-                  <div className="relative group/carousel">
-                    {/* Left Arrow */}
-                    <button
-                      onClick={() => scrollCarousel(photoStoriesScrollRef, "left")}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
-                    >
-                      <ChevronLeft className="w-5 h-5 text-gold" />
-                    </button>
-                    
-                    {/* Right Arrow */}
-                    <button
-                      onClick={() => scrollCarousel(photoStoriesScrollRef, "right")}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-wine/90 hover:bg-wine text-cream-soft p-3 rounded-full border border-gold/30 shadow-xl transition-all duration-300 opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center hover:scale-110 active:scale-95"
-                    >
-                      <ChevronRight className="w-5 h-5 text-gold" />
-                    </button>
-
-                    <div 
-                      ref={photoStoriesScrollRef}
-                      className="flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-8 hide-scrollbar -mx-6 px-6"
-                    >
-                      {VIDEOS.filter((v) => v.category === "Stories").map((vid) => (
-                        <div
-                          key={vid.url}
-                          className="relative group rounded-3xl overflow-hidden shadow-lg border border-gold/25 bg-wine-deep aspect-[9/16] cursor-pointer shrink-0 snap-center w-[75vw] sm:w-[45vw] lg:w-[320px]"
-                          onMouseEnter={() => handleVideoHoverStart(vid.url)}
-                          onMouseLeave={() => handleVideoHoverEnd(vid.url)}
-                          onClick={() => setLightboxVideo(vid.url)}
-                        >
-                          <video
-                            ref={(el) => {
-                              videoRefs.current[vid.url] = el;
-                              if (el) el.muted = true;
-                            }}
-                            src={vid.url}
-                            loop
-                            muted
-                            playsInline
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/95 via-wine-deep/30 to-transparent flex flex-col justify-end p-5">
-                            <div>
-                              <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-gold-soft mb-1 font-semibold">
-                                <Play className="w-3 h-3 fill-current" />
-                                <span>Hover to preview</span>
-                              </div>
-                              <h4 className="font-serif text-lg text-cream-soft leading-tight">{vid.title}</h4>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
+
+
         </div>
       </section>
 
@@ -1485,7 +1426,7 @@ export default function App() {
       {/* REVIEWS SECTION */}
       <section id="reviews" className="py-24 bg-gradient-to-b from-cream-soft to-cream border-t border-gold/25 overflow-hidden">
         <div className="mx-auto max-w-7xl px-6">
-          
+
           {/* Header Row */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
             <div className="text-left font-sans">
@@ -1494,7 +1435,7 @@ export default function App() {
                 What Our <span className="text-gold font-normal italic font-serif">Brides</span> Say
               </h2>
             </div>
-            
+
             {/* Nav Arrows */}
             <div className="flex gap-3 self-start sm:self-auto">
               <button
@@ -1506,7 +1447,7 @@ export default function App() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                 </svg>
               </button>
-              
+
               <button
                 onClick={() => scrollReviews("right")}
                 aria-label="Next review"
@@ -1552,7 +1493,7 @@ export default function App() {
                       <div className="h-12 w-12 rounded-full bg-gradient-to-br from-gold to-wine text-cream-soft flex items-center justify-center font-serif text-lg font-bold shadow-inner shrink-0 select-none overflow-hidden uppercase">
                         {r.avatar}
                       </div>
-                      
+
                       <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-wine/5 border border-gold/25 text-[10px] font-bold uppercase tracking-wider text-wine shadow-sm">
                         <span className="text-gold font-bold text-xs">✓</span>
                         <span>Verified</span>
@@ -1563,7 +1504,7 @@ export default function App() {
                     <svg className="w-8 h-8 text-gold mt-5 opacity-90" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.987z" />
                     </svg>
-                    
+
                     {/* Review Quote text in brand wine serif italic */}
                     <p className="text-[17px] sm:text-lg font-serif italic text-wine leading-snug tracking-wide mt-3 line-clamp-4">
                       "{getReviewQuote(r.id, r.text)}"
@@ -1603,8 +1544,8 @@ export default function App() {
           <div className="mt-16 space-y-4">
             {[
               {
-                q: "Do I need to travel to Coimbatore for a premium bridal outfit?",
-                a: "Not anymore. Sarrahh offers personalized bridal craftsmanship and premium customization right here, closer to you. Save multiple trips to big cities."
+                q: "Do I need to travel for a premium customised outfit?",
+                a: "Not at all. Sarrahh offers fully personalized bridal craftsmanship and premium customization with online consultations available. Brides from across Tamil Nadu and beyond can connect via video call to finalize their design before a single visit."
               },
               {
                 q: "Can you create my own design?",
@@ -1646,92 +1587,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* TRUST STATISTICS SECTION */}
-      <section
-        className="relative py-20 sm:py-24 lg:py-28 bg-[#FFF8F3] overflow-hidden border-y border-gold/15"
-      >
-        {/* Subtle decorative background */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-[radial-gradient(circle,rgba(201,151,43,0.10),transparent_70%)] blur-2xl" />
-          <div className="absolute -bottom-32 -right-24 w-[28rem] h-[28rem] rounded-full bg-[radial-gradient(circle,rgba(201,151,43,0.08),transparent_70%)] blur-3xl" />
-          <div className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full bg-[radial-gradient(circle,rgba(91,31,42,0.05),transparent_70%)] blur-2xl" />
-        </div>
-
-        <div className="relative mx-auto max-w-[1280px] px-6">
-          {/* Section eyebrow + heading */}
-          <Reveal variant="up" className="text-center mb-14 sm:mb-16">
-            <p
-              className="text-[#B8892E] uppercase tracking-[3px] text-[16px] font-medium"
-              style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-            >
-              The Sarrahh Promise
-            </p>
-            <h2
-              className="mt-3 font-serif text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight text-wine"
-            >
-              Trusted by Brides, Loved for a Lifetime
-            </h2>
-            <div className="gold-divider mx-auto mt-5" />
-          </Reveal>
-
-          {/* 4 floating cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {[
-              {
-                icon: <Star className="w-7 h-7 text-[#B8892E]" />,
-                number: "4.8",
-                title: "Customer Rating",
-                desc: "★★★★★ Rated by Real Customers",
-              },
-              {
-                icon: <Heart className="w-7 h-7 text-[#B8892E]" />,
-                number: "250+",
-                title: "Happy Brides",
-                desc: "Trusted Families Across Tamil Nadu",
-              },
-              {
-                icon: <Scissors className="w-7 h-7 text-[#B8892E]" />,
-                number: "8+",
-                title: "Years of Excellence",
-                desc: "Expert Bridal Blouse Designers",
-              },
-              {
-                icon: <Sparkles className="w-7 h-7 text-[#B8892E]" />,
-                number: "100K+",
-                title: "Designer Blouses Delivered",
-                desc: "Crafted with Precision & Love",
-              },
-            ].map((stat, i) => (
-              <Reveal key={i} variant="up" delay={i * 0.08}>
-                <div className="trust-card group h-[240px] rounded-[24px] bg-white border border-[rgba(201,151,43,0.18)] shadow-[0_18px_50px_-20px_rgba(91,31,42,0.20)] p-8 flex flex-col items-center justify-center text-center transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-[#C9972B] hover:shadow-[0_30px_60px_-18px_rgba(201,151,43,0.45)]">
-                  <div className="trust-icon flex items-center justify-center w-[60px] h-[60px] rounded-full bg-[rgba(201,151,43,0.12)] mb-5 transition-transform duration-300 ease-out group-hover:rotate-6">
-                    {stat.icon}
-                  </div>
-                  <div
-                    className="trust-number font-bold leading-none text-[#5B1F2A] text-[44px] sm:text-[48px] transition-transform duration-300 ease-out group-hover:scale-105"
-                    style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-                  >
-                    {stat.number}
-                  </div>
-                  <p
-                    className="mt-3 text-[#B8892E] uppercase tracking-[2px] text-[13px] font-semibold"
-                    style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-                  >
-                    {stat.title}
-                  </p>
-                  <p
-                    className="mt-2 text-[#7A6A60] text-[17px] font-medium leading-snug"
-                    style={{ fontFamily: '"Inter", system-ui, sans-serif' }}
-                  >
-                    {stat.desc}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* FINAL CTA SECTION */}
       <section
         id="book"
@@ -1740,49 +1595,38 @@ export default function App() {
         <div className="relative mx-auto max-w-6xl px-6">
           <Reveal variant="scale">
             <div className="relative overflow-hidden rounded-3xl p-8 sm:p-12 md:p-14 bg-gradient-to-r from-wine to-wine-deep text-cream-soft shadow-2xl border border-gold/30">
-              
+
               {/* Floating ambient circle elements */}
               <div className="absolute top-[-80px] left-[-80px] w-64 h-64 rounded-full bg-gold/10 blur-2xl pointer-events-none" />
               <div className="absolute bottom-[-120px] right-[-60px] w-80 h-80 rounded-full bg-gold-soft/10 blur-3xl pointer-events-none" />
               <div className="absolute bottom-[-20px] left-[35%] w-40 h-40 rounded-full bg-white/5 blur-xl pointer-events-none" />
-              
+
               <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-10 items-center justify-between">
-                
+
                 {/* Left Side Info */}
                 <div className="flex flex-col items-start text-left gap-5">
                   <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cream-soft text-[10px] font-bold tracking-widest text-wine uppercase shadow-md border border-gold/20">
                     <span className="text-gold font-bold">✦</span>
                     <span>Bespoke Bridal Couture</span>
                   </div>
-                  
+
                   <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight">
                     Let's Create Something{" "}
-                    <span
-                      className="text-gold-soft font-normal italic"
-                      style={{ fontFamily: '"Cormorant Garamond", Georgia, serif', fontSize: "1.08em", letterSpacing: "0.02em" }}
-                    >Unique</span>{" "}
+                    <span className="text-gold-soft font-light italic">Unique</span>{" "}
                     That Feels Yours.
                   </h2>
-                  
+
                   <p className="text-sm sm:text-base text-cream-soft/85 max-w-xl leading-relaxed font-normal tracking-wide">
                     Because, every bride has a different story.
                     <br />
                     Your bridal outfit should reflect that.
                   </p>
 
-                  {/* Urgency Line */}
-                  <div className="inline-flex items-start gap-2 px-4 py-3 rounded-xl bg-gold/15 border border-gold/30 text-cream-soft/90 text-xs sm:text-sm font-medium leading-snug max-w-md">
-                    <span className="text-gold mt-0.5 shrink-0">⏳</span>
-                    <span>
-                      Handcrafted, not mass-made — so we only take a{" "}
-                      <span className="text-gold font-semibold">few bridal bookings each month.</span>
-                    </span>
-                  </div>
                 </div>
 
                 {/* Right Side CTAs & Social Proof */}
                 <div className="flex flex-col items-start lg:items-end gap-6">
-                  
+
                   {/* Button row */}
                   <div className="flex flex-col sm:flex-row lg:flex-col gap-3.5 w-full sm:w-auto">
                     <button
@@ -1792,7 +1636,7 @@ export default function App() {
                       <span>Book Studio Visit</span>
                       <span className="text-sm transition-transform group-hover:translate-x-1">→</span>
                     </button>
-                    
+
                     <button
                       onClick={() => open("online")}
                       className="border-2 border-gold-soft/60 text-cream-soft hover:bg-gold/15 px-8 py-3.5 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all text-center shrink-0"
@@ -1805,9 +1649,7 @@ export default function App() {
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-cream-soft/75 font-light">
                     <span className="text-gold-soft font-semibold">Trusted by 250+ brides</span>
                     <span className="text-gold/50">•</span>
-                    <span>⭐ 4.8 Google Rating</span>
-                    <span className="text-gold/50">•</span>
-                    <span>8+ Years of Bridal Craftsmanship</span>
+                    <span>⭐ 4.8 Google Rating • 8+ Years of Bridal Craftsmanship</span>
                   </div>
 
                 </div>

@@ -65,9 +65,9 @@
   --color-cream-soft: var(--cream-soft);
   --color-gold: var(--gold);
   --color-gold-soft: var(--gold-soft);
-  --font-serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
-  --font-serif-accent: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Canva Sans", "Jost", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-serif-accent: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Canva Sans", "Poppins", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -587,5 +587,17 @@ html {
 @utility btn-glow-pulse { animation: btn-pulse-glow 2.5s ease-in-out infinite; }
 @utility ornament-glow  { animation: ornament-glow 3s ease-in-out infinite; }
 @utility slow-drift     { animation: slow-drift 14s ease-in-out infinite; }
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@utility ticker-run { animation: ticker-scroll 22s linear infinite; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(1.4); }
+}
+@utility pulse-strip { animation: pulse-dot 1.8s ease-in-out infinite; }
  
 @layer utilities { .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } .hide-scrollbar::-webkit-scrollbar { display: none; } } 
