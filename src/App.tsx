@@ -131,7 +131,7 @@ function Counter({
     observer.observe(el);
     return () => observer.disconnect();
   }, [end, duration]);
-  
+
   const displayCount = decimals > 0 ? count.toFixed(decimals) : Math.floor(count).toLocaleString();
 
   return (
@@ -327,6 +327,7 @@ interface Review {
   id: number;
   name: string;
   avatar: string;
+  role?: string;
   meta: string; // "Local Guide · 44 reviews"
   date: string;
   rating: number;
@@ -341,10 +342,11 @@ const REVIEWS_DATA: Review[] = [
     id: 1,
     name: "Cool Breeze",
     avatar: "C",
+    role: "Local Guide · 44 reviews",
     meta: "Local Guide · 44 reviews · 8 photos",
     date: "a month ago",
     rating: 5,
-    text: "Really happy with their work! The blouse fitting was perfect, and the aari work was done beautifully with great finishing and detailing. They also help with design ideas and suggestions, which was very useful. The team is very approachable, …More",
+    text: "Really happy with their work! The blouse fitting was perfect, and the aari work was done beautifully with great finishing and detailing. They also help with design ideas and suggestions, which was very useful. The team is very approachable and professional.",
     tags: ["fitting", "aari work"],
     photos: ["/photos/Picsart_26-06-27_09-41-27-355.png", "/photos/Picsart_26-06-27_09-50-20-474.png"]
   },
@@ -352,6 +354,7 @@ const REVIEWS_DATA: Review[] = [
     id: 2,
     name: "Rosilla Robert",
     avatar: "R",
+    role: "2 reviews",
     meta: "2 reviews · 2 photos",
     date: "2 weeks ago",
     rating: 5,
@@ -363,46 +366,51 @@ const REVIEWS_DATA: Review[] = [
     id: 3,
     name: "Jeevitha",
     avatar: "J",
+    role: "1 review",
     meta: "1 review",
     date: "2 months ago",
     rating: 5,
-    text: "Sarrahh truly understands customer needs and delivers exactly what is requested. The stitching and craftsmanship are outstanding. …More",
+    text: "Sarrahh truly understands customer needs and delivers exactly what is requested. The stitching and craftsmanship are outstanding. Every detail was carefully attended to and I am completely satisfied with the results.",
     tags: ["blouse stitching"]
   },
   {
     id: 4,
     name: "Selva Krithika",
     avatar: "S",
+    role: "2 reviews",
     meta: "2 reviews",
     date: "4 months ago",
     rating: 5,
-    text: "I and my sis had a great experience with this boutique for blouse and chudi stitching. The tailoring was neat, precise, and perfectly matched our measurements. The fitting was excellent, especially around the shoulders and sleeves, which is …More",
+    text: "I and my sis had a great experience with this boutique for blouse and chudi stitching. The tailoring was neat, precise, and perfectly matched our measurements. The fitting was excellent, especially around the shoulders and sleeves, which is usually very tricky. Highly recommend!",
     tags: ["fitting", "blouse stitching"]
   },
   {
     id: 5,
     name: "Selvanayaki M",
     avatar: "S",
+    role: "1 review",
     meta: "1 review",
     date: "a month ago",
     rating: 5,
-    text: "Excellent stitching work with neat finishing and perfect fitting. The dress was completed on time and designed exactly as expected. Good fabric and u fulfill my expectations mam",
+    text: "Excellent stitching work with neat finishing and perfect fitting. The dress was completed on time and designed exactly as expected. Good fabric and you fulfilled my expectations mam.",
     tags: ["fitting", "blouse stitching"]
   },
   {
     id: 6,
     name: "Harivarsha 3333",
     avatar: "H",
+    role: "2 reviews",
     meta: "2 reviews",
     date: "5 months ago",
     rating: 5,
-    text: "The dress stitching experience was truly delightful and fulfilling. From selecting the fabric and taking careful measurements to cutting the pieces and joining them with neat stitches, every step felt creative and exciting. As the design …More",
+    text: "The dress stitching experience was truly delightful and fulfilling. From selecting the fabric and taking careful measurements to cutting the pieces and joining them with neat stitches, every step felt creative and exciting. As the design came together, it was really satisfying to see the final result. Great work!",
     tags: ["blouse stitching"]
   },
   {
     id: 7,
     name: "karthika sadhasivam",
     avatar: "K",
+    role: "6 reviews",
     meta: "6 reviews · 2 photos",
     date: "4 months ago",
     rating: 5,
@@ -414,16 +422,18 @@ const REVIEWS_DATA: Review[] = [
     id: 8,
     name: "Aaraadanas Nest",
     avatar: "A",
+    role: "1 review",
     meta: "1 review",
     date: "a month ago",
     rating: 1,
-    text: "I came here after reading these reviews about this boutique..but I didn't expect this worst stitching style.. not worth for money which i paid..charged too much fair this worst stitching ..I paid more for this and the neckline is uneven, …More",
+    text: "I came here after reading these reviews about this boutique..but I didn't expect this worst stitching style.. not worth for money which i paid..charged too much fair this worst stitching ..I paid more for this and the neckline is uneven.",
     tags: ["blouse stitching"]
   },
   {
     id: 9,
     name: "shanthi thangavel",
     avatar: "S",
+    role: "1 review",
     meta: "1 review · 5 photos",
     date: "5 months ago",
     rating: 5,
@@ -435,6 +445,7 @@ const REVIEWS_DATA: Review[] = [
     id: 10,
     name: "Nivetha Moorthi",
     avatar: "N",
+    role: "4 reviews",
     meta: "4 reviews · 3 photos",
     date: "a year ago",
     rating: 5,
@@ -446,6 +457,7 @@ const REVIEWS_DATA: Review[] = [
     id: 11,
     name: "Yamu Senthil",
     avatar: "Y",
+    role: "1 review",
     meta: "1 review",
     date: "2 weeks ago",
     rating: 5,
@@ -457,6 +469,7 @@ const REVIEWS_DATA: Review[] = [
     id: 12,
     name: "Teenu Pappu",
     avatar: "T",
+    role: "1 review",
     meta: "1 review",
     date: "3 weeks ago",
     rating: 5,
@@ -468,16 +481,18 @@ const REVIEWS_DATA: Review[] = [
     id: 13,
     name: "Sahajan Sk",
     avatar: "S",
+    role: "1 review",
     meta: "1 review",
     date: "6 months ago",
     rating: 5,
-    text: "I stitched two of my bridal blouses at sarrahh. Two in another shop. I regret for not giving all my blouses here, because those two blouses were completely spoiled and took matching clothes and done all the reworks at sarrahh. They were my …More",
+    text: "I stitched two of my bridal blouses at sarrahh. Two in another shop. I regret for not giving all my blouses here, because those two blouses were completely spoiled and took matching clothes and done all the reworks at sarrahh. They were my lifesavers. Truly recommend sarrahh for any bridal stitching!",
     tags: ["fitting", "blouse designs"]
   },
   {
     id: 14,
     name: "Govarthini Shanmugam",
     avatar: "G",
+    role: "2 reviews",
     meta: "2 reviews",
     date: "5 months ago",
     rating: 5,
@@ -488,6 +503,7 @@ const REVIEWS_DATA: Review[] = [
     id: 15,
     name: "Kani Raj",
     avatar: "K",
+    role: "2 reviews",
     meta: "2 reviews · 2 photos",
     date: "a year ago",
     rating: 5,
@@ -500,6 +516,7 @@ const REVIEWS_DATA: Review[] = [
     id: 16,
     name: "Santhiya V",
     avatar: "S",
+    role: "3 reviews",
     meta: "3 reviews",
     date: "2 months ago",
     rating: 5,
@@ -510,10 +527,11 @@ const REVIEWS_DATA: Review[] = [
     id: 17,
     name: "Hema Santhosh",
     avatar: "H",
+    role: "Local Guide · 39 reviews",
     meta: "Local Guide · 39 reviews · 6 photos",
     date: "2 years ago",
     rating: 5,
-    text: "Regular follower of Sarrahh boutique in insta. Got my first designer blouse stitched. I am impressed by their aari work.. Stitching is good and work is quite decent and professional and they made exactly what I asked for. Inspite of her …More",
+    text: "Regular follower of Sarrahh boutique in insta. Got my first designer blouse stitched. I am impressed by their aari work. Stitching is good and work is quite decent and professional and they made exactly what I asked for. Inspite of her busy schedule, she took out time and gave personal attention which I really appreciated.",
     tags: ["aari work", "blouse stitching"],
     photos: ["/photos/Picsart_26-06-27_09-41-27-355.png"],
     ownerReply: "Thank you dear 🙏 you really made my day 🥰"
@@ -522,6 +540,7 @@ const REVIEWS_DATA: Review[] = [
     id: 18,
     name: "Mohana Priya T",
     avatar: "M",
+    role: "2 reviews",
     meta: "2 reviews",
     date: "a month ago",
     rating: 5,
@@ -532,6 +551,7 @@ const REVIEWS_DATA: Review[] = [
     id: 19,
     name: "Michael Michael",
     avatar: "M",
+    role: "1 review",
     meta: "1 review",
     date: "a month ago",
     rating: 5,
@@ -542,6 +562,7 @@ const REVIEWS_DATA: Review[] = [
     id: 20,
     name: "kavi kutty",
     avatar: "K",
+    role: "1 review",
     meta: "1 review · 1 photo",
     date: "2 months ago",
     rating: 5,
@@ -552,6 +573,7 @@ const REVIEWS_DATA: Review[] = [
     id: 21,
     name: "Subhashini Sathiyaseelan",
     avatar: "S",
+    role: "3 reviews",
     meta: "3 reviews",
     date: "3 weeks ago",
     rating: 5,
@@ -914,7 +936,7 @@ export default function App() {
               className="mx-auto mt-8 max-w-2xl text-sm leading-loose text-cream-soft/95 font-normal sm:text-base md:text-[1.05rem] tracking-wide"
               style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)", letterSpacing: "0.04em" }}
             >
-              Made to be worn, Not managed — because every confidence comes from
+              Made to be worn, Not managed — because confidence comes from
               <br className="hidden sm:block" />
               forgetting about the outfit and enjoying the moment.
             </p>
@@ -1066,7 +1088,7 @@ export default function App() {
                 <div className="trust-icon flex h-[48px] w-[48px] items-center justify-center rounded-full bg-[rgba(201,151,43,0.1)] transition-transform duration-300 ease-out group-hover:rotate-6">
                   {p.icon}
                 </div>
-                
+
                 {/* Metrics */}
                 <div className="flex flex-col gap-0.5 mt-2 flex-grow justify-center">
                   <span className="font-bold text-[#5B1F2A] text-xl sm:text-2xl tracking-tight transition-transform duration-300 ease-out group-hover:scale-105 block">
@@ -1076,7 +1098,7 @@ export default function App() {
                     {p.desc}
                   </span>
                 </div>
-                
+
                 {/* Subtitle / Question */}
                 <p className="mt-3 text-[9px] uppercase tracking-[0.2em] text-[#B8892E] font-semibold border-t border-gold/10 pt-2 w-full">
                   {p.question}
@@ -1088,7 +1110,7 @@ export default function App() {
       </section>
 
       {/* WHY SARRAHH SECTION */}
-      <section id="why" className="py-24 sm:py-32 bg-gradient-to-b from-cream to-cream-soft overflow-hidden">
+      <section id="why" className="py-12 bg-gradient-to-b from-cream to-cream-soft overflow-hidden">
         <div className="mx-auto max-w-[90rem] px-6">
           <Reveal className="text-center">
             <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">THE SARRAHH DIFFERENCE</p>
@@ -1117,54 +1139,14 @@ export default function App() {
             </div>
           </Reveal>
 
-          <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-3 xl:gap-12">
 
-            {/* THE CRAFTSMANSHIP */}
-            <Reveal variant="up" delay={50} className="flex">
-              <div className="glass-card card-lift rounded-3xl p-8 flex flex-col justify-between border border-gold/25 relative overflow-hidden bg-cream-soft/60">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gold/5 rounded-bl-full pointer-events-none" />
-                <div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10 text-wine mb-6 border border-gold/20">
-                    <Sparkles className="h-5 w-5" />
-                  </div>
-                  <h3 className="font-serif text-xs uppercase tracking-[0.2em] text-gold font-semibold">THE CRAFTSMANSHIP</h3>
-                  <h4 className="mt-3 font-serif text-2xl text-wine leading-tight">
-                    Anyone can add more stones. Anyone can follow a trend. Real craftsmanship is quieter.
-                  </h4>
-                  <div className="w-12 h-[1px] bg-gold/40 my-5" />
-                  <ul className="space-y-3.5 text-[15px] text-foreground leading-relaxed font-medium">
-                    <li className="flex items-start gap-2.5">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
-                      <span>Symmetry of the hand embroidery, ensuring exact matching patterns on sleeves and shoulders.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
-                      <span>The meticulous balance of every single motif to align with your bridal style.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
-                      <span>Internal lining and edge finishing you'll never have to think about or feel discomfort from.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
-                      <span>Details that make the outfit feel complete without demanding loud attention.</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="mt-8 pt-5 border-t border-gold/10">
-                  <p className="font-serif italic text-[15px] text-wine/90 leading-relaxed">
-                    Quiet elegance. Handcrafted thread-by-thread under expert master supervision in our Kangayam studio.
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* CENTER — Featured Founder Video */}
-            <div className="flex flex-col items-center justify-center my-8 lg:my-0">
-              <Reveal variant="scale" className="flex justify-center w-full">
-                <div className="w-full max-w-[360px] rounded-[2rem] overflow-hidden border border-gold/25 bg-cream-soft p-3.5 shadow-2xl relative group">
+            {/* LEFT — Featured Founder Video */}
+            <div className="flex flex-col items-center justify-center lg:col-span-1 lg:items-start">
+              <Reveal variant="scale" className="flex justify-center w-full max-w-[400px]">
+                <div className="w-full rounded-[2rem] overflow-hidden border border-gold/25 bg-cream-soft p-3.5 shadow-2xl relative group">
                   <div className="absolute inset-0 rounded-[2rem] border border-dashed border-gold/25 pointer-events-none m-1.5" />
-                  <div className="relative rounded-2xl overflow-hidden aspect-[9/16] h-[540px] w-full bg-wine/5 shadow-inner">
+                  <div className="relative rounded-2xl overflow-hidden aspect-[9/16] h-[600px] w-full bg-wine/5 shadow-inner">
                     <video
                       src="/transformation_videos/founder_intro.mp4"
                       className="w-full h-full object-cover rounded-2xl"
@@ -1180,41 +1162,62 @@ export default function App() {
               </Reveal>
             </div>
 
-            {/* PERSONAL DESIGN */}
-            <Reveal variant="right" delay={100} className="flex">
-              <div className="glass-card card-lift rounded-3xl p-8 flex flex-col justify-between border border-gold/25 relative overflow-hidden bg-cream-soft/60">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gold/5 rounded-bl-full pointer-events-none" />
-                <div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10 text-wine mb-6 border border-gold/20">
-                    <Wand2 className="h-5 w-5" />
+            {/* RIGHT - Craftsmanship and Personal Design */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:col-span-2 items-stretch">
+              {/* THE CRAFTSMANSHIP */}
+              <Reveal variant="up" delay={50} className="flex h-full w-full">
+                <div className="glass-card card-lift rounded-3xl p-8 flex flex-col border border-gold/25 relative overflow-hidden bg-cream-soft/60 w-full h-full">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-gold/5 rounded-bl-full pointer-events-none" />
+                  <div className="flex flex-col flex-1">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10 text-wine mb-6 border border-gold/20 shrink-0">
+                      <Sparkles className="h-5 w-5" />
+                    </div>
+                    <h3 className="font-serif text-xs uppercase tracking-[0.2em] text-gold font-semibold shrink-0">THE CRAFTSMANSHIP</h3>
+                    <div className="flex-1">
+                      <h4 className="mt-3 font-serif text-xl xl:text-2xl text-wine leading-tight">
+                        Anyone can add more stones. Anyone can follow a trend. Real craftsmanship is quieter.
+                      </h4>
+                    </div>
+                    <div className="w-12 h-[1px] bg-gold/40 my-5 shrink-0" />
+                    <div className="mt-auto rounded-xl overflow-hidden border border-gold/20 relative h-[220px] xl:h-[260px] shrink-0">
+                      <img src="/photos/download.jpg" alt="Craftsmanship detail" className="w-full h-full object-cover" />
+                    </div>
                   </div>
-                  <h3 className="font-serif text-xs uppercase tracking-[0.2em] text-gold font-semibold">PERSONAL DESIGN</h3>
-                  <h4 className="mt-3 font-serif text-2xl text-wine leading-tight">
-                    Finding the right outfit shouldn't mean adjusting yourself to a catalogue. We don't follow catalogues.
-                  </h4>
-                  <div className="w-12 h-[1px] bg-gold/40 my-5" />
-                  <ul className="space-y-3.5 text-[15px] text-foreground leading-relaxed font-medium">
-                    <li className="flex items-start gap-2.5">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
-                      <span>Most boutiques present standard catalogs. We believe catalogs limit your unique bride story.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
-                      <span>Instead, we create outfits inspired by your personality, your wedding saree, your vision, and style.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold mt-2" />
-                      <span>Because every bride deserves a look that feels uniquely, authentically hers.</span>
-                    </li>
-                  </ul>
+                  <div className="mt-8 pt-5 border-t border-gold/10 shrink-0 min-h-[90px] flex items-start">
+                    <p className="font-serif italic text-[14px] xl:text-[15px] text-wine/90 leading-relaxed">
+                      Quiet elegance. Handcrafted thread-by-thread under expert master supervision in our Kangayam studio.
+                    </p>
+                  </div>
                 </div>
-                <div className="mt-8 pt-5 border-t border-gold/10">
-                  <p className="font-serif text-base font-medium text-wine leading-relaxed tracking-wider uppercase">
-                    Your Wedding. Your Style.
-                  </p>
+              </Reveal>
+
+              {/* PERSONAL DESIGN */}
+              <Reveal variant="right" delay={100} className="flex h-full w-full">
+                <div className="glass-card card-lift rounded-3xl p-8 flex flex-col border border-gold/25 relative overflow-hidden bg-cream-soft/60 w-full h-full">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-gold/5 rounded-bl-full pointer-events-none" />
+                  <div className="flex flex-col flex-1">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10 text-wine mb-6 border border-gold/20 shrink-0">
+                      <Wand2 className="h-5 w-5" />
+                    </div>
+                    <h3 className="font-serif text-xs uppercase tracking-[0.2em] text-gold font-semibold shrink-0">YOUR WEDDING DESIGN</h3>
+                    <div className="flex-1">
+                      <h4 className="mt-3 font-serif text-xl xl:text-2xl text-wine leading-tight">
+                        Finding the right outfit shouldn't mean adjusting yourself to a catalogue. We don't follow catalogues.
+                      </h4>
+                    </div>
+                    <div className="w-12 h-[1px] bg-gold/40 my-5 shrink-0" />
+                    <div className="mt-auto rounded-xl overflow-hidden border border-gold/20 relative h-[220px] xl:h-[260px] shrink-0">
+                      <img src="/photos/202427.png" alt="Personal Design detail" className="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                  <div className="mt-8 pt-5 border-t border-gold/10 shrink-0 min-h-[90px] flex items-start">
+                    <p className="font-serif text-[14px] xl:text-base font-medium text-wine leading-relaxed tracking-wider uppercase">
+                      Your Wedding. Your Style.
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Reveal>
+              </Reveal>
+            </div>
 
           </div>
 
@@ -1242,7 +1245,7 @@ export default function App() {
       </section>
 
       {/* TRANSFORMATIONS SECTION */}
-      <section id="transformations" className="py-24 sm:py-32 bg-gradient-to-b from-cream-soft to-cream border-t border-gold/20 overflow-hidden">
+      <section id="transformations" className="py-12 bg-gradient-to-b from-cream-soft to-cream border-t border-gold/20 overflow-hidden">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal className="text-center">
             <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">GALLERY & EXPERIENCES</p>
@@ -1373,7 +1376,7 @@ export default function App() {
       </section>
 
       {/* THE SARRAHH PROCESS */}
-      <section id="process" className="py-24 sm:py-32 bg-gradient-to-b from-cream to-cream-soft overflow-hidden">
+      <section id="process" className="py-12 bg-gradient-to-b from-cream to-cream-soft overflow-hidden">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal className="text-center">
             <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">THREE STEPS TO CONFIDENCE</p>
@@ -1437,13 +1440,13 @@ export default function App() {
       </section>
 
       {/* REVIEWS SECTION */}
-      <section id="reviews" className="py-24 bg-gradient-to-b from-cream-soft to-cream border-t border-gold/25 overflow-hidden">
+      <section id="reviews" className="py-12 bg-gradient-to-b from-cream-soft to-cream border-t border-gold/25 overflow-hidden">
         <div className="mx-auto max-w-7xl px-6">
 
           {/* Header Row */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
             <div className="text-left font-sans">
-              <p className="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-gold font-bold">OUR REVIEWS</p>
+              <p className="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-gold font-bold">GOOGLE REVIEWS</p>
               <h2 className="mt-3 font-serif text-4xl text-wine sm:text-5xl md:text-6xl font-light tracking-tight leading-none">
                 What Our <span className="text-gold font-normal italic font-serif">Brides</span> Say
               </h2>
@@ -1480,61 +1483,49 @@ export default function App() {
             onMouseLeave={() => setReviewsHovered(false)}
             className="mt-12 flex gap-6 overflow-x-auto scrollbar-none pb-6 scroll-smooth snap-x snap-mandatory"
           >
-            {REVIEWS_DATA.map((r) => {
-              // Get custom punchy quote matching the image's layout balance
-              const getReviewQuote = (id: number, text: string) => {
-                const quotes: Record<number, string> = {
-                  1: "They tailor their solutions to our specific blouse design and fit needs.",
-                  2: "Awesome precision stitching, no alterations needed, worth every single penny.",
-                  3: "Outstanding craftsmanship that truly understands every custom detail requested.",
-                  4: "Tailoring was neat, precise, and perfectly matched our specific bridal measurements.",
-                  5: "Excellent stitching work with neat finishing and perfect fitting.",
-                  6: "Neat stitches and creative designs that make the wedding outfit delightful.",
-                  7: "Outstanding customer service and perfect fit on my custom reception lehenga."
-                };
-                return quotes[id] || (text.length > 80 ? text.slice(0, 80) + "..." : text);
-              };
-
+            {REVIEWS_DATA.filter((r) => r.rating >= 5).map((r) => {
               return (
                 <div
                   key={r.id}
-                  className="w-[290px] sm:w-[380px] shrink-0 snap-start glass-card bg-cream-soft/85 border border-gold/25 rounded-[2.5rem] p-8 shadow-sm hover:shadow-lg hover:border-gold/45 transition-all duration-500 flex flex-col justify-between h-[370px] relative text-left"
+                  className="w-[290px] sm:w-[380px] shrink-0 snap-start glass-card bg-cream-soft/85 border border-gold/25 rounded-[2.5rem] p-8 shadow-sm hover:shadow-lg hover:border-gold/45 transition-all duration-500 flex flex-col justify-between relative text-left h-auto min-h-[300px]"
                 >
-                  <div>
+                  <div className="flex flex-col h-full">
                     {/* Top card row */}
                     <div className="flex items-center justify-between gap-4">
-                      <div className="h-12 w-12 rounded-full bg-gradient-to-br from-gold to-wine text-cream-soft flex items-center justify-center font-serif text-lg font-bold shadow-inner shrink-0 select-none overflow-hidden uppercase">
-                        {r.avatar}
+                      <div className="flex items-center gap-3">
+                        <div className="h-12 w-12 rounded-full bg-[#E8F0FE] text-[#1967D2] flex items-center justify-center font-sans text-xl font-medium shrink-0 select-none overflow-hidden uppercase">
+                          {r.avatar}
+                        </div>
+                        <div>
+                          <div className="font-sans text-[15px] font-bold text-wine">{r.name}</div>
+                          <div className="font-sans text-[13px] text-wine/60">{r.role || "Local Guide"}</div>
+                        </div>
                       </div>
 
-                      <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-wine/5 border border-gold/25 text-[10px] font-bold uppercase tracking-wider text-wine shadow-sm">
-                        <span className="text-gold font-bold text-xs">✓</span>
-                        <span>Verified</span>
+                      <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white shadow-sm border border-gray-100 shrink-0">
+                        <svg className="w-4 h-4" viewBox="0 0 24 24">
+                          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                        </svg>
                       </div>
                     </div>
 
-                    {/* Double Quote icon SVG in Brand Gold */}
-                    <svg className="w-8 h-8 text-gold mt-5 opacity-90" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.987z" />
-                    </svg>
-
-                    {/* Review Quote text in brand wine serif italic */}
-                    <p className="text-[17px] sm:text-lg font-serif italic text-wine leading-snug tracking-wide mt-3 line-clamp-4">
-                      "{getReviewQuote(r.id, r.text)}"
-                    </p>
-                  </div>
-
-                  {/* Footer details in Brand styling */}
-                  <div className="border-t border-gold/15 pt-4 text-left">
-                    <span className="font-sans text-xs font-bold text-wine uppercase tracking-widest block">{r.name}</span>
-                    <span className="text-[10px] text-wine/60 block mt-0.5 tracking-wide">
-                      {r.meta.split("·")[0].trim()} · {r.date}
-                    </span>
-                    <div className="flex gap-0.5 text-gold mt-2">
+                    <div className="flex gap-0.5 text-[#FBBC04] mt-3">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className="w-3 h-3 fill-current" />
+                        <Star key={i} className="w-4 h-4 fill-current" />
                       ))}
                     </div>
+
+                    {/* Review text */}
+                    <p className="text-[15px] sm:text-[16px] text-wine/90 leading-relaxed mt-4 font-sans">
+                      {r.text}
+                    </p>
+
+                    <span className="text-[11px] text-wine/50 block mt-auto pt-6 tracking-wide uppercase">
+                      {r.date}
+                    </span>
                   </div>
                 </div>
               );
@@ -1546,7 +1537,7 @@ export default function App() {
 
 
       {/* FREQUENTLY ASKED QUESTIONS */}
-      <section id="faq" className="py-24 sm:py-32 bg-gradient-to-b from-cream to-cream-soft border-t border-gold/20 overflow-hidden">
+      <section id="faq" className="py-12 bg-gradient-to-b from-cream to-cream-soft border-t border-gold/20 overflow-hidden">
         <div className="mx-auto max-w-3xl px-6">
           <Reveal className="text-center">
             <p className="text-xs uppercase tracking-[0.4em] text-gold font-semibold">ANSWERS FOR EVERY BRIDE</p>
@@ -1603,7 +1594,7 @@ export default function App() {
       {/* FINAL CTA SECTION */}
       <section
         id="book"
-        className="py-16 sm:py-24 bg-gradient-to-b from-cream to-cream-soft border-t border-gold/25 overflow-hidden"
+        className="py-12 bg-gradient-to-b from-cream to-cream-soft border-t border-gold/25 overflow-hidden"
       >
         <div className="relative mx-auto max-w-6xl px-6">
           <Reveal variant="scale">
